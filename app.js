@@ -838,7 +838,15 @@ function buildTreeData() {
 let radarChartInstance = null;
 
 function initializeComplexityView() {
-    if (!traditionsData || !traditionsData.traditions) return;
+    console.log('Initializing complexity view...');
+    if (!traditionsData || !traditionsData.traditions) {
+        console.error('No traditions data available');
+        return;
+    }
+
+    // Count traditions with complexity profiles
+    const withProfiles = traditionsData.traditions.filter(t => t.complexityProfile).length;
+    console.log(`Found ${withProfiles} traditions with complexity profiles out of ${traditionsData.traditions.length}`);
 
     // Populate tradition selector
     populateTraditionSelect();
@@ -846,18 +854,22 @@ function initializeComplexityView() {
     // Create scatter plot
     createScatterPlot();
 
-    // Set up tradition selector handler
+    // Set up tradition selector handler (only add once)
     const selector = document.getElementById('traditionSelect');
-    selector.addEventListener('change', (e) => {
-        if (e.target.value) {
-            const tradition = traditionsData.traditions.find(t => t.id === e.target.value);
-            updateRadarChart(tradition);
-        }
-    });
+    const existingListener = selector.dataset.listenerAdded;
+    if (!existingListener) {
+        selector.addEventListener('change', (e) => {
+            if (e.target.value) {
+                const tradition = traditionsData.traditions.find(t => t.id === e.target.value);
+                updateRadarChart(tradition);
+            }
+        });
+        selector.dataset.listenerAdded = 'true';
+    }
 
     // Show first tradition by default
     if (traditionsData.traditions.length > 0) {
-        const firstTradition = traditionsData.traditions[0];
+        const firstTradition = traditionsData.traditions.find(t => t.complexityProfile) || traditionsData.traditions[0];
         selector.value = firstTradition.id;
         updateRadarChart(firstTradition);
     }
@@ -884,9 +896,19 @@ function populateTraditionSelect() {
 }
 
 function updateRadarChart(tradition) {
-    if (!tradition || !tradition.complexityProfile) return;
+    console.log('Updating radar chart for:', tradition?.name);
+    if (!tradition || !tradition.complexityProfile) {
+        console.warn('No complexity profile for tradition:', tradition?.name);
+        return;
+    }
 
-    const ctx = document.getElementById('radarChart').getContext('2d');
+    const canvas = document.getElementById('radarChart');
+    if (!canvas) {
+        console.error('Radar chart canvas not found');
+        return;
+    }
+
+    const ctx = canvas.getContext('2d');
     const profile = tradition.complexityProfile;
 
     const data = {
@@ -915,6 +937,8 @@ function updateRadarChart(tradition) {
         type: 'radar',
         data: data,
         options: {
+            responsive: true,
+            maintainAspectRatio: true,
             elements: {
                 line: {
                     borderWidth: 3
@@ -945,14 +969,23 @@ function updateRadarChart(tradition) {
         radarChartInstance.destroy();
     }
 
+    console.log('Creating radar chart with data:', data);
     radarChartInstance = new Chart(ctx, config);
 }
 
 function createScatterPlot() {
-    if (!traditionsData || !traditionsData.traditions) return;
+    console.log('Creating scatter plot...');
+    if (!traditionsData || !traditionsData.traditions) {
+        console.error('No traditions data for scatter plot');
+        return;
+    }
 
     // Clear any existing plot
     const container = document.getElementById('scatterPlot');
+    if (!container) {
+        console.error('Scatter plot container not found');
+        return;
+    }
     container.innerHTML = '';
 
     // Calculate average individual vs collective scores for each tradition
@@ -972,6 +1005,8 @@ function createScatterPlot() {
                 profile: profile
             };
         });
+
+    console.log(`Creating scatter plot with ${plotData.length} traditions`);
 
     // Set up SVG
     const margin = {top: 20, right: 20, bottom: 60, left: 60};
