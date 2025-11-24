@@ -1083,7 +1083,8 @@ function createScatterPlot() {
                 .style('opacity', .9);
             tooltip.html(`<strong>${d.name}</strong> (${d.origin})<br/>
                 Individual: ${d.x.toFixed(1)}<br/>
-                Social/Systemic: ${d.y.toFixed(1)}`)
+                Social/Systemic: ${d.y.toFixed(1)}<br/>
+                <em style="font-size: 0.9em; color: #7f8c8d;">Click to view profile</em>`)
                 .style('left', (event.pageX + 10) + 'px')
                 .style('top', (event.pageY - 28) + 'px');
         })
@@ -1095,5 +1096,25 @@ function createScatterPlot() {
             tooltip.transition()
                 .duration(500)
                 .style('opacity', 0);
+        })
+        .on('click', function(event, d) {
+            // Find the tradition by name
+            const tradition = traditionsData.traditions.find(t => t.name === d.name);
+            if (tradition) {
+                // Update dropdown
+                const selector = document.getElementById('traditionSelect');
+                selector.value = tradition.id;
+
+                // Update radar chart
+                updateRadarChart(tradition);
+
+                // Visual feedback
+                d3.selectAll('circle')
+                    .style('fill', '#3498db')
+                    .attr('r', 6);
+                d3.select(this)
+                    .style('fill', '#27ae60')
+                    .attr('r', 8);
+            }
         });
 }
