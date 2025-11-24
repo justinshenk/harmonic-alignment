@@ -334,6 +334,23 @@ function initializeNavigation() {
         aboutView: 'about-section'
     };
 
+    // Restore saved section from localStorage
+    const savedSection = localStorage.getItem('activeSection');
+    if (savedSection && buttons[savedSection]) {
+        // Remove default active states
+        document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+
+        // Activate saved section
+        document.getElementById(savedSection).classList.add('active');
+        document.getElementById(buttons[savedSection]).classList.add('active');
+
+        // Initialize complexity view if needed
+        if (savedSection === 'complexityView') {
+            initializeComplexityView();
+        }
+    }
+
     Object.keys(buttons).forEach(buttonId => {
         document.getElementById(buttonId).addEventListener('click', () => {
             // Update active button
@@ -343,6 +360,9 @@ function initializeNavigation() {
             // Update active section
             document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
             document.getElementById(buttons[buttonId]).classList.add('active');
+
+            // Save to localStorage
+            localStorage.setItem('activeSection', buttonId);
 
             // Initialize complexity visualizations when switching to that view
             if (buttonId === 'complexityView') {
@@ -366,6 +386,9 @@ function initializeQuiz() {
         document.getElementById('compareView').classList.add('active');
         document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
         document.getElementById('compare-section').classList.add('active');
+
+        // Save to localStorage
+        localStorage.setItem('activeSection', 'compareView');
 
         // Scroll to top
         window.scrollTo(0, 0);
