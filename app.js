@@ -360,6 +360,16 @@ function initializeQuiz() {
     document.getElementById('prevQuestion').addEventListener('click', prevQuestion);
     document.getElementById('nextQuestion').addEventListener('click', nextQuestion);
     document.getElementById('restartQuiz').addEventListener('click', restartQuiz);
+    document.getElementById('compareRecommendations').addEventListener('click', () => {
+        // Switch to compare view
+        document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
+        document.getElementById('compareView').classList.add('active');
+        document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+        document.getElementById('compare-section').classList.add('active');
+
+        // Scroll to top
+        window.scrollTo(0, 0);
+    });
 }
 
 function startQuiz() {
@@ -535,9 +545,21 @@ function calculateRecommendations() {
             score += effectiveness * weight;
         });
 
+        // Calculate match reasons
+        const matchedAreas = Object.entries(weights)
+            .map(([metric, weight]) => {
+                const effectiveness = tradition.effectiveness[metric] || 0;
+                if (effectiveness >= 4 && weight > 0) { // High effectiveness in weighted area
+                    return metric;
+                }
+                return null;
+            })
+            .filter(m => m !== null);
+
         return {
             tradition,
-            score
+            score,
+            matchedAreas
         };
     }).filter(item => item !== null);
 
@@ -556,12 +578,28 @@ function renderResults(recommendations) {
 
     recommendations.forEach((rec, index) => {
         const t = rec.tradition;
+
+        // Format matched areas into readable text
+        const metricLabels = {
+            adhd: 'ADHD', depression: 'Depression', anxiety: 'Anxiety', trauma: 'Trauma',
+            focus: 'Focus', metacognition: 'Metacognition', insight: 'Insight',
+            compassion: 'Compassion', communication: 'Communication', empathy: 'Empathy',
+            bodyAwareness: 'Body Awareness', emotionalRegulation: 'Emotional Regulation'
+        };
+        const matchReasons = rec.matchedAreas.length > 0
+            ? rec.matchedAreas.map(m => metricLabels[m] || m).join(', ')
+            : 'Good overall match for your goals';
+
         html += `
             <div class="recommendation-card">
                 <div class="recommendation-rank">#${index + 1}</div>
                 <h3>${t.name}</h3>
                 <p class="tradition-origin">${t.origin} (${t.yearOrigin > 0 ? t.yearOrigin : Math.abs(t.yearOrigin) + ' BCE'})</p>
                 <p>${t.description}</p>
+                <div style="background: #e8f4f8; padding: 0.75rem; border-radius: 5px; margin: 1rem 0; border-left: 3px solid var(--secondary);">
+                    <strong style="color: var(--primary);">Why recommended:</strong>
+                    <span style="color: #2c3e50;"> Particularly effective for ${matchReasons}</span>
+                </div>
                 <div class="recommendation-details">
                     <div class="detail-item">
                         <strong>Practices:</strong> ${t.practices.join(', ')}
