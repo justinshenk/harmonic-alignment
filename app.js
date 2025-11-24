@@ -9,7 +9,7 @@ let sortState = {
 
 // Table display state
 let tableDisplayState = {
-    showAll: false,
+    showAll: true,  // Show all rows by default
     initialRowCount: 10
 };
 
@@ -78,6 +78,7 @@ let quizState = {
         }
     ]
 };
+
 
 // Initialize
 document.addEventListener('DOMContentLoaded', async () => {
