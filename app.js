@@ -1555,6 +1555,19 @@ function createVerticalViolinPlot(tradition) {
 
 // Form handling
 document.addEventListener('DOMContentLoaded', () => {
+    // Handle "Other" source field visibility
+    const sourceSelect = document.getElementById('signup-source');
+    const sourceOtherGroup = document.getElementById('signup-source-other-group');
+    if (sourceSelect && sourceOtherGroup) {
+        sourceSelect.addEventListener('change', (e) => {
+            if (e.target.value === 'Other') {
+                sourceOtherGroup.style.display = 'block';
+            } else {
+                sourceOtherGroup.style.display = 'none';
+            }
+        });
+    }
+
     // Signup form
     const signupForm = document.getElementById('signupForm');
     if (signupForm) {
@@ -1573,6 +1586,13 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const formData = new FormData(signupForm);
 
+                // Get source value - use sourceOther if "Other" is selected
+                let source = formData.get('source');
+                if (source === 'Other') {
+                    const otherValue = formData.get('sourceOther');
+                    source = otherValue ? `Other: ${otherValue}` : 'Other';
+                }
+
                 const response = await fetch('/api/signup', {
                     method: 'POST',
                     headers: {
@@ -1580,7 +1600,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     body: JSON.stringify({
                         email: formData.get('email'),
-                        name: formData.get('name')
+                        name: formData.get('name'),
+                        source: source
                     })
                 });
 

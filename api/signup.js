@@ -15,7 +15,7 @@ export default async function handler(req, res) {
     }
 
     try {
-        const { email, name } = req.body;
+        const { email, name, source } = req.body;
 
         // Validate required fields
         if (!email) {
@@ -27,6 +27,7 @@ export default async function handler(req, res) {
             fields: {
                 Email: email,
                 Name: name || '',
+                Source: source || '',
                 SignupDate: new Date().toISOString(),
                 Type: 'Signup'
             }

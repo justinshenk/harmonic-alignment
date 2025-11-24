@@ -202,6 +202,22 @@
                         <label for="signup-name">Name (optional)</label>
                         <input type="text" id="signup-name" name="name" placeholder="Your name">
                     </div>
+                    <div class="form-group">
+                        <label for="signup-source">How did you hear about us? (optional)</label>
+                        <select id="signup-source" name="source">
+                            <option value="">Select...</option>
+                            <option value="Integral Altruism">Integral Altruism</option>
+                            <option value="Social Media">Social Media</option>
+                            <option value="Search Engine">Search Engine</option>
+                            <option value="Friend/Colleague">Friend/Colleague</option>
+                            <option value="Academic Research">Academic Research</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="signup-source-other-group" style="display: none;">
+                        <label for="signup-source-other">Please specify:</label>
+                        <input type="text" id="signup-source-other" name="sourceOther" placeholder="How did you find us?">
+                    </div>
                     <button type="submit" class="primary-button">Sign Up</button>
                     <div id="signup-message" class="form-message"></div>
                 </form>

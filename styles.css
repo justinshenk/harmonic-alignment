@@ -539,7 +539,8 @@ footer a:hover {
 
 .form-group input[type="email"],
 .form-group input[type="text"],
-.form-group textarea {
+.form-group textarea,
+.form-group select {
     width: 100%;
     padding: 0.75rem;
     border: 2px solid var(--border);
@@ -547,11 +548,13 @@ footer a:hover {
     font-size: 1rem;
     font-family: inherit;
     transition: border-color 0.3s;
+    background: white;
 }
 
 .form-group input[type="email"]:focus,
 .form-group input[type="text"]:focus,
-.form-group textarea:focus {
+.form-group textarea:focus,
+.form-group select:focus {
     outline: none;
     border-color: var(--secondary);
 }
