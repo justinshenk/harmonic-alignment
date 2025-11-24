@@ -613,7 +613,10 @@ const wikipediaMapping = {
     'Internal Family Systems (IFS)': 'Internal_Family_Systems_Model',
     'Internal Family Systems': 'Internal_Family_Systems_Model',
     'IFS': 'Internal_Family_Systems_Model',
-    'Mussar': 'Musar_movement'
+    'Mussar': 'Musar_movement',
+    'Acceptance and Commitment Therapy (ACT)': 'Acceptance_and_commitment_therapy',
+    'Acceptance and Commitment Therapy': 'Acceptance_and_commitment_therapy',
+    'ACT': 'Acceptance_and_commitment_therapy'
 };
 
 function getWikipediaUrl(traditionName) {
