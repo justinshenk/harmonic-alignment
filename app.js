@@ -1412,26 +1412,14 @@ function createVerticalViolinPlot(tradition) {
         .range([height, 0])
         .padding(0.3);
 
-    // X scale - centered at 3 (middle of 1-5 range), showing 0-6 for symmetry
-    const x = d3.scaleLinear()
-        .domain([0, 6])
-        .range([0, width]);
+    // X scale for bar width (0-5)
+    const maxBarWidth = width * 0.7; // Use 70% of width for max bar
+    const barScale = d3.scaleLinear()
+        .domain([0, 5])
+        .range([0, maxBarWidth]);
 
-    // Add center line at value 3
-    svg.append('line')
-        .attr('x1', x(3))
-        .attr('x2', x(3))
-        .attr('y1', 0)
-        .attr('y2', height)
-        .attr('stroke', '#bdc3c7')
-        .attr('stroke-width', 1.5)
-        .attr('stroke-dasharray', '4,4')
-        .attr('opacity', 0.5);
-
-    // Add X axis
-    svg.append('g')
-        .attr('transform', `translate(0,${height})`)
-        .call(d3.axisBottom(x).ticks(6));
+    // Calculate centering offset
+    const centerOffset = (width - maxBarWidth) / 2;
 
     // Add Y axis with dimension labels
     svg.append('g')
@@ -1443,52 +1431,31 @@ function createVerticalViolinPlot(tradition) {
     // Add bars for each dimension
     complexity_dims.forEach(dim => {
         const value = tradition.complexityProfile[dim];
+        const barWidth = barScale(value);
 
-        // Draw bar from center (3) to actual value
-        const barStart = x(3);
-        const barEnd = x(value);
-        const barWidth = Math.abs(barEnd - barStart);
-        const barX = value >= 3 ? barStart : barEnd;
-
-        // Color based on whether above or below center
-        const barColor = value >= 3 ? '#27ae60' : '#e74c3c';
+        // Color gradient based on value
+        const colorScale = d3.scaleLinear()
+            .domain([1, 3, 5])
+            .range(['#e74c3c', '#f39c12', '#27ae60']);
 
         svg.append('rect')
-            .attr('x', barX)
+            .attr('x', centerOffset)
             .attr('y', y(dim))
             .attr('width', barWidth)
             .attr('height', y.bandwidth())
-            .attr('fill', barColor)
-            .attr('opacity', 0.7)
+            .attr('fill', colorScale(value))
+            .attr('opacity', 0.8)
             .attr('rx', 3);
 
         // Add value label at end of bar
         svg.append('text')
-            .attr('x', barEnd + (value >= 3 ? 8 : -8))
+            .attr('x', centerOffset + barWidth + 8)
             .attr('y', y(dim) + y.bandwidth() / 2)
             .attr('dy', '0.35em')
-            .attr('text-anchor', value >= 3 ? 'start' : 'end')
+            .attr('text-anchor', 'start')
             .style('font-size', '13px')
             .style('font-weight', 'bold')
-            .style('fill', barColor)
+            .style('fill', '#2c3e50')
             .text(value);
     });
-
-    // Add axis label
-    svg.append('text')
-        .attr('x', width / 2)
-        .attr('y', height + 35)
-        .attr('text-anchor', 'middle')
-        .style('font-size', '13px')
-        .style('fill', '#7f8c8d')
-        .text('Complexity Score');
-
-    // Add legend/note
-    svg.append('text')
-        .attr('x', x(3))
-        .attr('y', -5)
-        .attr('text-anchor', 'middle')
-        .style('font-size', '11px')
-        .style('fill', '#7f8c8d')
-        .text('Center (3)');
 }
