@@ -568,6 +568,32 @@ function calculateRecommendations() {
     return scored.slice(0, 5);
 }
 
+// Wikipedia URL mapping for traditions with different article names
+const wikipediaMapping = {
+    'Vipassana': 'Vipassanā',
+    'Metta (Loving-Kindness)': 'Mettā',
+    'Theravada Buddhism': 'Theravada',
+    'Zen Buddhism': 'Zen',
+    'Tibetan Buddhism': 'Tibetan_Buddhism',
+    'Body Scan': 'Body_scan_(meditation)',
+    'Progressive Muscle Relaxation': 'Progressive_muscle_relaxation',
+    'Yoga Nidra': 'Yoga_nidra',
+    'Christian Contemplation': 'Christian_meditation',
+    'Centering Prayer': 'Centering_prayer',
+    'Lectio Divina': 'Lectio_Divina',
+    'Ignatian Spirituality': 'Ignatian_spirituality',
+    'Sufi Meditation': 'Sufism',
+    'Kabbalah': 'Kabbalah',
+    'Stoic Philosophy': 'Stoicism',
+    'Advaita Vedanta': 'Advaita_Vedanta'
+};
+
+function getWikipediaUrl(traditionName) {
+    const mappedName = wikipediaMapping[traditionName] || traditionName;
+    const urlName = mappedName.replace(/ /g, '_');
+    return `https://en.wikipedia.org/wiki/${urlName}`;
+}
+
 function renderResults(recommendations) {
     if (recommendations.length === 0) {
         document.getElementById('resultsContainer').innerHTML = '<p>No recommendations found. Please try adjusting your answers.</p>';
@@ -578,6 +604,7 @@ function renderResults(recommendations) {
 
     recommendations.forEach((rec, index) => {
         const t = rec.tradition;
+        const wikipediaUrl = getWikipediaUrl(t.name);
 
         // Format matched areas into readable text
         const metricLabels = {
@@ -593,7 +620,7 @@ function renderResults(recommendations) {
         html += `
             <div class="recommendation-card">
                 <div class="recommendation-rank">#${index + 1}</div>
-                <h3>${t.name}</h3>
+                <h3>${t.name} <a href="${wikipediaUrl}" target="_blank" rel="noopener noreferrer" style="font-size: 0.8em; color: var(--secondary); text-decoration: none;" title="Learn more on Wikipedia">ⓘ</a></h3>
                 <p class="tradition-origin">${t.origin} (${t.yearOrigin > 0 ? t.yearOrigin : Math.abs(t.yearOrigin) + ' BCE'})</p>
                 <p>${t.description}</p>
                 <div style="background: #e8f4f8; padding: 0.75rem; border-radius: 5px; margin: 1rem 0; border-left: 3px solid var(--secondary);">
