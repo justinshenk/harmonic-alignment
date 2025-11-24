@@ -634,10 +634,23 @@ footer a:hover {
 
     .controls {
         flex-direction: column;
+        width: 100%;
+    }
+
+    .controls label {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .controls select {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
     }
 
     .dimension-legend {
         max-width: 100% !important;
+        width: 100%;
     }
 
     /* Stack visualizations vertically on mobile */
