@@ -519,7 +519,7 @@ footer a:hover {
 /* Form Styles */
 .form-container {
     max-width: 600px;
-    margin: 1.5rem 0;
+    margin: 1.5rem auto;
     padding: 1.5rem;
     background: #f8f9fa;
     border-radius: 8px;
