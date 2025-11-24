@@ -1,1 +1,4 @@
 .vercel
+.env
+.env.example
+scripts/setup-vercel-env.sh

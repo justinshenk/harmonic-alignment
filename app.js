@@ -1552,3 +1552,105 @@ function createVerticalViolinPlot(tradition) {
             .text(value);
     });
 }
+
+// Form handling
+document.addEventListener('DOMContentLoaded', () => {
+    // Signup form
+    const signupForm = document.getElementById('signupForm');
+    if (signupForm) {
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const submitButton = signupForm.querySelector('button[type="submit"]');
+            const messageDiv = document.getElementById('signup-message');
+
+            // Disable button and show loading
+            submitButton.disabled = true;
+            submitButton.textContent = 'Signing up...';
+            messageDiv.className = 'form-message';
+            messageDiv.textContent = '';
+
+            try {
+                const formData = new FormData(signupForm);
+                const interests = formData.getAll('interests');
+
+                const response = await fetch('/api/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: formData.get('email'),
+                        name: formData.get('name'),
+                        interests: interests
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    messageDiv.className = 'form-message success';
+                    messageDiv.textContent = data.message;
+                    signupForm.reset();
+                } else {
+                    throw new Error(data.error || 'Failed to sign up');
+                }
+            } catch (error) {
+                messageDiv.className = 'form-message error';
+                messageDiv.textContent = error.message || 'An error occurred. Please try again.';
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Sign Up';
+            }
+        });
+    }
+
+    // Contact form
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const submitButton = contactForm.querySelector('button[type="submit"]');
+            const messageDiv = document.getElementById('contact-message');
+
+            // Disable button and show loading
+            submitButton.disabled = true;
+            submitButton.textContent = 'Sending...';
+            messageDiv.className = 'form-message';
+            messageDiv.textContent = '';
+
+            try {
+                const formData = new FormData(contactForm);
+
+                const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: formData.get('email'),
+                        name: formData.get('name'),
+                        message: formData.get('message')
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    messageDiv.className = 'form-message success';
+                    messageDiv.textContent = data.message;
+                    contactForm.reset();
+                } else {
+                    throw new Error(data.error || 'Failed to send message');
+                }
+            } catch (error) {
+                messageDiv.className = 'form-message error';
+                messageDiv.textContent = error.message || 'An error occurred. Please try again.';
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Send Message';
+            }
+        });
+    }
+});

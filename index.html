@@ -98,7 +98,7 @@
                 </div>
             </div>
 
-            <div class="visualization-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 2rem;">
+            <div class="visualization-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
                 <div>
                     <h3 style="margin-bottom: 1rem; color: var(--primary);">Radar Profile</h3>
                     <div style="max-width: 400px; max-height: 400px; margin: 0 auto;">
@@ -109,10 +109,11 @@
                     <h3 style="margin-bottom: 1rem; color: var(--primary);">Dimension Scores</h3>
                     <div id="verticalViolinPlot" style="min-height: 400px; display: none;"></div>
                 </div>
-                <div>
-                    <h3 style="margin-bottom: 1rem; color: var(--primary);">All Traditions</h3>
-                    <div id="scatterPlot" style="min-height: 400px;"></div>
-                </div>
+            </div>
+
+            <div style="margin-top: 2rem;">
+                <h3 style="margin-bottom: 1rem; color: var(--primary);">All Traditions</h3>
+                <div id="scatterPlot" style="min-height: 500px; width: 100%;"></div>
             </div>
 
             <div id="traditionDetails" style="margin-top: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 8px; display: none; border-left: 4px solid var(--secondary);">
@@ -188,7 +189,52 @@
                 <p>Data maintained via <a href="https://github.com/justinshenk/harmonic-alignment">GitHub</a>. Community contributions welcome.</p>
 
                 <h3>Feedback</h3>
-                <p>Help improve this project by sharing your insights, corrections, or suggestions in our <a href="https://docs.google.com/document/d/1Oy_1yQia5fWepw1oNp7rIXfnfOHQVQk0fZXANZZDRRU/edit?tab=t.0" target="_blank" rel="noopener noreferrer">feedback document</a>.</p>
+                <p>Share feedback in our <a href="https://docs.google.com/document/d/1Oy_1yQia5fWepw1oNp7rIXfnfOHQVQk0fZXANZZDRRU/edit?tab=t.0" target="_blank" rel="noopener noreferrer">feedback document</a>, or use the forms below.</p>
+
+                <h3 style="margin-top: 2rem;">Stay Updated</h3>
+                <p>Sign up to receive updates about new research, traditions, and features.</p>
+                <form id="signupForm" class="form-container">
+                    <div class="form-group">
+                        <label for="signup-email">Email *</label>
+                        <input type="email" id="signup-email" name="email" required placeholder="your@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-name">Name (optional)</label>
+                        <input type="text" id="signup-name" name="name" placeholder="Your name">
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" name="interests" value="research"> Research updates
+                        </label>
+                        <label>
+                            <input type="checkbox" name="interests" value="new-traditions"> New traditions
+                        </label>
+                        <label>
+                            <input type="checkbox" name="interests" value="tools"> Practice tools
+                        </label>
+                    </div>
+                    <button type="submit" class="primary-button">Sign Up</button>
+                    <div id="signup-message" class="form-message"></div>
+                </form>
+
+                <h3 style="margin-top: 3rem;">Contact & Feedback</h3>
+                <p>Share your insights, corrections, or suggestions.</p>
+                <form id="contactForm" class="form-container">
+                    <div class="form-group">
+                        <label for="contact-email">Email *</label>
+                        <input type="email" id="contact-email" name="email" required placeholder="your@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-name">Name (optional)</label>
+                        <input type="text" id="contact-name" name="name" placeholder="Your name">
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-message">Message *</label>
+                        <textarea id="contact-message" name="message" rows="5" required placeholder="Your feedback, questions, or suggestions..."></textarea>
+                    </div>
+                    <button type="submit" class="primary-button">Send Message</button>
+                    <div id="contact-message" class="form-message"></div>
+                </form>
             </div>
         </div>
     </main>

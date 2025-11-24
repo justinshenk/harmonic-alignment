@@ -1,0 +1,68 @@
+// Vercel serverless function for signup form
+export default async function handler(req, res) {
+    // Only allow POST requests
+    if (req.method !== 'POST') {
+        return res.status(405).json({ error: 'Method not allowed' });
+    }
+
+    // Enable CORS
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+
+    try {
+        const { email, name, interests } = req.body;
+
+        // Validate required fields
+        if (!email) {
+            return res.status(400).json({ error: 'Email is required' });
+        }
+
+        // Prepare Airtable record
+        const record = {
+            fields: {
+                Email: email,
+                Name: name || '',
+                Interests: interests ? interests.join(', ') : '',
+                SignupDate: new Date().toISOString(),
+                Type: 'Signup'
+            }
+        };
+
+        // Send to Airtable
+        const airtableResponse = await fetch(
+            `https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/${process.env.AIRTABLE_TABLE_NAME}`,
+            {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${process.env.AIRTABLE_API_KEY}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ records: [record] })
+            }
+        );
+
+        if (!airtableResponse.ok) {
+            const errorData = await airtableResponse.text();
+            console.error('Airtable error:', errorData);
+            throw new Error('Failed to save to Airtable');
+        }
+
+        const result = await airtableResponse.json();
+
+        return res.status(200).json({
+            success: true,
+            message: 'Thank you for signing up!'
+        });
+
+    } catch (error) {
+        console.error('Signup error:', error);
+        return res.status(500).json({
+            error: 'Failed to process signup. Please try again later.'
+        });
+    }
+}
