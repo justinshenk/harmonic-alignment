@@ -572,6 +572,7 @@ function calculateRecommendations() {
 const wikipediaMapping = {
     'Vipassana': 'Vipassanā',
     'Metta (Loving-Kindness)': 'Mettā',
+    'Jhana Meditation': 'Jhana',
     'Theravada Buddhism': 'Theravada',
     'Zen Buddhism': 'Zen',
     'Tibetan Buddhism': 'Tibetan_Buddhism',
