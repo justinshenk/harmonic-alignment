@@ -1215,10 +1215,14 @@ function createScatterPlot() {
         .on('click', function(event, d) {
             // Find the tradition by name
             const tradition = traditionsData.traditions.find(t => t.name === d.name);
+            console.log('Clicked scatter point:', d.name, 'Found tradition:', tradition?.id);
             if (tradition) {
-                // Update dropdown
+                // Update dropdown and trigger change event
                 const selector = document.getElementById('traditionSelect');
                 selector.value = tradition.id;
+
+                // Dispatch change event to ensure UI updates
+                selector.dispatchEvent(new Event('change'));
 
                 // Update all views
                 selectTradition(tradition);
