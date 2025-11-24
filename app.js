@@ -616,11 +616,19 @@ const wikipediaMapping = {
     'Mussar': 'Musar_movement',
     'Acceptance and Commitment Therapy (ACT)': 'Acceptance_and_commitment_therapy',
     'Acceptance and Commitment Therapy': 'Acceptance_and_commitment_therapy',
-    'ACT': 'Acceptance_and_commitment_therapy'
+    'ACT': 'Acceptance_and_commitment_therapy',
+    'Circling': 'https://www.psychologytoday.com/us/blog/passion/202112/circling-a-personal-perspective-on-finding-genuine-connection'
 };
 
 function getWikipediaUrl(traditionName) {
     const mappedName = wikipediaMapping[traditionName] || traditionName;
+
+    // If it's already a full URL, return it as-is
+    if (mappedName.startsWith('http://') || mappedName.startsWith('https://')) {
+        return mappedName;
+    }
+
+    // Otherwise, construct Wikipedia URL
     const urlName = mappedName.replace(/ /g, '_');
     return `https://en.wikipedia.org/wiki/${urlName}`;
 }
