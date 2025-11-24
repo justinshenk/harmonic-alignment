@@ -7,6 +7,12 @@ let sortState = {
     direction: 'desc' // Reverse chronological (newest first)
 };
 
+// Table display state
+let tableDisplayState = {
+    showAll: false,
+    initialRowCount: 10
+};
+
 // Quiz state
 let quizState = {
     currentQuestion: 0,
@@ -376,6 +382,13 @@ function renderQuestion() {
     const totalQuestions = quizState.questions.length;
 
     document.getElementById('questionNumber').textContent = `Question ${quizState.currentQuestion + 1} of ${totalQuestions}`;
+
+    // Update progress bar
+    const progressBar = document.getElementById('progressBar');
+    if (progressBar) {
+        const progress = ((quizState.currentQuestion + 1) / totalQuestions) * 100;
+        progressBar.style.width = `${progress}%`;
+    }
 
     let html = `<h3>${question.question}</h3>`;
 
@@ -858,6 +871,16 @@ function initializeComplexityView() {
     // Populate complexity table
     renderComplexityTable();
 
+    // Set up toggle button handler (only add once)
+    const toggleBtn = document.getElementById('toggleTableRows');
+    if (toggleBtn && !toggleBtn.dataset.listenerAdded) {
+        toggleBtn.addEventListener('click', () => {
+            tableDisplayState.showAll = !tableDisplayState.showAll;
+            renderComplexityTable();
+        });
+        toggleBtn.dataset.listenerAdded = 'true';
+    }
+
     // Create violin plot
     createViolinPlot();
 
@@ -945,8 +968,20 @@ function renderComplexityTable() {
         }
     });
 
+    // Limit rows if not showing all
+    const displayedTraditions = tableDisplayState.showAll
+        ? sorted
+        : sorted.slice(0, tableDisplayState.initialRowCount);
+
+    // Update toggle button
+    const toggleBtn = document.getElementById('toggleTableRows');
+    if (toggleBtn) {
+        toggleBtn.textContent = tableDisplayState.showAll ? 'Show Less' : `Show All (${sorted.length})`;
+        toggleBtn.style.display = sorted.length <= tableDisplayState.initialRowCount ? 'none' : 'inline-block';
+    }
+
     // Render rows
-    tbody.innerHTML = sorted.map(tradition => {
+    tbody.innerHTML = displayedTraditions.map(tradition => {
         const profile = tradition.complexityProfile;
         return `
             <tr data-tradition-id="${tradition.id}" style="cursor: pointer;">

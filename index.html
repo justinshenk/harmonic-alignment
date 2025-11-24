@@ -32,6 +32,9 @@
 
                 <div id="quiz-questions" class="quiz-step">
                     <div class="question-progress">
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" id="progressBar"></div>
+                        </div>
                         <span id="questionNumber">Question 1 of 5</span>
                     </div>
 
@@ -71,38 +74,56 @@
             <h2>Complexity Mapping</h2>
             <p style="margin-bottom: 2rem; max-width: 800px;">Each practice introduces complexity at different levels of agency—from somatic awareness to transpersonal realization. This visualization maps where each tradition focuses its intervention.</p>
 
-            <div class="controls">
+            <div class="controls" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap;">
                 <label>
                     Select tradition for radar chart:
                     <select id="traditionSelect">
                         <option value="">Choose a tradition...</option>
                     </select>
                 </label>
+
+                <div class="dimension-legend" style="background: #f8f9fa; padding: 1rem; border-radius: 8px; max-width: 500px;">
+                    <h4 style="margin: 0 0 0.75rem 0; color: var(--primary); font-size: 0.9rem;">Complexity Dimensions</h4>
+                    <div style="display: grid; grid-template-columns: auto 1fr; gap: 0.5rem 1rem; font-size: 0.85rem;">
+                        <strong>Somatic:</strong><span>Body awareness, physical sensation</span>
+                        <strong>Intrapsychic:</strong><span>Internal mental/emotional processing</span>
+                        <strong>Relational:</strong><span>One-on-one interpersonal dynamics</span>
+                        <strong>Collective:</strong><span>Group practices, community</span>
+                        <strong>Systemic:</strong><span>Institutional structures, broader systems</span>
+                        <strong>Transpersonal:</strong><span>Cosmic consciousness, ego transcendence</span>
+                    </div>
+                </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
+            <div class="visualization-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 2rem;">
                 <div>
-                    <h3 style="margin-bottom: 1rem; color: var(--primary);">Individual Profile</h3>
-                    <div style="max-width: 500px; max-height: 500px; margin: 0 auto;">
+                    <h3 style="margin-bottom: 1rem; color: var(--primary);">Radar Profile</h3>
+                    <div style="max-width: 400px; max-height: 400px; margin: 0 auto;">
                         <canvas id="radarChart"></canvas>
                     </div>
-                    <div id="verticalViolinPlot" style="margin-top: 2rem; min-height: 400px; display: none;"></div>
-                    <div id="traditionDetails" style="margin-top: 2rem; padding: 1rem; background: #f8f9fa; border-radius: 8px; display: none;">
-                        <h4 style="margin-top: 0; color: var(--primary);"></h4>
-                        <p class="origin" style="color: #7f8c8d; margin-bottom: 0.5rem;"></p>
-                        <p class="description" style="margin-bottom: 1rem;"></p>
-                        <div class="meta" style="font-size: 0.9rem; color: #7f8c8d;">
-                            <div><strong>Time:</strong> <span class="time"></span></div>
-                            <div><strong>Guidance:</strong> <span class="guidance"></span></div>
-                            <div><strong>Accessibility:</strong> <span class="accessibility"></span></div>
-                        </div>
-                    </div>
+                </div>
+                <div>
+                    <h3 style="margin-bottom: 1rem; color: var(--primary);">Dimension Scores</h3>
+                    <div id="verticalViolinPlot" style="min-height: 400px; display: none;"></div>
                 </div>
                 <div>
                     <h3 style="margin-bottom: 1rem; color: var(--primary);">All Traditions</h3>
-                    <div id="scatterPlot" style="min-height: 500px;"></div>
+                    <div id="scatterPlot" style="min-height: 400px;"></div>
                 </div>
             </div>
+
+            <div id="traditionDetails" style="margin-top: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 8px; display: none; border-left: 4px solid var(--secondary);">
+                <h4 style="margin-top: 0; color: var(--primary);"></h4>
+                <p class="origin" style="color: #7f8c8d; margin-bottom: 0.5rem; font-size: 0.95rem;"></p>
+                <p class="description" style="margin-bottom: 1rem;"></p>
+                <div class="meta" style="font-size: 0.9rem; color: #7f8c8d; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                    <div><strong>Time:</strong> <span class="time"></span></div>
+                    <div><strong>Guidance:</strong> <span class="guidance"></span></div>
+                    <div><strong>Accessibility:</strong> <span class="accessibility"></span></div>
+                </div>
+            </div>
+
+            <hr style="border: none; border-top: 2px solid #ecf0f1; margin: 3rem 0;">
 
             <div style="margin-top: 3rem;">
                 <h3 style="margin-bottom: 1rem; color: var(--primary);">Distribution by Dimension</h3>
@@ -110,9 +131,16 @@
                 <div id="violinPlot" style="min-height: 400px;"></div>
             </div>
 
+            <hr style="border: none; border-top: 2px solid #ecf0f1; margin: 3rem 0;">
+
             <div style="margin-top: 3rem;">
-                <h3 style="margin-bottom: 1rem; color: var(--primary);">Complexity Profiles Table</h3>
-                <p style="margin-bottom: 1rem; color: #7f8c8d;">Click column headers to sort. Click a row to view details.</p>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <div>
+                        <h3 style="margin: 0; color: var(--primary);">Complexity Profiles Table</h3>
+                        <p style="margin: 0.25rem 0 0 0; color: #7f8c8d; font-size: 0.9rem;">Click column headers to sort. Click a row to view details.</p>
+                    </div>
+                    <button id="toggleTableRows" class="secondary-button" style="white-space: nowrap;">Show All</button>
+                </div>
                 <div id="complexity-table-container" style="overflow-x: auto; overflow-y: auto; max-height: 600px;">
                     <table id="complexityTable">
                         <thead>
