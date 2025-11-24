@@ -612,7 +612,8 @@ const wikipediaMapping = {
     'Advaita Vedanta': 'Advaita_Vedanta',
     'Internal Family Systems (IFS)': 'Internal_Family_Systems_Model',
     'Internal Family Systems': 'Internal_Family_Systems_Model',
-    'IFS': 'Internal_Family_Systems_Model'
+    'IFS': 'Internal_Family_Systems_Model',
+    'Mussar': 'Musar_movement'
 };
 
 function getWikipediaUrl(traditionName) {
