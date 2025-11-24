@@ -661,6 +661,12 @@ footer a:hover {
     .visualization-grid > div > div {
         max-width: 100% !important;
         width: 100% !important;
+        margin: 0 !important;
+    }
+
+    /* Ensure complexity section containers don't overflow */
+    #complexity-section .visualization-grid > div {
+        overflow: hidden;
     }
 
     #scatterPlot,
