@@ -586,7 +586,10 @@ const wikipediaMapping = {
     'Sufi Meditation': 'Sufism',
     'Kabbalah': 'Kabbalah',
     'Stoic Philosophy': 'Stoicism',
-    'Advaita Vedanta': 'Advaita_Vedanta'
+    'Advaita Vedanta': 'Advaita_Vedanta',
+    'Internal Family Systems (IFS)': 'Internal_Family_Systems_Model',
+    'Internal Family Systems': 'Internal_Family_Systems_Model',
+    'IFS': 'Internal_Family_Systems_Model'
 };
 
 function getWikipediaUrl(traditionName) {
