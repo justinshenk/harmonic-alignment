@@ -1406,9 +1406,9 @@ function createVerticalViolinPlot(tradition) {
         .append('g')
         .attr('transform', `translate(${margin.left},${margin.top})`);
 
-    // Y scale - categorical for dimensions (reversed so somatic is at bottom)
+    // Y scale - categorical for dimensions (somatic at bottom)
     const y = d3.scaleBand()
-        .domain(complexity_dims.reverse()) // Reverse so somatic is at bottom
+        .domain(complexity_dims)
         .range([height, 0])
         .padding(0.3);
 
