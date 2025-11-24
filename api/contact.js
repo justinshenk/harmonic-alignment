@@ -25,11 +25,11 @@ export default async function handler(req, res) {
         // Prepare Airtable record
         const record = {
             fields: {
-                Email: email,
-                Name: name || '',
-                Message: message,
-                SubmitDate: new Date().toISOString(),
-                Type: 'Contact'
+                'email': email,
+                'name': name || '',
+                'message': message,
+                'created_at': new Date().toISOString(),
+                'type': 'Contact'
             }
         };
 

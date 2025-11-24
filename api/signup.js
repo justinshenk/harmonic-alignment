@@ -23,13 +23,14 @@ export default async function handler(req, res) {
         }
 
         // Prepare Airtable record
+        // Try common field name variations
         const record = {
             fields: {
-                Email: email,
-                Name: name || '',
-                Source: source || '',
-                SignupDate: new Date().toISOString(),
-                Type: 'Signup'
+                'email': email,
+                'name': name || '',
+                'source': source || '',
+                'created_at': new Date().toISOString(),
+                'type': 'Signup'
             }
         };
 
