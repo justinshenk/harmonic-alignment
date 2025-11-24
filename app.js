@@ -1,0 +1,829 @@
+// Load traditions data
+let traditionsData = null;
+
+// Sort state
+let sortState = {
+    column: 'yearOrigin',
+    direction: 'desc' // Reverse chronological (newest first)
+};
+
+// Quiz state
+let quizState = {
+    currentQuestion: 0,
+    answers: {},
+    questions: [
+        {
+            id: 'goals',
+            question: 'What are your primary goals?',
+            type: 'multiple',
+            options: [
+                { value: 'mental-health', label: 'Address mental health challenges (ADHD, depression, anxiety, trauma)', weights: { adhd: 1, depression: 1, anxiety: 1, trauma: 1 } },
+                { value: 'cognitive', label: 'Improve focus, insight, and metacognition', weights: { focus: 1, metacognition: 1, insight: 1 } },
+                { value: 'relational', label: 'Enhance compassion, communication, and empathy', weights: { compassion: 1, communication: 1, empathy: 1 } },
+                { value: 'somatic', label: 'Develop body awareness and emotional regulation', weights: { bodyAwareness: 1, emotionalRegulation: 1 } }
+            ]
+        },
+        {
+            id: 'timeCommitment',
+            question: 'How much time can you commit?',
+            type: 'single',
+            options: [
+                { value: 'minimal', label: '15-30 minutes daily', filter: (t) => t.timeCommitment.includes('15') || t.timeCommitment.includes('20') },
+                { value: 'moderate', label: '30-60 minutes daily', filter: (t) => t.timeCommitment.includes('30') || t.timeCommitment.includes('40') || t.timeCommitment.includes('45') },
+                { value: 'significant', label: '1+ hours daily or weekly sessions', filter: (t) => t.timeCommitment.includes('hour') || t.timeCommitment.includes('Weekly') || t.timeCommitment.includes('session') },
+                { value: 'any', label: 'Flexible / any amount', filter: (t) => true }
+            ]
+        },
+        {
+            id: 'guidance',
+            question: 'Do you prefer guided or independent practice?',
+            type: 'single',
+            options: [
+                { value: 'independent', label: 'Independent practice with minimal guidance', filter: (t) => t.guidanceNeeded === 'Low' || t.guidanceNeeded === 'Low-Medium' },
+                { value: 'some-guidance', label: 'Some guidance or periodic check-ins', filter: (t) => t.guidanceNeeded === 'Medium' || t.guidanceNeeded === 'Medium-High' },
+                { value: 'professional', label: 'Professional therapist or teacher required', filter: (t) => t.guidanceNeeded === 'High' || t.guidanceNeeded === 'Very High' },
+                { value: 'any', label: 'Open to any level', filter: (t) => true }
+            ]
+        },
+        {
+            id: 'accessibility',
+            question: 'What level of accessibility do you need?',
+            type: 'single',
+            options: [
+                { value: 'very-high', label: 'Widely available and easy to start', filter: (t) => t.accessibility === 'Very High' || t.accessibility === 'High' },
+                { value: 'medium', label: 'Some barriers okay (cost, availability)', filter: (t) => t.accessibility === 'Medium' || t.accessibility === 'High' || t.accessibility === 'Very High' },
+                { value: 'any', label: 'Willing to seek out specialized resources', filter: (t) => true }
+            ]
+        },
+        {
+            id: 'specificNeeds',
+            question: 'Any specific areas you want to focus on? (optional)',
+            type: 'multiple',
+            optional: true,
+            options: [
+                { value: 'adhd', label: 'ADHD', weights: { adhd: 2 } },
+                { value: 'depression', label: 'Depression', weights: { depression: 2 } },
+                { value: 'anxiety', label: 'Anxiety', weights: { anxiety: 2 } },
+                { value: 'trauma', label: 'Trauma', weights: { trauma: 2 } },
+                { value: 'focus', label: 'Focus & Concentration', weights: { focus: 2 } },
+                { value: 'insight', label: 'Self-understanding & Insight', weights: { insight: 2, metacognition: 1 } },
+                { value: 'compassion', label: 'Compassion & Empathy', weights: { compassion: 2, empathy: 2 } }
+            ]
+        }
+    ]
+};
+
+// Initialize
+document.addEventListener('DOMContentLoaded', async () => {
+    await loadData();
+    initializeNavigation();
+    initializeQuiz();
+    renderComparisonTable();
+    renderEvolutionTree();
+});
+
+async function loadData() {
+    // Try CSV first
+    try {
+        console.log('Loading data from CSV...');
+        traditionsData = await loadFromCSV();
+        console.log('✓ Loaded from CSV');
+        return;
+    } catch (error) {
+        console.warn('Failed to load from CSV, falling back...', error);
+    }
+
+    // Fallback to local JSON
+    try {
+        const response = await fetch('data/traditions.json');
+        traditionsData = await response.json();
+        console.log('✓ Loaded from local JSON');
+    } catch (error) {
+        console.error('Error loading data:', error);
+    }
+}
+
+async function loadFromCSV() {
+    const response = await fetch('data/traditions-template.csv');
+
+    if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+
+    const csvText = await response.text();
+    return parseCSVToTraditions(csvText);
+}
+
+function parseCSVToTraditions(csvText) {
+    const lines = csvText.split('\n');
+    const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+    const traditions = [];
+
+    for (let i = 1; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (!line) continue;
+
+        const values = parseCSVLine(line);
+        if (values.length < headers.length) continue;
+
+        const row = {};
+        headers.forEach((header, idx) => {
+            row[header] = values[idx] || '';
+        });
+
+        if (!row.id || !row.name) continue;
+
+        // Parse pipe-separated fields
+        const practices = row.practices ? row.practices.split('|').map(p => p.trim()).filter(p => p) : [];
+        const parentTraditions = row.parentTraditions ? row.parentTraditions.split('|').map(p => p.trim()).filter(p => p) : [];
+        const citations = row.citations ? row.citations.split('|').map(c => c.trim()).filter(c => c) : [];
+
+        // Build effectiveness scores
+        const effectiveness = {};
+        ['adhd', 'depression', 'anxiety', 'trauma', 'focus', 'metacognition',
+         'insight', 'compassion', 'communication', 'empathy',
+         'bodyAwareness', 'emotionalRegulation'].forEach(metric => {
+            const value = parseInt(row[metric]) || 0;
+            effectiveness[metric] = Math.max(0, Math.min(5, value));
+        });
+
+        traditions.push({
+            id: row.id,
+            name: row.name,
+            origin: row.origin,
+            yearOrigin: parseInt(row.yearOrigin) || 0,
+            parentTraditions: parentTraditions,
+            description: row.description,
+            practices: practices,
+            timeCommitment: row.timeCommitment,
+            guidanceNeeded: row.guidanceNeeded,
+            accessibility: row.accessibility,
+            effectiveness: effectiveness,
+            researchSupport: row.researchSupport,
+            citations: citations
+        });
+    }
+
+    return {
+        traditions: traditions,
+        dimensions: {
+            mentalHealth: ['adhd', 'depression', 'anxiety', 'trauma'],
+            cognitive: ['focus', 'metacognition', 'insight'],
+            relational: ['compassion', 'communication', 'empathy'],
+            somatic: ['bodyAwareness', 'emotionalRegulation']
+        },
+        scale: {
+            '1': 'Minimal/No evidence',
+            '2': 'Low effectiveness',
+            '3': 'Moderate effectiveness',
+            '4': 'High effectiveness',
+            '5': 'Very high effectiveness'
+        }
+    };
+}
+
+function parseCSVLine(line) {
+    const values = [];
+    let current = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+
+        if (char === '"') {
+            inQuotes = !inQuotes;
+        } else if (char === ',' && !inQuotes) {
+            values.push(current.trim().replace(/^"|"$/g, ''));
+            current = '';
+        } else {
+            current += char;
+        }
+    }
+
+    values.push(current.trim().replace(/^"|"$/g, ''));
+    return values;
+}
+
+async function loadFromGoogleSheets() {
+    const csvUrl = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/export?format=csv&gid=0`;
+    const response = await fetch(csvUrl);
+
+    if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+
+    const csvText = await response.text();
+    return parseCSVToTraditions(csvText);
+}
+
+function parseCSVToTraditions(csvText) {
+    const lines = csvText.split('\n');
+    const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+    const traditions = [];
+
+    // Validate headers
+    const requiredHeaders = ['id', 'name', 'origin', 'description'];
+    const hasRequiredHeaders = requiredHeaders.every(h => headers.includes(h));
+    if (!hasRequiredHeaders) {
+        throw new Error('Invalid sheet format: missing required columns');
+    }
+
+    for (let i = 1; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (!line) continue;
+
+        const values = parseCSVLine(line);
+        if (values.length < headers.length) continue;
+
+        const row = {};
+        headers.forEach((header, idx) => {
+            row[header] = values[idx] || '';
+        });
+
+        // Skip rows without required fields
+        if (!row.id || !row.name) continue;
+
+        // Parse practices (comma-separated, but within quotes if needed)
+        const practices = row.practices ? row.practices.split('|').map(p => p.trim()).filter(p => p) : [];
+
+        // Parse parent traditions
+        const parentTraditions = row.parentTraditions ? row.parentTraditions.split('|').map(p => p.trim()).filter(p => p) : [];
+
+        // Parse citations
+        const citations = row.citations ? row.citations.split('|').map(c => c.trim()).filter(c => c) : [];
+
+        // Build effectiveness scores (validate 1-5 range)
+        const effectiveness = {};
+        ['adhd', 'depression', 'anxiety', 'trauma', 'focus', 'metacognition',
+         'insight', 'compassion', 'communication', 'empathy',
+         'bodyAwareness', 'emotionalRegulation'].forEach(metric => {
+            const value = parseInt(row[metric]) || 0;
+            // Clamp to valid range
+            effectiveness[metric] = Math.max(0, Math.min(5, value));
+        });
+
+        traditions.push({
+            id: row.id,
+            name: row.name,
+            origin: row.origin,
+            yearOrigin: parseInt(row.yearOrigin) || 0,
+            parentTraditions: parentTraditions,
+            description: row.description,
+            practices: practices,
+            timeCommitment: row.timeCommitment,
+            guidanceNeeded: row.guidanceNeeded,
+            accessibility: row.accessibility,
+            effectiveness: effectiveness,
+            researchSupport: row.researchSupport,
+            citations: citations
+        });
+    }
+
+    return {
+        traditions: traditions,
+        dimensions: {
+            mentalHealth: ['adhd', 'depression', 'anxiety', 'trauma'],
+            cognitive: ['focus', 'metacognition', 'insight'],
+            relational: ['compassion', 'communication', 'empathy'],
+            somatic: ['bodyAwareness', 'emotionalRegulation']
+        },
+        scale: {
+            '1': 'Minimal/No evidence',
+            '2': 'Low effectiveness',
+            '3': 'Moderate effectiveness',
+            '4': 'High effectiveness',
+            '5': 'Very high effectiveness'
+        }
+    };
+}
+
+function parseCSVLine(line) {
+    const values = [];
+    let current = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+
+        if (char === '"') {
+            inQuotes = !inQuotes;
+        } else if (char === ',' && !inQuotes) {
+            values.push(current.trim().replace(/^"|"$/g, ''));
+            current = '';
+        } else {
+            current += char;
+        }
+    }
+
+    values.push(current.trim().replace(/^"|"$/g, ''));
+    return values;
+}
+
+function initializeNavigation() {
+    const buttons = {
+        quizView: 'quiz-section',
+        compareView: 'compare-section',
+        treeView: 'tree-section',
+        aboutView: 'about-section'
+    };
+
+    Object.keys(buttons).forEach(buttonId => {
+        document.getElementById(buttonId).addEventListener('click', () => {
+            // Update active button
+            document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(buttonId).classList.add('active');
+
+            // Update active section
+            document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+            document.getElementById(buttons[buttonId]).classList.add('active');
+        });
+    });
+
+    // Add filter listeners
+    document.getElementById('dimensionFilter').addEventListener('change', renderComparisonTable);
+}
+
+function initializeQuiz() {
+    document.getElementById('startQuiz').addEventListener('click', startQuiz);
+    document.getElementById('prevQuestion').addEventListener('click', prevQuestion);
+    document.getElementById('nextQuestion').addEventListener('click', nextQuestion);
+    document.getElementById('restartQuiz').addEventListener('click', restartQuiz);
+}
+
+function startQuiz() {
+    quizState.currentQuestion = 0;
+    quizState.answers = {};
+
+    document.getElementById('quiz-intro').classList.remove('active');
+    document.getElementById('quiz-questions').classList.add('active');
+
+    renderQuestion();
+}
+
+function restartQuiz() {
+    document.getElementById('quiz-results').classList.remove('active');
+    document.getElementById('quiz-intro').classList.add('active');
+}
+
+function renderQuestion() {
+    const question = quizState.questions[quizState.currentQuestion];
+    const totalQuestions = quizState.questions.length;
+
+    document.getElementById('questionNumber').textContent = `Question ${quizState.currentQuestion + 1} of ${totalQuestions}`;
+
+    let html = `<h3>${question.question}</h3>`;
+
+    if (question.type === 'multiple') {
+        html += '<p class="question-hint">Select all that apply</p>';
+        html += '<div class="options">';
+        question.options.forEach(option => {
+            const checked = quizState.answers[question.id]?.includes(option.value) ? 'checked' : '';
+            html += `
+                <label class="option-checkbox">
+                    <input type="checkbox" name="${question.id}" value="${option.value}" ${checked}>
+                    <span>${option.label}</span>
+                </label>
+            `;
+        });
+        html += '</div>';
+    } else {
+        html += '<div class="options">';
+        question.options.forEach(option => {
+            const checked = quizState.answers[question.id] === option.value ? 'checked' : '';
+            html += `
+                <label class="option-radio">
+                    <input type="radio" name="${question.id}" value="${option.value}" ${checked}>
+                    <span>${option.label}</span>
+                </label>
+            `;
+        });
+        html += '</div>';
+    }
+
+    document.getElementById('questionContainer').innerHTML = html;
+
+    // Update navigation buttons
+    document.getElementById('prevQuestion').style.display = quizState.currentQuestion > 0 ? 'inline-block' : 'none';
+    document.getElementById('nextQuestion').textContent = quizState.currentQuestion === totalQuestions - 1 ? 'See Results' : 'Next';
+
+    // Add change listeners to save answers
+    const inputs = document.querySelectorAll(`input[name="${question.id}"]`);
+    inputs.forEach(input => {
+        input.addEventListener('change', () => saveAnswer(question));
+    });
+}
+
+function saveAnswer(question) {
+    const inputs = document.querySelectorAll(`input[name="${question.id}"]`);
+
+    if (question.type === 'multiple') {
+        const selected = Array.from(inputs)
+            .filter(input => input.checked)
+            .map(input => input.value);
+        quizState.answers[question.id] = selected;
+    } else {
+        const selected = Array.from(inputs).find(input => input.checked);
+        if (selected) {
+            quizState.answers[question.id] = selected.value;
+        }
+    }
+}
+
+function prevQuestion() {
+    if (quizState.currentQuestion > 0) {
+        quizState.currentQuestion--;
+        renderQuestion();
+    }
+}
+
+function nextQuestion() {
+    const question = quizState.questions[quizState.currentQuestion];
+
+    // Validate answer (skip validation for optional questions)
+    if (!question.optional && !quizState.answers[question.id]) {
+        alert('Please select an answer before continuing');
+        return;
+    }
+
+    if (question.type === 'multiple' && !question.optional && quizState.answers[question.id].length === 0) {
+        alert('Please select at least one option');
+        return;
+    }
+
+    if (quizState.currentQuestion < quizState.questions.length - 1) {
+        quizState.currentQuestion++;
+        renderQuestion();
+    } else {
+        showResults();
+    }
+}
+
+function showResults() {
+    document.getElementById('quiz-questions').classList.remove('active');
+    document.getElementById('quiz-results').classList.add('active');
+
+    const recommendations = calculateRecommendations();
+    renderResults(recommendations);
+}
+
+function calculateRecommendations() {
+    if (!traditionsData) return [];
+
+    // Build weights from answers
+    const weights = {};
+    const filters = [];
+
+    quizState.questions.forEach(question => {
+        const answer = quizState.answers[question.id];
+        if (!answer) return;
+
+        if (question.type === 'multiple') {
+            // Multiple selection - aggregate weights
+            answer.forEach(value => {
+                const option = question.options.find(o => o.value === value);
+                if (option && option.weights) {
+                    Object.entries(option.weights).forEach(([metric, weight]) => {
+                        weights[metric] = (weights[metric] || 0) + weight;
+                    });
+                }
+            });
+        } else {
+            // Single selection
+            const option = question.options.find(o => o.value === answer);
+            if (option) {
+                if (option.weights) {
+                    Object.entries(option.weights).forEach(([metric, weight]) => {
+                        weights[metric] = (weights[metric] || 0) + weight;
+                    });
+                }
+                if (option.filter) {
+                    filters.push(option.filter);
+                }
+            }
+        }
+    });
+
+    // Score each tradition
+    const scored = traditionsData.traditions.map(tradition => {
+        // Apply filters
+        const passesFilters = filters.every(filter => filter(tradition));
+        if (!passesFilters) return null;
+
+        // Calculate weighted score
+        let score = 0;
+        Object.entries(weights).forEach(([metric, weight]) => {
+            const effectiveness = tradition.effectiveness[metric] || 0;
+            score += effectiveness * weight;
+        });
+
+        return {
+            tradition,
+            score
+        };
+    }).filter(item => item !== null);
+
+    // Sort by score and return top 5
+    scored.sort((a, b) => b.score - a.score);
+    return scored.slice(0, 5);
+}
+
+function renderResults(recommendations) {
+    if (recommendations.length === 0) {
+        document.getElementById('resultsContainer').innerHTML = '<p>No recommendations found. Please try adjusting your answers.</p>';
+        return;
+    }
+
+    let html = '<div class="recommendations">';
+
+    recommendations.forEach((rec, index) => {
+        const t = rec.tradition;
+        html += `
+            <div class="recommendation-card">
+                <div class="recommendation-rank">#${index + 1}</div>
+                <h3>${t.name}</h3>
+                <p class="tradition-origin">${t.origin} (${t.yearOrigin > 0 ? t.yearOrigin : Math.abs(t.yearOrigin) + ' BCE'})</p>
+                <p>${t.description}</p>
+                <div class="recommendation-details">
+                    <div class="detail-item">
+                        <strong>Practices:</strong> ${t.practices.join(', ')}
+                    </div>
+                    <div class="detail-item">
+                        <strong>Time commitment:</strong> ${t.timeCommitment}
+                    </div>
+                    <div class="detail-item">
+                        <strong>Guidance needed:</strong> ${t.guidanceNeeded}
+                    </div>
+                    <div class="detail-item">
+                        <strong>Accessibility:</strong> ${t.accessibility}
+                    </div>
+                    <div class="detail-item">
+                        <strong>Research support:</strong> ${t.researchSupport}
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+
+    html += '</div>';
+
+    document.getElementById('resultsContainer').innerHTML = html;
+}
+
+function renderComparisonTable() {
+    if (!traditionsData) return;
+
+    const dimensionFilter = document.getElementById('dimensionFilter').value;
+
+    // Determine which metrics to show
+    let metricsToShow = [];
+    if (dimensionFilter === 'all') {
+        metricsToShow = ['adhd', 'depression', 'anxiety', 'trauma', 'focus', 'metacognition', 'insight',
+                        'compassion', 'communication', 'empathy', 'bodyAwareness', 'emotionalRegulation'];
+    } else {
+        metricsToShow = traditionsData.dimensions[dimensionFilter] || [];
+    }
+
+    // Sort traditions if sort column is set
+    let sortedTraditions = [...traditionsData.traditions];
+    if (sortState.column) {
+        sortedTraditions.sort((a, b) => {
+            let valA, valB;
+
+            if (sortState.column === 'name') {
+                valA = a.name;
+                valB = b.name;
+            } else if (sortState.column === 'origin') {
+                valA = a.origin;
+                valB = b.origin;
+            } else if (sortState.column === 'yearOrigin') {
+                valA = a.yearOrigin;
+                valB = b.yearOrigin;
+            } else if (sortState.column === 'timeCommitment') {
+                valA = a.timeCommitment;
+                valB = b.timeCommitment;
+            } else if (sortState.column === 'guidanceNeeded') {
+                valA = a.guidanceNeeded;
+                valB = b.guidanceNeeded;
+            } else {
+                // Effectiveness score
+                valA = a.effectiveness[sortState.column] || 0;
+                valB = b.effectiveness[sortState.column] || 0;
+            }
+
+            // Compare values
+            let comparison = 0;
+            if (typeof valA === 'string') {
+                comparison = valA.localeCompare(valB);
+            } else {
+                comparison = valA - valB;
+            }
+
+            return sortState.direction === 'asc' ? comparison : -comparison;
+        });
+    }
+
+    // Create table headers with sort indicators
+    let html = '<table><thead><tr>';
+
+    const createSortableHeader = (label, column) => {
+        const sortIcon = sortState.column === column
+            ? (sortState.direction === 'asc' ? ' ▲' : ' ▼')
+            : '';
+        return `<th class="sortable" data-column="${column}">${label}${sortIcon}</th>`;
+    };
+
+    html += createSortableHeader('Framework', 'name');
+    html += '<th>Description</th>';
+    html += '<th>Practices</th>';
+    html += createSortableHeader('Origin', 'origin');
+    html += createSortableHeader('Time/Day', 'timeCommitment');
+    html += createSortableHeader('Guidance', 'guidanceNeeded');
+
+    metricsToShow.forEach(metric => {
+        const label = formatMetricName(metric);
+        html += createSortableHeader(label, metric);
+    });
+
+    html += '</tr></thead><tbody>';
+
+    sortedTraditions.forEach(tradition => {
+        html += '<tr>';
+        html += `<td><div class="tradition-name">${tradition.name}</div></td>`;
+        html += `<td>${tradition.description}</td>`;
+        html += `<td>${tradition.practices.join(', ')}</td>`;
+        html += `<td><div class="tradition-origin">${tradition.origin}</div></td>`;
+        html += `<td>${tradition.timeCommitment}</td>`;
+        html += `<td>${tradition.guidanceNeeded}</td>`;
+
+        metricsToShow.forEach(metric => {
+            const score = tradition.effectiveness[metric] || 0;
+            html += `<td><span class="score score-${score}">${score}</span></td>`;
+        });
+
+        html += '</tr>';
+    });
+
+    html += '</tbody></table>';
+
+    document.getElementById('comparison-table').innerHTML = html;
+
+    // Add click handlers to sortable headers
+    document.querySelectorAll('th.sortable').forEach(th => {
+        th.addEventListener('click', () => {
+            const column = th.dataset.column;
+
+            if (sortState.column === column) {
+                // Toggle direction
+                sortState.direction = sortState.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+                // New column
+                sortState.column = column;
+                sortState.direction = 'asc';
+            }
+
+            renderComparisonTable();
+        });
+    });
+}
+
+function formatMetricName(metric) {
+    const names = {
+        adhd: 'ADHD',
+        depression: 'Depression',
+        anxiety: 'Anxiety',
+        trauma: 'Trauma',
+        focus: 'Focus',
+        metacognition: 'Metacognition',
+        insight: 'Insight',
+        compassion: 'Compassion',
+        communication: 'Communication',
+        empathy: 'Empathy',
+        bodyAwareness: 'Body Awareness',
+        emotionalRegulation: 'Emotional Regulation'
+    };
+    return names[metric] || metric;
+}
+
+function renderEvolutionTree() {
+    if (!traditionsData) return;
+
+    const width = 1200;
+    const height = 600;
+    const margin = { top: 20, right: 120, bottom: 20, left: 120 };
+
+    // Clear existing
+    d3.select('#evolution-tree').html('');
+
+    const svg = d3.select('#evolution-tree')
+        .append('svg')
+        .attr('width', '100%')
+        .attr('height', height)
+        .attr('viewBox', `0 0 ${width} ${height}`)
+        .append('g')
+        .attr('transform', `translate(${margin.left},${margin.top})`);
+
+    // Build hierarchy
+    const nodes = buildTreeData();
+
+    // Create tree layout
+    const treeLayout = d3.tree()
+        .size([height - margin.top - margin.bottom, width - margin.left - margin.right]);
+
+    const root = d3.hierarchy(nodes);
+    treeLayout(root);
+
+    // Draw links
+    svg.selectAll('.link')
+        .data(root.links())
+        .enter()
+        .append('path')
+        .attr('class', 'link')
+        .attr('d', d3.linkHorizontal()
+            .x(d => d.y)
+            .y(d => d.x));
+
+    // Draw nodes
+    const node = svg.selectAll('.node')
+        .data(root.descendants())
+        .enter()
+        .append('g')
+        .attr('class', 'node')
+        .attr('transform', d => `translate(${d.y},${d.x})`);
+
+    node.append('circle')
+        .attr('r', 5);
+
+    node.append('text')
+        .attr('dy', 3)
+        .attr('x', d => d.children ? -10 : 10)
+        .style('text-anchor', d => d.children ? 'end' : 'start')
+        .text(d => d.data.name);
+
+    // Add tooltip on hover
+    node.append('title')
+        .text(d => {
+            if (d.data.description) {
+                return `${d.data.name}\n${d.data.description}`;
+            }
+            return d.data.name;
+        });
+}
+
+function buildTreeData() {
+    // Build simplified tree showing evolution and relationships
+    return {
+        name: 'Ancient Traditions',
+        children: [
+            {
+                name: 'Buddhist (-500)',
+                children: [
+                    { name: 'Vipassana', description: 'Insight meditation' },
+                    { name: 'Jhana', description: 'Concentration states' },
+                    { name: 'Metta', description: 'Loving-kindness' },
+                    {
+                        name: 'Tibetan Buddhism (800)',
+                        children: [
+                            { name: 'Open Awareness', description: 'Dzogchen practices' }
+                        ]
+                    }
+                ]
+            },
+            {
+                name: 'Jewish (-500)',
+                children: [
+                    { name: 'Mussar', description: 'Character development' }
+                ]
+            },
+            {
+                name: 'Greek Philosophy (-300)',
+                children: [
+                    { name: 'Stoicism', description: 'Virtue ethics' }
+                ]
+            },
+            {
+                name: 'Western Psychology (1900s)',
+                children: [
+                    {
+                        name: 'Humanistic (1950s)',
+                        children: [
+                            { name: 'Focusing (1978)', description: 'Body-centered awareness' },
+                            { name: 'Circling (2005)', description: 'Relational mindfulness' }
+                        ]
+                    },
+                    {
+                        name: 'Trauma Therapy (1970s)',
+                        children: [
+                            { name: 'Somatic Experiencing', description: 'Body-based trauma work' }
+                        ]
+                    },
+                    {
+                        name: 'Developmental (1980s)',
+                        children: [
+                            { name: 'IDP (2010)', description: 'Stage development' }
+                        ]
+                    }
+                ]
+            }
+        ]
+    };
+}

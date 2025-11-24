@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harmonic Alignment Project</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Harmonic Alignment Project</h1>
+        <p>Cataloguing wisdom traditions as reference for multi-scale alignment</p>
+        <nav>
+            <button id="quizView" class="active">Find Your Practice</button>
+            <button id="compareView">Compare</button>
+            <button id="treeView">Evolution</button>
+            <button id="aboutView">About</button>
+        </nav>
+    </header>
+
+    <main>
+        <div id="quiz-section" class="section active">
+            <div class="quiz-container">
+                <div id="quiz-intro" class="quiz-step active">
+                    <h2>Find Your Practice</h2>
+                    <p>Answer a few questions to discover contemplative practices that match your needs and circumstances.</p>
+                    <button id="startQuiz" class="primary-button">Start Quiz</button>
+                </div>
+
+                <div id="quiz-questions" class="quiz-step">
+                    <div class="question-progress">
+                        <span id="questionNumber">Question 1 of 5</span>
+                    </div>
+
+                    <div id="questionContainer"></div>
+
+                    <div class="quiz-navigation">
+                        <button id="prevQuestion" class="secondary-button">Previous</button>
+                        <button id="nextQuestion" class="primary-button">Next</button>
+                    </div>
+                </div>
+
+                <div id="quiz-results" class="quiz-step">
+                    <h2>Recommended Practices</h2>
+                    <div id="resultsContainer"></div>
+                    <button id="restartQuiz" class="secondary-button">Retake Quiz</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="compare-section" class="section">
+            <div class="controls">
+                <label>
+                    Filter by dimension:
+                    <select id="dimensionFilter">
+                        <option value="all">All Dimensions</option>
+                        <option value="mentalHealth">Mental Health</option>
+                        <option value="cognitive">Cognitive</option>
+                        <option value="relational">Relational</option>
+                        <option value="somatic">Somatic</option>
+                    </select>
+                </label>
+            </div>
+            <div id="comparison-table"></div>
+        </div>
+
+        <div id="tree-section" class="section">
+            <div id="evolution-tree"></div>
+        </div>
+
+        <div id="about-section" class="section">
+            <div class="content">
+                <h2>About</h2>
+                <p>Cataloguing wisdom traditions as reference for multi-scale alignment—from individual development to institutional coordination to AGI values.</p>
+
+                <p>Each tradition rated 1-5 across 12 dimensions: mental health (ADHD, depression, anxiety, trauma), cognitive (focus, metacognition, insight), relational (compassion, communication, empathy), and somatic (body awareness, emotional regulation).</p>
+
+                <h3>Character Development Model</h3>
+                <p>We've synthesized contemplative practice with reinforcement learning to create a practical character development framework. The model treats virtue cultivation as policy optimization with structured gratitude endpoints throughout the day.</p>
+
+                <p><a href="character-development.html" style="display: inline-block; margin-top: 1rem; padding: 0.75rem 1.5rem; background: var(--secondary); color: white; text-decoration: none; border-radius: 5px;">View Character Development Model →</a></p>
+
+                <h3>Data & Contributions</h3>
+                <p>Data maintained via <a href="https://github.com/justinshenk/harmonic-alignment">GitHub</a>. Community contributions welcome.</p>
+
+                <h3>Feedback</h3>
+                <p>Help improve this project by sharing your insights, corrections, or suggestions in our <a href="https://docs.google.com/document/d/1Oy_1yQia5fWepw1oNp7rIXfnfOHQVQk0fZXANZZDRRU/edit?tab=t.0" target="_blank" rel="noopener noreferrer">feedback document</a>.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Harmonic Alignment Project | MIT License | <a href="https://github.com/justinshenk/harmonic-alignment">GitHub</a></p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

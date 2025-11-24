@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Development Model - Harmonic Alignment</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- MathJax for LaTeX math rendering -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+
+    <style>
+        .model-content {
+            max-width: 900px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        .model-content ul {
+            margin-left: 2rem;
+            padding-left: 0;
+            list-style-position: outside;
+        }
+
+        .model-content ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .model-content ol {
+            margin-left: 2rem;
+            padding-left: 0;
+        }
+
+        .model-content ol li {
+            margin-bottom: 0.5rem;
+        }
+
+        .model-content h2 {
+            color: var(--primary);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        .model-content h3 {
+            color: var(--secondary);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .endpoint-card {
+            background: var(--bg);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary);
+        }
+
+        .endpoint-card h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .endpoint-meta {
+            font-family: 'Courier New', monospace;
+            background: white;
+            padding: 0.75rem;
+            border-radius: 4px;
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+
+        .practice-box {
+            background: white;
+            padding: 1rem;
+            margin: 0.75rem 0;
+            border-radius: 4px;
+            border-left: 3px solid var(--success);
+        }
+
+        .footnote-ref {
+            color: var(--secondary);
+            text-decoration: none;
+            font-size: 0.85em;
+            vertical-align: super;
+        }
+
+        .footnote-ref:hover {
+            text-decoration: underline;
+        }
+
+        .footnotes {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--border);
+            font-size: 0.9rem;
+        }
+
+        .footnote-item {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            text-indent: -1.5rem;
+        }
+
+        .comparison-table {
+            width: 100%;
+            margin: 1.5rem 0;
+            border-collapse: collapse;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .comparison-table th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        .comparison-table tr:hover {
+            background: var(--bg);
+        }
+
+        .highlight-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        .highlight-box ul {
+            margin-left: 2rem;
+            padding-left: 0;
+        }
+
+        .highlight-box ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .code-box {
+            background: #f8f9fa;
+            border-left: 3px solid var(--primary);
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Language Toggle */
+        .language-toggle {
+            display: flex;
+            gap: 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            padding: 2px;
+        }
+
+        .toggle-btn {
+            background: transparent;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .toggle-btn.active {
+            background: rgba(255, 255, 255, 0.3);
+            font-weight: 600;
+        }
+
+        /* Content visibility toggles */
+        .technical-content {
+            display: block;
+        }
+
+        .contemplative-content {
+            display: none;
+        }
+
+        body.contemplative-mode .technical-content {
+            display: none;
+        }
+
+        body.contemplative-mode .contemplative-content {
+            display: block;
+        }
+
+        /* Dual content styling */
+        .content-both {
+            margin: 1rem 0;
+        }
+
+        /* System Architecture SVG Styles */
+        .architecture-container {
+            margin: 2rem 0;
+            padding: 2rem;
+            background: var(--bg);
+            border-radius: 8px;
+        }
+
+        .architecture-svg {
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .architecture-svg .node rect,
+        .architecture-svg .node ellipse,
+        .architecture-svg .node circle {
+            transition: all 0.3s ease;
+        }
+
+        .architecture-svg .node:hover rect,
+        .architecture-svg .node:hover ellipse,
+        .architecture-svg .node:hover circle {
+            filter: brightness(1.1);
+            stroke-width: 3;
+        }
+
+        .architecture-svg .arrow line {
+            transition: stroke-width 0.2s;
+        }
+
+        .iit-box {
+            background: #e8f4f8;
+            border-left: 4px solid var(--secondary);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+
+        .iit-box h4 {
+            color: var(--primary);
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+
+        .iit-box ul {
+            margin-left: 2rem;
+            padding-left: 0;
+        }
+
+        .iit-box li {
+            margin-bottom: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .architecture-svg {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 id="pageTitle">Character Development as Policy Optimization</h1>
+        <p id="pageSubtitle">A computational model for virtue development</p>
+        <nav style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+            <a href="index.html" style="color: white; text-decoration: none;">← Back to Main Site</a>
+            <div class="language-toggle">
+                <button id="toggleTechnical" class="toggle-btn active">Technical</button>
+                <button id="toggleContemplative" class="toggle-btn">Contemplative</button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="section active">
+            <div class="model-content">
+                <p class="back-link"><a href="index.html">← Back to Harmonic Alignment Project</a></p>
+
+                <div class="highlight-box" style="background: #fff3cd; border-color: #ffc107;">
+                    <strong>⚠️ Draft Document:</strong> This is a working draft. References have not been fully verified for accuracy and may contain errors. Use as conceptual framework, not authoritative source. Contributions and corrections welcome via <a href="https://github.com/justinshenk/harmonic-alignment">GitHub</a>.
+                </div>
+
+                <h2>Core Framework</h2>
+
+                <div class="technical-content">
+                    <p><strong>Character</strong> = Policy (behavioral tendencies shaped by virtues)<br>
+                    <strong>Virtue</strong> = Learned parameters that bias action selection<br>
+                    <strong>Growth</strong> = Policy improvement through experience</p>
+
+                    <p>This model synthesizes reinforcement learning (RL) concepts with contemplative practice traditions, treating character development as a learnable optimization problem.<a href="#fn1" class="footnote-ref">[1]</a></p>
+
+                    <p><strong>Key Reinforcement Learning Mappings:</strong></p>
+                    <ul>
+                        <li><strong>Value function</strong> - How you evaluate states/situations based on virtue weights</li>
+                        <li><strong>Policy gradient</strong> - Evening reflection updates your behavioral tendencies</li>
+                        <li><strong>Temporal difference (TD) error</strong> - Gratitude recalibrates undervalued present moments</li>
+                        <li><strong>Exploration/exploitation</strong> - Balancing familiar virtuous patterns vs. trying virtue in new contexts</li>
+                        <li><strong>Reward</strong> - Gratitude endpoints calibrate what you implicitly value</li>
+                    </ul>
+                </div>
+
+                <div class="contemplative-content">
+                    <p><strong>Character</strong> = The patterns of choice you've cultivated through practice<br>
+                    <strong>Virtue</strong> = Inner qualities that guide your actions (generosity, humility, equanimity)<br>
+                    <strong>Growth</strong> = The gradual refinement of your character through lived experience</p>
+
+                    <p>This path integrates ancient contemplative wisdom with modern understanding of how humans learn and change. Character development is a practice you engage in daily, with structured moments for reflection and recalibration.</p>
+
+                    <div class="practice-box">
+                        <strong>Core Insight:</strong> Character isn't fixed—it's shaped by repeated choices. By creating intentional pause points throughout your day (waking, eating, encountering beauty), you train yourself to notice, appreciate, and choose wisely. Each moment of gratitude is a chance to realign with your deepest values.
+                    </div>
+                </div>
+
+                <h2>System Architecture</h2>
+
+                <div class="architecture-container">
+                    <svg class="architecture-svg" viewBox="0 0 600 700" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Define arrow marker -->
+                        <defs>
+                            <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                <polygon points="0 0, 10 3, 0 6" fill="#3498db" />
+                            </marker>
+                        </defs>
+
+                        <!-- Character Layer -->
+                        <g class="node">
+                            <rect x="50" y="30" width="500" height="80" rx="8" fill="#2c3e50" stroke="#34495e" stroke-width="2"/>
+                            <text x="300" y="60" text-anchor="middle" fill="white" font-size="18" font-weight="bold">CHARACTER (Policy)</text>
+                            <text x="300" y="85" text-anchor="middle" fill="#ecf0f1" font-size="14">Stable behavioral patterns</text>
+                        </g>
+
+                        <!-- Arrow 1 -->
+                        <g class="arrow">
+                            <line x1="300" y1="110" x2="300" y2="140" stroke="#3498db" stroke-width="3" marker-end="url(#arrowhead)"/>
+                            <text x="310" y="130" fill="#7f8c8d" font-size="12">gradient descent</text>
+                        </g>
+
+                        <!-- Virtues Layer -->
+                        <g class="node">
+                            <rect x="50" y="140" width="500" height="80" rx="8" fill="#16a085" stroke="#1abc9c" stroke-width="2"/>
+                            <text x="300" y="170" text-anchor="middle" fill="white" font-size="18" font-weight="bold">VIRTUES (Parameters)</text>
+                            <text x="300" y="195" text-anchor="middle" fill="#ecf0f1" font-size="14">Generosity, humility, equanimity, courage...</text>
+                        </g>
+
+                        <!-- Arrow 2 -->
+                        <g class="arrow">
+                            <line x1="300" y1="220" x2="300" y2="250" stroke="#3498db" stroke-width="3" marker-end="url(#arrowhead)"/>
+                            <text x="310" y="240" fill="#7f8c8d" font-size="12">bias selection</text>
+                        </g>
+
+                        <!-- Value Function Layer -->
+                        <g class="node">
+                            <rect x="50" y="250" width="500" height="80" rx="8" fill="#2980b9" stroke="#3498db" stroke-width="2"/>
+                            <text x="300" y="280" text-anchor="middle" fill="white" font-size="18" font-weight="bold">VALUE FUNCTION</text>
+                            <text x="300" y="305" text-anchor="middle" fill="#ecf0f1" font-size="14">How you evaluate situations</text>
+                        </g>
+
+                        <!-- Arrow 3 -->
+                        <g class="arrow">
+                            <line x1="300" y1="330" x2="300" y2="360" stroke="#3498db" stroke-width="3" marker-end="url(#arrowhead)"/>
+                            <text x="310" y="350" fill="#7f8c8d" font-size="12">guides attention</text>
+                        </g>
+
+                        <!-- Attention Layer -->
+                        <g class="node">
+                            <rect x="50" y="360" width="500" height="80" rx="8" fill="#8e44ad" stroke="#9b59b6" stroke-width="2"/>
+                            <text x="300" y="390" text-anchor="middle" fill="white" font-size="18" font-weight="bold">ATTENTION PATTERNS</text>
+                            <text x="300" y="415" text-anchor="middle" fill="#ecf0f1" font-size="14">What you notice, what you miss</text>
+                        </g>
+
+                        <!-- Arrow 4 -->
+                        <g class="arrow">
+                            <line x1="300" y1="440" x2="300" y2="470" stroke="#3498db" stroke-width="3" marker-end="url(#arrowhead)"/>
+                            <text x="310" y="460" fill="#7f8c8d" font-size="12">shapes actions</text>
+                        </g>
+
+                        <!-- Actions Layer -->
+                        <g class="node">
+                            <rect x="50" y="470" width="500" height="80" rx="8" fill="#e67e22" stroke="#f39c12" stroke-width="2"/>
+                            <text x="300" y="500" text-anchor="middle" fill="white" font-size="18" font-weight="bold">ACTIONS (Behavior)</text>
+                            <text x="300" y="525" text-anchor="middle" fill="#ecf0f1" font-size="14">Moment-to-moment choices</text>
+                        </g>
+
+                        <!-- Arrow 5 -->
+                        <g class="arrow">
+                            <line x1="300" y1="550" x2="300" y2="580" stroke="#3498db" stroke-width="3" marker-end="url(#arrowhead)"/>
+                            <text x="310" y="570" fill="#7f8c8d" font-size="12">generate</text>
+                        </g>
+
+                        <!-- Gratitude Endpoints Layer -->
+                        <g class="node">
+                            <ellipse cx="300" cy="620" rx="250" ry="50" fill="#27ae60" stroke="#2ecc71" stroke-width="2"/>
+                            <text x="300" y="615" text-anchor="middle" fill="white" font-size="18" font-weight="bold">GRATITUDE ENDPOINTS</text>
+                            <text x="300" y="635" text-anchor="middle" fill="#ecf0f1" font-size="14">Wake | Eat | Drink | Novel | Sleep | ...</text>
+                        </g>
+
+                        <!-- Feedback arrow (from endpoints back to virtues) -->
+                        <path d="M 50 620 Q 20 400 50 170" stroke="#e74c3c" stroke-width="3" fill="none" marker-end="url(#arrowhead)" stroke-dasharray="5,5"/>
+                        <text x="25" y="400" fill="#e74c3c" font-size="12" font-weight="bold">feedback</text>
+                    </svg>
+                </div>
+
+                <div class="technical-content">
+                    <div class="iit-box">
+                        <h4>Integration as Φ (Phi)</h4>
+                        <p>From Integrated Information Theory (IIT), we can understand character coherence through information integration:</p>
+                        <ul>
+                            <li><strong>Φ (Integration measure):</strong> Degree of coherence across virtues. High Φ = virtues reinforce each other (generosity supports humility). Low Φ = virtues conflict (generosity without boundaries leads to exploitation).</li>
+                            <li><strong>Cause-effect structure:</strong> Each gratitude endpoint creates specific patterns of virtue activation. Morning gratitude → attention to interdependence → humility in action → feedback at evening review.</li>
+                            <li><strong>Irreducibility:</strong> Character cannot be reduced to individual virtues. The system-level patterns (how courage modulates compassion during conflict) create emergent behavioral tendencies.</li>
+                            <li><strong>Practical measurement:</strong> Evening reviews capture Φ by asking "Where did virtues work together?" vs. "Where did they compete?" Track integration trends over weeks.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="contemplative-content">
+                    <div class="iit-box">
+                        <h4>Coherence and Integration</h4>
+                        <p>Your character development works best when all the parts work together as a unified whole:</p>
+                        <ul>
+                            <li><strong>Integration:</strong> Your virtues should support each other, not compete. Generosity paired with wisdom knows when to give and when to hold boundaries. Courage paired with compassion acts boldly without harming.</li>
+                            <li><strong>Feedback loops:</strong> Each gratitude moment creates a specific pattern. Morning gratitude helps you notice interdependence throughout the day, which deepens humility, which you reflect on in the evening.</li>
+                            <li><strong>The whole matters:</strong> Character isn't just a collection of individual virtues. It's how they work together—how your courage modulates your compassion during conflict, how your humility tempers your confidence when teaching.</li>
+                            <li><strong>Tracking coherence:</strong> Evening reflections help you notice when your virtues worked in harmony versus when they pulled in different directions.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Why This Works: Cognitive Mechanisms</h3>
+
+                <p>Character development through structured endpoints leverages several validated psychological mechanisms:</p>
+
+                <ul>
+                    <li><strong>Habit formation through implementation intentions</strong><a href="#fn2" class="footnote-ref">[2]</a> - Linking gratitude to specific cues (waking, eating) creates automatic behavioral patterns</li>
+                    <li><strong>Attention training reduces default mode activation</strong><a href="#fn3" class="footnote-ref">[3]</a> - Regular pause points interrupt rumination and self-referential processing</li>
+                    <li><strong>Gratitude practices increase well-being and prosocial behavior</strong><a href="#fn4" class="footnote-ref">[4]</a> - Empirically demonstrated across multiple studies</li>
+                    <li><strong>Metacognitive awareness improves emotional regulation</strong><a href="#fn5" class="footnote-ref">[5]</a> - Explicitly reviewing actions (evening endpoint) enhances self-monitoring</li>
+                    <li><strong>Retrieval practice strengthens memory consolidation</strong><a href="#fn6" class="footnote-ref">[6]</a> - Recalling virtue alignments at day's end improves retention</li>
+                </ul>
+
+                <h2>Core Gratitude Endpoints</h2>
+
+                <div class="endpoint-card">
+                    <h4>1. Wake Transition (Morning)</h4>
+                    <div class="endpoint-meta">
+                        Event: Sleep → Wake<br>
+                        RL interpretation: Episode initialization, baseline calibration<br>
+                        Frequency: 1x/day | Cognitive load: Low | Growth leverage: High
+                    </div>
+                    <div class="practice-box">
+                        <strong>Practice:</strong> Before checking devices, name three functional capacities (breath, movement, cognition). Acknowledge these aren't guaranteed.
+                    </div>
+                    <p><strong>Why it works:</strong> Morning routines shape entire day trajectories.<a href="#fn7" class="footnote-ref">[7]</a> Starting with gratitude before cortisol-driven reactivity prevents negative priming effects. Sets reference point for value estimation throughout the day.<a href="#fn8" class="footnote-ref">[8]</a></p>
+                </div>
+
+                <div class="endpoint-card">
+                    <h4>2. Eating (3-5x daily)</h4>
+                    <div class="endpoint-meta">
+                        Event: Hunger → Satiation<br>
+                        RL interpretation: Resource acquisition, credit assignment<br>
+                        Frequency: 3-5x/day | Cognitive load: Low | Growth leverage: Medium
+                    </div>
+                    <div class="practice-box">
+                        <strong>Practice:</strong> Pause before first bite. Mentally trace: sun → photosynthesis → farmer → transport → preparation. Feel interdependence.
+                    </div>
+                    <p><strong>Why it works:</strong> Mindful eating increases satiation and reduces overconsumption.<a href="#fn9" class="footnote-ref">[9]</a> Tracing supply chains trains relational cognition and reduces illusion of independent agency.<a href="#fn10" class="footnote-ref">[10]</a></p>
+                </div>
+
+                <div class="endpoint-card">
+                    <h4>3. Drinking (10+ times daily)</h4>
+                    <div class="endpoint-meta">
+                        Event: Thirst → Hydration<br>
+                        RL interpretation: Maintenance reward, system preservation<br>
+                        Frequency: 10+x/day | Cognitive load: Very Low | Growth leverage: Low-Medium
+                    </div>
+                    <div class="practice-box">
+                        <strong>Practice:</strong> Micro-pause at water contact. Acknowledge infrastructure (pipes, watersheds, workers). Feel embodied dependence.
+                    </div>
+                    <p><strong>Why it works:</strong> High-frequency, low-effort practices build automaticity faster.<a href="#fn11" class="footnote-ref">[11]</a> Prevents hedonic adaptation by maintaining salience of background infrastructure.<a href="#fn12" class="footnote-ref">[12]</a></p>
+                </div>
+
+                <div class="endpoint-card">
+                    <h4>4. New Experiences (Variable)</h4>
+                    <div class="endpoint-meta">
+                        Event: Familiar → Novel<br>
+                        RL interpretation: Exploration bonus, model update<br>
+                        Frequency: Variable | Cognitive load: Medium | Growth leverage: High
+                    </div>
+                    <div class="practice-box">
+                        <strong>Practice:</strong> When encountering something unexpected, pause: "What made this moment possible?" Trace causal preconditions.
+                    </div>
+                    <p><strong>Why it works:</strong> Curiosity and novelty-seeking correlate with cognitive flexibility and resilience.<a href="#fn13" class="footnote-ref">[13]</a> Gratitude for novelty reduces threat response to unfamiliar stimuli, increasing learning rate.<a href="#fn14" class="footnote-ref">[14]</a></p>
+                </div>
+
+                <div class="endpoint-card">
+                    <h4>5. Sleep Transition (Evening)</h4>
+                    <div class="endpoint-meta">
+                        Event: Wake → Sleep<br>
+                        RL interpretation: Episode termination, batch update, consolidation<br>
+                        Frequency: 1x/day | Cognitive load: Medium | Growth leverage: Very High
+                    </div>
+                    <div class="practice-box">
+                        <strong>Practice:</strong> Before unconsciousness, review: (1) Where did I act from virtue? (2) Where did I miss alignment? (3) What did others teach me? Release self-judgment.
+                    </div>
+                    <p><strong>Why it works:</strong> Evening reflection improves emotional processing during sleep.<a href="#fn15" class="footnote-ref">[15]</a> Self-compassion during review (treating errors as data, not identity) prevents rumination and supports psychological flexibility.<a href="#fn16" class="footnote-ref">[16]</a> Sleep-dependent memory consolidation strengthens learning.<a href="#fn17" class="footnote-ref">[17]</a></p>
+                </div>
+
+                <h2>Extended Endpoints</h2>
+
+                <div class="highlight-box">
+                    <strong>Note:</strong> Don't attempt all endpoints at once. Start with core 5, then add 2-3 extended endpoints based on your specific growth needs after 3-6 months of practice.
+                </div>
+
+                <h3>High-Leverage Extended Endpoints</h3>
+
+                <div class="endpoint-card">
+                    <h4>6. Threshold Crossings (Doorways)</h4>
+                    <div class="endpoint-meta">
+                        Event: Context transition (home ↔ work, private ↔ public)<br>
+                        RL interpretation: State space partition, context switching<br>
+                        Traditional source: Mezuzah touching
+                    </div>
+                    <div class="practice-box">
+                        <strong>Practice:</strong> Physical doorways as attention anchors. Touch frame = micro-pause: "What mode am I entering?"
+                    </div>
+                    <p><strong>Why it works:</strong> Explicit context markers reduce perseveration and improve task switching.<a href="#fn18" class="footnote-ref">[18]</a> Implementation intentions at boundaries enhance goal-directed behavior.<a href="#fn19" class="footnote-ref">[19]</a></p>
+                </div>
+
+                <div class="endpoint-card">
+                    <h4>7. Bathroom Use</h4>
+                    <div class="endpoint-meta">
+                        Event: Discomfort → Relief<br>
+                        RL interpretation: Homeostatic regulation verification<br>
+                        Traditional source: Asher Yatzar prayer
+                    </div>
+                    <div class="practice-box">
+                        <strong>Practice:</strong> Brief somatic scan: "This system works." Acknowledge organs, muscles, infrastructure.
+                    </div>
+                    <p><strong>Why it works:</strong> Body awareness practices reduce anxiety and improve interoception.<a href="#fn20" class="footnote-ref">[20]</a> Regular calibration against "everything breaks eventually" prevents entitlement and maintains realistic vulnerability models.<a href="#fn21" class="footnote-ref">[21]</a></p>
+                </div>
+
+                <div class="endpoint-card">
+                    <h4>8. Seeing Beauty (Aesthetic Encounters)</h4>
+                    <div class="endpoint-meta">
+                        Event: Ordinary → Arresting beauty<br>
+                        RL interpretation: Intrinsic reward, terminal value recognition<br>
+                        Traditional source: Shehecheyanu blessing
+                    </div>
+                    <div class="practice-box">
+                        <strong>Practice:</strong> When beauty halts you, pause before moving on. Name it. Feel your capacity to perceive it.
+                    </div>
+                    <p><strong>Why it works:</strong> Aesthetic experiences enhance well-being and meaning.<a href="#fn22" class="footnote-ref">[22]</a> Savoring positive experiences extends their hedonic impact and builds psychological resources.<a href="#fn23" class="footnote-ref">[23]</a></p>
+                </div>
+
+                <div class="endpoint-card">
+                    <h4>9. Hearing Suffering (Encountering Pain)</h4>
+                    <div class="endpoint-meta">
+                        Event: Comfort → Awareness of distress<br>
+                        RL interpretation: Cooperative reward shaping, empathy calibration<br>
+                        Traditional source: Tzedakah obligation
+                    </div>
+                    <div class="practice-box">
+                        <strong>Practice:</strong> Pause before problem-solving or numbing. Ask: "Can I help? If yes, what's needed? If no, can I witness without collapsing?"
+                    </div>
+                    <p><strong>Why it works:</strong> Compassion meditation increases prosocial behavior without causing burnout when paired with healthy boundaries.<a href="#fn24" class="footnote-ref">[24]</a> Explicit engage/boundary decisions prevent both callousness and vicarious trauma.<a href="#fn25" class="footnote-ref">[25]</a></p>
+                </div>
+
+                <div class="endpoint-card">
+                    <h4>10. Receiving Correction (Feedback Events)</h4>
+                    <div class="endpoint-meta">
+                        Event: Self-model → Discrepant data<br>
+                        RL interpretation: Prediction error, gradient signal<br>
+                        Traditional source: Tochecha (rebuke obligation)
+                    </div>
+                    <div class="practice-box">
+                        <strong>Practice:</strong> Pause before defending. Think: "Prediction error data." Ask: "Is there signal here?" Thank them for effort.
+                    </div>
+                    <p><strong>Why it works:</strong> Growth mindset (viewing feedback as learning opportunity) predicts achievement and resilience.<a href="#fn26" class="footnote-ref">[26]</a> Reducing defensiveness increases information uptake from critical feedback.<a href="#fn27" class="footnote-ref">[27]</a></p>
+                </div>
+
+                <div class="endpoint-card">
+                    <h4>11. Weekly Reset (Sabbath Structure)</h4>
+                    <div class="endpoint-meta">
+                        Event: Production mode → Reflection mode<br>
+                        RL interpretation: Larger batch update, meta-learning<br>
+                        Traditional source: Shabbat
+                    </div>
+                    <div class="practice-box">
+                        <strong>Practice:</strong> One day per week with different rules. No production metrics. Review: "What did I learn this week? What virtue improved?"
+                    </div>
+                    <p><strong>Why it works:</strong> Recovery periods improve performance and prevent burnout.<a href="#fn28" class="footnote-ref">[28]</a> Metacognitive reflection enhances self-regulated learning.<a href="#fn29" class="footnote-ref">[29]</a> Weekly zoom-out catches strategic misalignment invisible in daily frames.<a href="#fn30" class="footnote-ref">[30]</a></p>
+                </div>
+
+                <div class="endpoint-card">
+                    <h4>12. Difficult Conversations (Conflict Moments)</h4>
+                    <div class="endpoint-meta">
+                        Event: Harmony → Discord<br>
+                        RL interpretation: Adversarial testing, robustness check<br>
+                        Traditional source: Talmudic dispute culture
+                    </div>
+                    <div class="practice-box">
+                        <strong>Practice:</strong> Before: "This will test me." During: Notice activation. After: "Where did I stay aligned vs. defend ego?"
+                    </div>
+                    <p><strong>Why it works:</strong> Exposure to challenging social situations builds emotion regulation skills.<a href="#fn31" class="footnote-ref">[31]</a> Pre-commitment strategies improve self-control under stress.<a href="#fn32" class="footnote-ref">[32]</a> Post-conflict reflection facilitates learning from social mistakes.<a href="#fn33" class="footnote-ref">[33]</a></p>
+                </div>
+
+                <div class="endpoint-card">
+                    <h4>13. Witnessing Death (Mortality Salience)</h4>
+                    <div class="endpoint-meta">
+                        Event: Life assumption → Finitude recognition<br>
+                        RL interpretation: Horizon awareness, discount factor update<br>
+                        Traditional source: Mourning practices
+                    </div>
+                    <div class="practice-box">
+                        <strong>Practice:</strong> When confronting death, don't rush past. Ask: "What becomes important with limited time?"
+                    </div>
+                    <p><strong>Why it works:</strong> Mortality salience, when processed constructively, clarifies values and increases meaning.<a href="#fn34" class="footnote-ref">[34]</a> Terror management theory shows death awareness can enhance prosocial behavior when coupled with intrinsic goals.<a href="#fn35" class="footnote-ref">[35]</a></p>
+                </div>
+
+                <div class="endpoint-card">
+                    <h4>14. Receiving Gifts (Unearned Good)</h4>
+                    <div class="endpoint-meta">
+                        Event: Effort-reward equilibrium → Disproportionate benefit<br>
+                        RL interpretation: Off-policy learning, privilege modeling<br>
+                        Traditional source: Blessing before enjoyment
+                    </div>
+                    <div class="practice-box">
+                        <strong>Practice:</strong> Pause before normalizing gift. Feel: "I didn't earn this fully." Ask: "What's my responsibility as steward?"
+                    </div>
+                    <p><strong>Why it works:</strong> Acknowledging privilege without guilt facilitates prosocial action.<a href="#fn36" class="footnote-ref">[36]</a> Stewardship framing (vs. ownership) increases generosity and reduces entitlement.<a href="#fn37" class="footnote-ref">[37]</a></p>
+                </div>
+
+                <div class="endpoint-card">
+                    <h4>15. Teaching Moments (Knowledge Transfer)</h4>
+                    <div class="endpoint-meta">
+                        Event: Knowing → Explaining<br>
+                        RL interpretation: Policy distillation, meta-learning<br>
+                        Traditional source: Torah study traditions
+                    </div>
+                    <div class="practice-box">
+                        <strong>Practice:</strong> Before teaching: "I'm a link in transmission chain." After: "What did I learn by teaching?"
+                    </div>
+                    <p><strong>Why it works:</strong> Teaching deepens understanding through elaborative rehearsal and retrieval practice.<a href="#fn38" class="footnote-ref">[38]</a> Acknowledging intellectual lineage reduces overconfidence and increases epistemic humility.<a href="#fn39" class="footnote-ref">[39]</a></p>
+                </div>
+
+                <h2>Implementation Protocol</h2>
+
+                <h3>Weeks 1-4: Core Foundation</h3>
+                <div class="code-box">
+                    Morning (30 sec): Name 3 functional capacities<br>
+                    Meals (10 sec): Trace one causal link<br>
+                    Evening (3 min): Virtue alignment review<br>
+                    <br>
+                    Track: Consistency, mood trends
+                </div>
+
+                <h3>Weeks 5-12: Add High-Frequency Endpoints</h3>
+                <div class="code-box">
+                    + Drinking pauses (5 sec)<br>
+                    + Threshold crossings (2 sec)<br>
+                    <br>
+                    Track: Automaticity, context-bleed reduction
+                </div>
+
+                <h3>Months 4-6: Strategic Extensions</h3>
+                <div class="code-box">
+                    + Weekly reset (30 min on weekends)<br>
+                    + 2-3 personalized endpoints based on growth edge<br>
+                    <br>
+                    Track: Virtue consistency scores, strategic alignment
+                </div>
+
+                <h3>Endpoint Selection Table</h3>
+
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Endpoint</th>
+                            <th>Frequency</th>
+                            <th>Cognitive Load</th>
+                            <th>Growth Leverage</th>
+                            <th>Best For</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Wake</td><td>1x/day</td><td>Low</td><td>High</td><td>Everyone (core)</td></tr>
+                        <tr><td>Eating</td><td>3-5x/day</td><td>Low</td><td>Medium</td><td>Everyone (core)</td></tr>
+                        <tr><td>Drinking</td><td>10+x/day</td><td>Very Low</td><td>Low-Med</td><td>Building automaticity</td></tr>
+                        <tr><td>New Experience</td><td>Variable</td><td>Medium</td><td>High</td><td>Everyone (core)</td></tr>
+                        <tr><td>Sleep</td><td>1x/day</td><td>Medium</td><td>Very High</td><td>Everyone (core)</td></tr>
+                        <tr><td>Threshold</td><td>10+x/day</td><td>Very Low</td><td>Medium</td><td>Context-bleed issues</td></tr>
+                        <tr><td>Bathroom</td><td>5-8x/day</td><td>Very Low</td><td>Low</td><td>Entitlement patterns</td></tr>
+                        <tr><td>Beauty</td><td>Variable</td><td>Low</td><td>High</td><td>Meaning deficits</td></tr>
+                        <tr><td>Suffering</td><td>Variable</td><td>High</td><td>Very High</td><td>Empathy calibration</td></tr>
+                        <tr><td>Correction</td><td>Rare</td><td>Very High</td><td>Extreme</td><td>Defensiveness</td></tr>
+                        <tr><td>Weekly Reset</td><td>1x/week</td><td>High</td><td>Very High</td><td>Strategic misalignment</td></tr>
+                        <tr><td>Conflict</td><td>Rare</td><td>Very High</td><td>Extreme</td><td>Stress testing virtue</td></tr>
+                        <tr><td>Mortality</td><td>Rare</td><td>Very High</td><td>Extreme</td><td>Priority clarification</td></tr>
+                        <tr><td>Gifts</td><td>Variable</td><td>Medium</td><td>High</td><td>Privilege blindness</td></tr>
+                        <tr><td>Teaching</td><td>Variable</td><td>Medium</td><td>High</td><td>Knowledge work</td></tr>
+                    </tbody>
+                </table>
+
+                <h2>Measurement & Optimization</h2>
+
+                <h3>Track These Metrics</h3>
+                <ul>
+                    <li><strong>Consistency:</strong> % of intended endpoints completed</li>
+                    <li><strong>Depth:</strong> Can you trace >3 causal nodes in gratitude practice?</li>
+                    <li><strong>Spontaneity:</strong> Gratitude arising outside structured endpoints?</li>
+                    <li><strong>Virtue alignment:</strong> % of daily actions consistent with stated values</li>
+                    <li><strong>Emotional baseline:</strong> Weekly mood trends, anxiety levels</li>
+                </ul>
+
+                <h3>Expected Outcomes</h3>
+
+                <div class="code-box">
+                    <strong>1-3 months:</strong><br>
+                    - Reduced hedonic adaptation<br>
+                    - Increased relational awareness<br>
+                    - Better emotional regulation<br>
+                    <br>
+                    <strong>3-12 months:</strong><br>
+                    - Measurable virtue consistency improvements<br>
+                    - Spontaneous gratitude (not just at endpoints)<br>
+                    - Reduced self-referential anxiety<br>
+                    <br>
+                    <strong>1+ years:</strong><br>
+                    - Character as stable attractor<br>
+                    - Teaching capacity<br>
+                    - Deep integration with meaning architecture
+                </div>
+
+                <h2>Key Principles</h2>
+
+                <div class="highlight-box">
+                    <ul style="margin: 0;">
+                        <li><strong>Start minimal:</strong> Core 5 endpoints only for first 3 months</li>
+                        <li><strong>Build automaticity:</strong> High-frequency, low-load practices first</li>
+                        <li><strong>Personalize strategically:</strong> Add extensions based on specific weaknesses</li>
+                        <li><strong>Measure outcomes:</strong> Data-driven adjustment, not obligation</li>
+                        <li><strong>Practice self-compassion:</strong> Errors are training data, not identity</li>
+                        <li><strong>Treat as experiment:</strong> Test, iterate, optimize</li>
+                    </ul>
+                </div>
+
+                <h2>References</h2>
+
+                <div class="highlight-box" style="background: #fff3cd; border-color: #ffc107; margin-bottom: 1.5rem;">
+                    <strong>Note:</strong> These references are provided as indicative of relevant research areas but have not been verified for complete accuracy. Some citations may be incomplete, incorrectly attributed, or misrepresent the original findings. Please verify independently before citing in academic work.
+                </div>
+
+                <div class="footnotes">
+                    <div class="footnote-item" id="fn1">[1] Sutton, R. S., & Barto, A. G. (2018). <em>Reinforcement learning: An introduction</em> (2nd ed.). MIT Press.</div>
+
+                    <div class="footnote-item" id="fn2">[2] Gollwitzer, P. M., & Sheeran, P. (2006). Implementation intentions and goal achievement: A meta-analysis of effects and processes. <em>Advances in Experimental Social Psychology, 38</em>, 69-119.</div>
+
+                    <div class="footnote-item" id="fn3">[3] Brewer, J. A., et al. (2011). Meditation experience is associated with differences in default mode network activity and connectivity. <em>Proceedings of the National Academy of Sciences, 108</em>(50), 20254-20259.</div>
+
+                    <div class="footnote-item" id="fn4">[4] Emmons, R. A., & McCullough, M. E. (2003). Counting blessings versus burdens: An experimental investigation of gratitude and subjective well-being in daily life. <em>Journal of Personality and Social Psychology, 84</em>(2), 377-389.</div>
+
+                    <div class="footnote-item" id="fn5">[5] Teasdale, J. D., et al. (2002). Metacognitive awareness and prevention of relapse in depression: Empirical evidence. <em>Journal of Consulting and Clinical Psychology, 70</em>(2), 275-287.</div>
+
+                    <div class="footnote-item" id="fn6">[6] Roediger, H. L., & Karpicke, J. D. (2006). Test-enhanced learning: Taking memory tests improves long-term retention. <em>Psychological Science, 17</em>(3), 249-255.</div>
+
+                    <div class="footnote-item" id="fn7">[7] Wood, W., Quinn, J. M., & Kashy, D. A. (2002). Habits in everyday life: Thought, emotion, and action. <em>Journal of Personality and Social Psychology, 83</em>(6), 1281-1297.</div>
+
+                    <div class="footnote-item" id="fn8">[8] Kahneman, D., & Tversky, A. (1979). Prospect theory: An analysis of decision under risk. <em>Econometrica, 47</em>(2), 263-291.</div>
+
+                    <div class="footnote-item" id="fn9">[9] Robinson, E., et al. (2013). Eating attentively: A systematic review and meta-analysis of the effect of food intake memory and awareness on eating. <em>American Journal of Clinical Nutrition, 97</em>(4), 728-742.</div>
+
+                    <div class="footnote-item" id="fn10">[10] Batson, C. D., et al. (1997). Empathy and attitudes: Can feeling for a member of a stigmatized group improve feelings toward the group? <em>Journal of Personality and Social Psychology, 72</em>(1), 105-118.</div>
+
+                    <div class="footnote-item" id="fn11">[11] Lally, P., et al. (2010). How are habits formed: Modelling habit formation in the real world. <em>European Journal of Social Psychology, 40</em>(6), 998-1009.</div>
+
+                    <div class="footnote-item" id="fn12">[12] Frederick, S., & Loewenstein, G. (1999). Hedonic adaptation. In D. Kahneman, E. Diener, & N. Schwarz (Eds.), <em>Well-being: The foundations of hedonic psychology</em> (pp. 302-329). Russell Sage Foundation.</div>
+
+                    <div class="footnote-item" id="fn13">[13] Kashdan, T. B., & Silvia, P. J. (2009). Curiosity and interest: The benefits of thriving on novelty and challenge. In S. J. Lopez & C. R. Snyder (Eds.), <em>Oxford handbook of positive psychology</em> (2nd ed., pp. 367-374). Oxford University Press.</div>
+
+                    <div class="footnote-item" id="fn14">[14] Dweck, C. S. (2006). <em>Mindset: The new psychology of success</em>. Random House.</div>
+
+                    <div class="footnote-item" id="fn15">[15] Walker, M. P., & van der Helm, E. (2009). Overnight therapy? The role of sleep in emotional brain processing. <em>Psychological Bulletin, 135</em>(5), 731-748.</div>
+
+                    <div class="footnote-item" id="fn16">[16] Neff, K. D., & Germer, C. K. (2013). A pilot study and randomized controlled trial of the mindful self-compassion program. <em>Journal of Clinical Psychology, 69</em>(1), 28-44.</div>
+
+                    <div class="footnote-item" id="fn17">[17] Stickgold, R. (2005). Sleep-dependent memory consolidation. <em>Nature, 437</em>(7063), 1272-1278.</div>
+
+                    <div class="footnote-item" id="fn18">[18] Monsell, S. (2003). Task switching. <em>Trends in Cognitive Sciences, 7</em>(3), 134-140.</div>
+
+                    <div class="footnote-item" id="fn19">[19] Bayer, U. C., Achtziger, A., Gollwitzer, P. M., & Moskowitz, G. B. (2009). Responding to subliminal cues: Do if-then plans facilitate action preparation and initiation without conscious intent? <em>Social Cognition, 27</em>(2), 183-201.</div>
+
+                    <div class="footnote-item" id="fn20">[20] Mehling, W. E., et al. (2012). Body awareness: A phenomenological inquiry into the common ground of mind-body therapies. <em>Philosophy, Ethics, and Humanities in Medicine, 7</em>(1), 6.</div>
+
+                    <div class="footnote-item" id="fn21">[21] Gilbert, P. (2009). Introducing compassion-focused therapy. <em>Advances in Psychiatric Treatment, 15</em>(3), 199-208.</div>
+
+                    <div class="footnote-item" id="fn22">[22] Diessner, R., Solom, R. D., Frost, N. K., Parsons, L., & Davidson, J. (2008). Engagement with beauty: Appreciating natural, artistic, and moral beauty. <em>The Journal of Psychology, 142</em>(3), 303-329.</div>
+
+                    <div class="footnote-item" id="fn23">[23] Bryant, F. B., & Veroff, J. (2007). <em>Savoring: A new model of positive experience</em>. Psychology Press.</div>
+
+                    <div class="footnote-item" id="fn24">[24] Klimecki, O. M., Leiberg, S., Ricard, M., & Singer, T. (2014). Differential pattern of functional brain plasticity after compassion and empathy training. <em>Social Cognitive and Affective Neuroscience, 9</em>(6), 873-879.</div>
+
+                    <div class="footnote-item" id="fn25">[25] Figley, C. R. (2002). Compassion fatigue: Psychotherapists' chronic lack of self care. <em>Journal of Clinical Psychology, 58</em>(11), 1433-1441.</div>
+
+                    <div class="footnote-item" id="fn26">[26] Dweck, C. S. (2008). Mindset: The new psychology of success. <em>Random House Digital, Inc.</em></div>
+
+                    <div class="footnote-item" id="fn27">[27] Kluger, A. N., & DeNisi, A. (1996). The effects of feedback interventions on performance: A historical review, a meta-analysis, and a preliminary feedback intervention theory. <em>Psychological Bulletin, 119</em>(2), 254-284.</div>
+
+                    <div class="footnote-item" id="fn28">[28] Sonnentag, S., & Fritz, C. (2007). The Recovery Experience Questionnaire: Development and validation of a measure for assessing recuperation and unwinding from work. <em>Journal of Occupational Health Psychology, 12</em>(3), 204-221.</div>
+
+                    <div class="footnote-item" id="fn29">[29] Schraw, G., Crippen, K. J., & Hartley, K. (2006). Promoting self-regulation in science education: Metacognition as part of a broader perspective on learning. <em>Research in Science Education, 36</em>(1), 111-139.</div>
+
+                    <div class="footnote-item" id="fn30">[30] Vallacher, R. R., & Wegner, D. M. (1987). What do people think they're doing? Action identification and human behavior. <em>Psychological Review, 94</em>(1), 3-15.</div>
+
+                    <div class="footnote-item" id="fn31">[31] Gross, J. J., & John, O. P. (2003). Individual differences in two emotion regulation processes: Implications for affect, relationships, and well-being. <em>Journal of Personality and Social Psychology, 85</em>(2), 348-362.</div>
+
+                    <div class="footnote-item" id="fn32">[32] Muraven, M., & Baumeister, R. F. (2000). Self-regulation and depletion of limited resources: Does self-control resemble a muscle? <em>Psychological Bulletin, 126</em>(2), 247-259.</div>
+
+                    <div class="footnote-item" id="fn33">[33] Baumeister, R. F., Stillwell, A. M., & Heatherton, T. F. (1994). Guilt: An interpersonal approach. <em>Psychological Bulletin, 115</em>(2), 243-267.</div>
+
+                    <div class="footnote-item" id="fn34">[34] Vail, K. E., et al. (2012). A terror management analysis of the psychological functions of religion. <em>Personality and Social Psychology Review, 16</em>(4), 318-348.</div>
+
+                    <div class="footnote-item" id="fn35">[35] Pyszczynski, T., Solomon, S., & Greenberg, J. (2015). Thirty years of terror management theory: From genesis to revelation. <em>Advances in Experimental Social Psychology, 52</em>, 1-70.</div>
+
+                    <div class="footnote-item" id="fn36">[36] Powell, A. A., Branscombe, N. R., & Schmitt, M. T. (2005). Inequality as ingroup privilege or outgroup disadvantage: The impact of group focus on collective guilt and interracial attitudes. <em>Personality and Social Psychology Bulletin, 31</em>(4), 508-521.</div>
+
+                    <div class="footnote-item" id="fn37">[37] Piff, P. K., et al. (2015). Awe, the small self, and prosocial behavior. <em>Journal of Personality and Social Psychology, 108</em>(6), 883-899.</div>
+
+                    <div class="footnote-item" id="fn38">[38] Karpicke, J. D., & Blunt, J. R. (2011). Retrieval practice produces more learning than elaborative studying with concept mapping. <em>Science, 331</em>(6018), 772-775.</div>
+
+                    <div class="footnote-item" id="fn39">[39] Kruger, J., & Dunning, D. (1999). Unskilled and unaware of it: How difficulties in recognizing one's own incompetence lead to inflated self-assessments. <em>Journal of Personality and Social Psychology, 77</em>(6), 1121-1134.</div>
+                </div>
+
+                <p style="margin-top: 3rem; padding-top: 2rem; border-top: 2px solid var(--border);">
+                    <a href="index.html" class="back-link">← Back to Harmonic Alignment Project</a>
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Harmonic Alignment Project | MIT License | <a href="https://github.com/justinshenk/harmonic-alignment">GitHub</a></p>
+    </footer>
+
+    <script>
+        // Language toggle functionality
+        const toggleTechnical = document.getElementById('toggleTechnical');
+        const toggleContemplative = document.getElementById('toggleContemplative');
+        const pageTitle = document.getElementById('pageTitle');
+        const pageSubtitle = document.getElementById('pageSubtitle');
+
+        const titles = {
+            technical: {
+                title: 'Character Development as Policy Optimization',
+                subtitle: 'A computational model for virtue development'
+            },
+            contemplative: {
+                title: 'Character Development as Spiritual Practice',
+                subtitle: 'A contemplative path for virtue cultivation'
+            }
+        };
+
+        toggleTechnical.addEventListener('click', () => {
+            document.body.classList.remove('contemplative-mode');
+            toggleTechnical.classList.add('active');
+            toggleContemplative.classList.remove('active');
+            pageTitle.textContent = titles.technical.title;
+            pageSubtitle.textContent = titles.technical.subtitle;
+            localStorage.setItem('languageMode', 'technical');
+        });
+
+        toggleContemplative.addEventListener('click', () => {
+            document.body.classList.add('contemplative-mode');
+            toggleContemplative.classList.add('active');
+            toggleTechnical.classList.remove('active');
+            pageTitle.textContent = titles.contemplative.title;
+            pageSubtitle.textContent = titles.contemplative.subtitle;
+            localStorage.setItem('languageMode', 'contemplative');
+        });
+
+        // Restore saved preference
+        const savedMode = localStorage.getItem('languageMode');
+        if (savedMode === 'contemplative') {
+            toggleContemplative.click();
+        }
+    </script>
+</body>
+</html>
