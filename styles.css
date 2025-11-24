@@ -316,6 +316,15 @@ footer a:hover {
     text-decoration: underline;
 }
 
+/* Collapsible dimension legend */
+details.dimension-legend summary span {
+    transition: transform 0.2s;
+}
+
+details.dimension-legend[open] summary span {
+    transform: rotate(90deg);
+}
+
 /* Quiz Styles */
 .quiz-container {
     max-width: 800px;
