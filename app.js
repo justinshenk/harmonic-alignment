@@ -575,7 +575,7 @@ const wikipediaMapping = {
     'Theravada Buddhism': 'Theravada',
     'Zen Buddhism': 'Zen',
     'Tibetan Buddhism': 'Tibetan_Buddhism',
-    'Body Scan': 'Body_scan_(meditation)',
+    'Body Scan': 'Mindfulness#Body_scan',
     'Progressive Muscle Relaxation': 'Progressive_muscle_relaxation',
     'Yoga Nidra': 'Yoga_nidra',
     'Christian Contemplation': 'Christian_meditation',
