@@ -858,6 +858,9 @@ function initializeComplexityView() {
     // Populate complexity table
     renderComplexityTable();
 
+    // Create violin plot
+    createViolinPlot();
+
     // Set up tradition selector handler (only add once)
     const selector = document.getElementById('traditionSelect');
     const existingListener = selector.dataset.listenerAdded;
@@ -1236,4 +1239,138 @@ function createScatterPlot() {
                     .attr('r', 8);
             }
         });
+}
+
+function createViolinPlot() {
+    console.log('Creating violin plot...');
+    if (!traditionsData || !traditionsData.traditions) {
+        console.error('No traditions data for violin plot');
+        return;
+    }
+
+    const container = document.getElementById('violinPlot');
+    if (!container) {
+        console.error('Violin plot container not found');
+        return;
+    }
+    container.innerHTML = '';
+
+    const complexity_dims = ['somatic', 'intrapsychic', 'relational', 'collective', 'systemic', 'transpersonal'];
+
+    // Collect data for each dimension
+    const dimensionData = complexity_dims.map(dim => {
+        const values = traditionsData.traditions
+            .filter(t => t.complexityProfile)
+            .map(t => t.complexityProfile[dim]);
+        return { dimension: dim, values: values };
+    });
+
+    // Set up SVG
+    const margin = {top: 20, right: 30, bottom: 80, left: 60};
+    const width = 900 - margin.left - margin.right;
+    const height = 400 - margin.top - margin.bottom;
+
+    const svg = d3.select('#violinPlot')
+        .append('svg')
+        .attr('width', width + margin.left + margin.right)
+        .attr('height', height + margin.top + margin.bottom)
+        .append('g')
+        .attr('transform', `translate(${margin.left},${margin.top})`);
+
+    // X scale - categorical for dimensions
+    const x = d3.scaleBand()
+        .domain(complexity_dims)
+        .range([0, width])
+        .padding(0.2);
+
+    // Y scale - 1 to 5 for complexity scores
+    const y = d3.scaleLinear()
+        .domain([0, 6])
+        .range([height, 0]);
+
+    // Add X axis
+    svg.append('g')
+        .attr('transform', `translate(0,${height})`)
+        .call(d3.axisBottom(x))
+        .selectAll('text')
+        .attr('transform', 'rotate(-45)')
+        .style('text-anchor', 'end')
+        .style('font-size', '12px');
+
+    // Add Y axis
+    svg.append('g')
+        .call(d3.axisLeft(y).ticks(5));
+
+    // Create violin shapes for each dimension
+    dimensionData.forEach(dimData => {
+        const values = dimData.values;
+        const dimension = dimData.dimension;
+
+        // Calculate histogram bins
+        const histogram = d3.bin()
+            .domain([0.5, 5.5])
+            .thresholds([0.5, 1.5, 2.5, 3.5, 4.5, 5.5])
+            (values);
+
+        // Find max bin size for scaling
+        const maxNum = d3.max(histogram, h => h.length);
+
+        // X scale for violin width
+        const xNum = d3.scaleLinear()
+            .domain([0, maxNum])
+            .range([0, x.bandwidth() / 2]);
+
+        // Create area generator for violin shape
+        const area = d3.area()
+            .x0(d => x(dimension) + x.bandwidth() / 2 - xNum(d.length))
+            .x1(d => x(dimension) + x.bandwidth() / 2 + xNum(d.length))
+            .y(d => y((d.x0 + d.x1) / 2))
+            .curve(d3.curveCatmullRom);
+
+        // Draw violin
+        svg.append('path')
+            .datum(histogram)
+            .attr('d', area)
+            .style('fill', '#3498db')
+            .style('opacity', 0.6)
+            .style('stroke', '#2c3e50')
+            .style('stroke-width', 1);
+
+        // Add median line
+        const median = d3.median(values);
+        svg.append('line')
+            .attr('x1', x(dimension) + x.bandwidth() / 2 - x.bandwidth() / 4)
+            .attr('x2', x(dimension) + x.bandwidth() / 2 + x.bandwidth() / 4)
+            .attr('y1', y(median))
+            .attr('y2', y(median))
+            .attr('stroke', 'white')
+            .attr('stroke-width', 2);
+
+        // Add individual points with jitter
+        svg.selectAll(`circle.${dimension}`)
+            .data(values)
+            .enter()
+            .append('circle')
+            .attr('cx', () => x(dimension) + x.bandwidth() / 2 + (Math.random() - 0.5) * x.bandwidth() * 0.3)
+            .attr('cy', d => y(d))
+            .attr('r', 3)
+            .style('fill', '#2c3e50')
+            .style('opacity', 0.3);
+    });
+
+    // Add axis labels
+    svg.append('text')
+        .attr('x', width / 2)
+        .attr('y', height + 70)
+        .attr('text-anchor', 'middle')
+        .style('font-size', '14px')
+        .text('Complexity Dimension');
+
+    svg.append('text')
+        .attr('transform', 'rotate(-90)')
+        .attr('x', -height / 2)
+        .attr('y', -45)
+        .attr('text-anchor', 'middle')
+        .style('font-size', '14px')
+        .text('Complexity Score (1-5)');
 }
