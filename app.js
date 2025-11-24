@@ -1572,7 +1572,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 const formData = new FormData(signupForm);
-                const interests = formData.getAll('interests');
 
                 const response = await fetch('/api/signup', {
                     method: 'POST',
@@ -1581,8 +1580,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     body: JSON.stringify({
                         email: formData.get('email'),
-                        name: formData.get('name'),
-                        interests: interests
+                        name: formData.get('name')
                     })
                 });
 
