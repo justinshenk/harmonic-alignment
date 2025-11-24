@@ -86,10 +86,43 @@
                     <div style="max-width: 500px; max-height: 500px; margin: 0 auto;">
                         <canvas id="radarChart"></canvas>
                     </div>
+                    <div id="traditionDetails" style="margin-top: 2rem; padding: 1rem; background: #f8f9fa; border-radius: 8px; display: none;">
+                        <h4 style="margin-top: 0; color: var(--primary);"></h4>
+                        <p class="origin" style="color: #7f8c8d; margin-bottom: 0.5rem;"></p>
+                        <p class="description" style="margin-bottom: 1rem;"></p>
+                        <div class="meta" style="font-size: 0.9rem; color: #7f8c8d;">
+                            <div><strong>Time:</strong> <span class="time"></span></div>
+                            <div><strong>Guidance:</strong> <span class="guidance"></span></div>
+                            <div><strong>Accessibility:</strong> <span class="accessibility"></span></div>
+                        </div>
+                    </div>
                 </div>
                 <div>
                     <h3 style="margin-bottom: 1rem; color: var(--primary);">All Traditions</h3>
                     <div id="scatterPlot" style="min-height: 500px;"></div>
+                </div>
+            </div>
+
+            <div style="margin-top: 3rem;">
+                <h3 style="margin-bottom: 1rem; color: var(--primary);">Complexity Profiles Table</h3>
+                <p style="margin-bottom: 1rem; color: #7f8c8d;">Click column headers to sort. Click a row to view details.</p>
+                <div id="complexity-table-container" style="overflow-x: auto; overflow-y: auto; max-height: 600px;">
+                    <table id="complexityTable">
+                        <thead>
+                            <tr>
+                                <th class="sortable" data-sort="name">Tradition</th>
+                                <th class="sortable" data-sort="origin">Origin</th>
+                                <th class="sortable" data-sort="somatic">Somatic</th>
+                                <th class="sortable" data-sort="intrapsychic">Intrapsychic</th>
+                                <th class="sortable" data-sort="relational">Relational</th>
+                                <th class="sortable" data-sort="collective">Collective</th>
+                                <th class="sortable" data-sort="systemic">Systemic</th>
+                                <th class="sortable" data-sort="transpersonal">Transpersonal</th>
+                            </tr>
+                        </thead>
+                        <tbody id="complexityTableBody">
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

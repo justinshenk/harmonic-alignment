@@ -170,6 +170,15 @@ tr:hover {
     background: rgba(52, 152, 219, 0.05);
 }
 
+tr.selected-row {
+    background: rgba(39, 174, 96, 0.15);
+    border-left: 4px solid var(--success);
+}
+
+tr.selected-row:hover {
+    background: rgba(39, 174, 96, 0.2);
+}
+
 .score {
     display: inline-block;
     padding: 0.25rem 0.5rem;

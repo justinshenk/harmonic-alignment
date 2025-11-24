@@ -836,6 +836,7 @@ function buildTreeData() {
 
 // Complexity visualization
 let radarChartInstance = null;
+let complexitySortState = { column: 'name', direction: 'asc' };
 
 function initializeComplexityView() {
     console.log('Initializing complexity view...');
@@ -854,6 +855,9 @@ function initializeComplexityView() {
     // Create scatter plot
     createScatterPlot();
 
+    // Populate complexity table
+    renderComplexityTable();
+
     // Set up tradition selector handler (only add once)
     const selector = document.getElementById('traditionSelect');
     const existingListener = selector.dataset.listenerAdded;
@@ -861,7 +865,7 @@ function initializeComplexityView() {
         selector.addEventListener('change', (e) => {
             if (e.target.value) {
                 const tradition = traditionsData.traditions.find(t => t.id === e.target.value);
-                updateRadarChart(tradition);
+                selectTradition(tradition);
             }
         });
         selector.dataset.listenerAdded = 'true';
@@ -871,8 +875,119 @@ function initializeComplexityView() {
     if (traditionsData.traditions.length > 0) {
         const firstTradition = traditionsData.traditions.find(t => t.complexityProfile) || traditionsData.traditions[0];
         selector.value = firstTradition.id;
-        updateRadarChart(firstTradition);
+        selectTradition(firstTradition);
     }
+}
+
+function selectTradition(tradition) {
+    if (!tradition) return;
+    updateRadarChart(tradition);
+    showTraditionDetails(tradition);
+    highlightTableRow(tradition.id);
+}
+
+function showTraditionDetails(tradition) {
+    const detailsPanel = document.getElementById('traditionDetails');
+    if (!detailsPanel) return;
+
+    detailsPanel.style.display = 'block';
+    detailsPanel.querySelector('h4').textContent = tradition.name;
+    detailsPanel.querySelector('.origin').textContent = `${tradition.origin} (${tradition.yearOrigin > 0 ? tradition.yearOrigin : Math.abs(tradition.yearOrigin) + ' BCE'})`;
+    detailsPanel.querySelector('.description').textContent = tradition.description;
+    detailsPanel.querySelector('.time').textContent = tradition.timeCommitment;
+    detailsPanel.querySelector('.guidance').textContent = tradition.guidanceNeeded;
+    detailsPanel.querySelector('.accessibility').textContent = tradition.accessibility;
+}
+
+function highlightTableRow(traditionId) {
+    // Remove existing highlights
+    document.querySelectorAll('#complexityTableBody tr').forEach(row => {
+        row.classList.remove('selected-row');
+    });
+
+    // Add highlight to selected row
+    const row = document.querySelector(`#complexityTableBody tr[data-tradition-id="${traditionId}"]`);
+    if (row) {
+        row.classList.add('selected-row');
+        row.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+}
+
+function renderComplexityTable() {
+    const tbody = document.getElementById('complexityTableBody');
+    if (!tbody) return;
+
+    // Get traditions with complexity profiles
+    const traditions = traditionsData.traditions.filter(t => t.complexityProfile);
+
+    // Sort traditions
+    const sorted = [...traditions].sort((a, b) => {
+        const col = complexitySortState.column;
+        let aVal, bVal;
+
+        if (col === 'name' || col === 'origin') {
+            aVal = a[col];
+            bVal = b[col];
+            return complexitySortState.direction === 'asc'
+                ? aVal.localeCompare(bVal)
+                : bVal.localeCompare(aVal);
+        } else {
+            // Complexity dimension
+            aVal = a.complexityProfile[col];
+            bVal = b.complexityProfile[col];
+            return complexitySortState.direction === 'asc'
+                ? aVal - bVal
+                : bVal - aVal;
+        }
+    });
+
+    // Render rows
+    tbody.innerHTML = sorted.map(tradition => {
+        const profile = tradition.complexityProfile;
+        return `
+            <tr data-tradition-id="${tradition.id}" style="cursor: pointer;">
+                <td><span class="tradition-name">${tradition.name}</span></td>
+                <td class="tradition-origin">${tradition.origin}</td>
+                <td><span class="score score-${profile.somatic}">${profile.somatic}</span></td>
+                <td><span class="score score-${profile.intrapsychic}">${profile.intrapsychic}</span></td>
+                <td><span class="score score-${profile.relational}">${profile.relational}</span></td>
+                <td><span class="score score-${profile.collective}">${profile.collective}</span></td>
+                <td><span class="score score-${profile.systemic}">${profile.systemic}</span></td>
+                <td><span class="score score-${profile.transpersonal}">${profile.transpersonal}</span></td>
+            </tr>
+        `;
+    }).join('');
+
+    // Add click handlers to rows
+    tbody.querySelectorAll('tr').forEach(row => {
+        row.addEventListener('click', () => {
+            const traditionId = row.dataset.traditionId;
+            const tradition = traditionsData.traditions.find(t => t.id === traditionId);
+            if (tradition) {
+                const selector = document.getElementById('traditionSelect');
+                selector.value = tradition.id;
+                selectTradition(tradition);
+            }
+        });
+    });
+
+    // Add sort handlers to headers (only once)
+    const headers = document.querySelectorAll('#complexityTable th.sortable');
+    headers.forEach(header => {
+        if (!header.dataset.sortHandlerAdded) {
+            header.addEventListener('click', () => {
+                const column = header.dataset.sort;
+                if (complexitySortState.column === column) {
+                    complexitySortState.direction = complexitySortState.direction === 'asc' ? 'desc' : 'asc';
+                } else {
+                    complexitySortState.column = column;
+                    complexitySortState.direction = 'desc'; // Default to descending for new column
+                }
+                renderComplexityTable();
+            });
+            header.dataset.sortHandlerAdded = 'true';
+        }
+    });
 }
 
 function populateTraditionSelect() {
@@ -1105,8 +1220,8 @@ function createScatterPlot() {
                 const selector = document.getElementById('traditionSelect');
                 selector.value = tradition.id;
 
-                // Update radar chart
-                updateRadarChart(tradition);
+                // Update all views
+                selectTradition(tradition);
 
                 // Visual feedback
                 d3.selectAll('circle')
