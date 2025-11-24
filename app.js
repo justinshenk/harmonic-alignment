@@ -1228,15 +1228,18 @@ function createScatterPlot() {
 
     console.log(`Creating scatter plot with ${plotData.length} traditions`);
 
-    // Set up SVG
+    // Set up SVG with responsive sizing
     const margin = {top: 20, right: 20, bottom: 60, left: 60};
-    const width = 600 - margin.left - margin.right;
+    const containerWidth = container.clientWidth || 600;
+    const width = Math.min(containerWidth, 600) - margin.left - margin.right;
     const height = 500 - margin.top - margin.bottom;
 
     const svg = d3.select('#scatterPlot')
         .append('svg')
-        .attr('width', width + margin.left + margin.right)
+        .attr('width', '100%')
         .attr('height', height + margin.top + margin.bottom)
+        .attr('viewBox', `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
+        .attr('preserveAspectRatio', 'xMidYMid meet')
         .append('g')
         .attr('transform', `translate(${margin.left},${margin.top})`);
 
@@ -1367,15 +1370,18 @@ function createViolinPlot() {
         return { dimension: dim, values: values };
     });
 
-    // Set up SVG
+    // Set up SVG with responsive sizing
     const margin = {top: 20, right: 30, bottom: 80, left: 60};
-    const width = 900 - margin.left - margin.right;
+    const containerWidth = container.clientWidth || 900;
+    const width = Math.min(containerWidth, 900) - margin.left - margin.right;
     const height = 400 - margin.top - margin.bottom;
 
     const svg = d3.select('#violinPlot')
         .append('svg')
-        .attr('width', width + margin.left + margin.right)
+        .attr('width', '100%')
         .attr('height', height + margin.top + margin.bottom)
+        .attr('viewBox', `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
+        .attr('preserveAspectRatio', 'xMidYMid meet')
         .append('g')
         .attr('transform', `translate(${margin.left},${margin.top})`);
 

@@ -654,13 +654,27 @@ footer a:hover {
     .visualization-grid canvas,
     .visualization-grid > div {
         max-width: 100% !important;
-        max-height: 300px !important;
+        width: 100% !important;
+    }
+
+    /* Override inline max-width for radar chart container */
+    .visualization-grid > div > div {
+        max-width: 100% !important;
+        width: 100% !important;
     }
 
     #scatterPlot,
     #violinPlot,
     #verticalViolinPlot {
         min-height: 300px !important;
+        width: 100% !important;
+        overflow-x: auto;
+    }
+
+    /* Ensure canvas elements fit container */
+    canvas {
+        max-width: 100% !important;
+        height: auto !important;
     }
 
     table {
