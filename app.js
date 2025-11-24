@@ -1377,15 +1377,15 @@ function createViolinPlot() {
 }
 
 function createVerticalViolinPlot(tradition) {
-    console.log('Creating vertical violin plot for', tradition?.name);
-    if (!traditionsData || !traditionsData.traditions || !tradition) {
-        console.error('No tradition data for vertical violin plot');
+    console.log('Creating complexity bar chart for', tradition?.name);
+    if (!tradition || !tradition.complexityProfile) {
+        console.error('No tradition data for complexity bar chart');
         return;
     }
 
     const container = document.getElementById('verticalViolinPlot');
     if (!container) {
-        console.error('Vertical violin plot container not found');
+        console.error('Complexity bar chart container not found');
         return;
     }
     container.innerHTML = '';
@@ -1394,16 +1394,8 @@ function createVerticalViolinPlot(tradition) {
     // Dimensions ordered from bottom to top: somatic -> transpersonal
     const complexity_dims = ['somatic', 'intrapsychic', 'relational', 'collective', 'systemic', 'transpersonal'];
 
-    // Collect data for each dimension (all traditions)
-    const dimensionData = complexity_dims.map(dim => {
-        const values = traditionsData.traditions
-            .filter(t => t.complexityProfile)
-            .map(t => t.complexityProfile[dim]);
-        return { dimension: dim, values: values };
-    });
-
-    // Set up SVG (vertical orientation)
-    const margin = {top: 20, right: 30, bottom: 40, left: 120};
+    // Set up SVG
+    const margin = {top: 20, right: 40, bottom: 40, left: 120};
     const width = 450 - margin.left - margin.right;
     const height = 400 - margin.top - margin.bottom;
 
@@ -1418,17 +1410,28 @@ function createVerticalViolinPlot(tradition) {
     const y = d3.scaleBand()
         .domain(complexity_dims.reverse()) // Reverse so somatic is at bottom
         .range([height, 0])
-        .padding(0.2);
+        .padding(0.3);
 
-    // X scale - 1 to 5 for complexity scores
+    // X scale - centered at 3 (middle of 1-5 range), showing 0-6 for symmetry
     const x = d3.scaleLinear()
         .domain([0, 6])
         .range([0, width]);
 
+    // Add center line at value 3
+    svg.append('line')
+        .attr('x1', x(3))
+        .attr('x2', x(3))
+        .attr('y1', 0)
+        .attr('y2', height)
+        .attr('stroke', '#bdc3c7')
+        .attr('stroke-width', 1.5)
+        .attr('stroke-dasharray', '4,4')
+        .attr('opacity', 0.5);
+
     // Add X axis
     svg.append('g')
         .attr('transform', `translate(0,${height})`)
-        .call(d3.axisBottom(x).ticks(5));
+        .call(d3.axisBottom(x).ticks(6));
 
     // Add Y axis with dimension labels
     svg.append('g')
@@ -1437,87 +1440,41 @@ function createVerticalViolinPlot(tradition) {
         .style('font-size', '12px')
         .style('text-transform', 'capitalize');
 
-    // Create violin shapes for each dimension (horizontal violins)
-    dimensionData.forEach(dimData => {
-        const values = dimData.values;
-        const dimension = dimData.dimension;
+    // Add bars for each dimension
+    complexity_dims.forEach(dim => {
+        const value = tradition.complexityProfile[dim];
 
-        // Calculate histogram bins
-        const histogram = d3.bin()
-            .domain([0.5, 5.5])
-            .thresholds([0.5, 1.5, 2.5, 3.5, 4.5, 5.5])
-            (values);
+        // Draw bar from center (3) to actual value
+        const barStart = x(3);
+        const barEnd = x(value);
+        const barWidth = Math.abs(barEnd - barStart);
+        const barX = value >= 3 ? barStart : barEnd;
 
-        // Find max bin size for scaling
-        const maxNum = d3.max(histogram, h => h.length);
+        // Color based on whether above or below center
+        const barColor = value >= 3 ? '#27ae60' : '#e74c3c';
 
-        // Y scale for violin height (now vertical dimension)
-        const yNum = d3.scaleLinear()
-            .domain([0, maxNum])
-            .range([0, y.bandwidth() / 2]);
+        svg.append('rect')
+            .attr('x', barX)
+            .attr('y', y(dim))
+            .attr('width', barWidth)
+            .attr('height', y.bandwidth())
+            .attr('fill', barColor)
+            .attr('opacity', 0.7)
+            .attr('rx', 3);
 
-        // Create area generator for violin shape (rotated)
-        const area = d3.area()
-            .y0(d => y(dimension) + y.bandwidth() / 2 - yNum(d.length))
-            .y1(d => y(dimension) + y.bandwidth() / 2 + yNum(d.length))
-            .x(d => x((d.x0 + d.x1) / 2))
-            .curve(d3.curveCatmullRom);
-
-        // Draw violin
-        svg.append('path')
-            .datum(histogram)
-            .attr('d', area)
-            .style('fill', '#3498db')
-            .style('opacity', 0.3)
-            .style('stroke', '#2c3e50')
-            .style('stroke-width', 1);
-
-        // Add median line for all traditions
-        const median = d3.median(values);
-        svg.append('line')
-            .attr('x1', x(median))
-            .attr('x2', x(median))
-            .attr('y1', y(dimension) + y.bandwidth() / 2 - y.bandwidth() / 4)
-            .attr('y2', y(dimension) + y.bandwidth() / 2 + y.bandwidth() / 4)
-            .attr('stroke', '#95a5a6')
-            .attr('stroke-width', 1.5)
-            .attr('opacity', 0.5);
+        // Add value label at end of bar
+        svg.append('text')
+            .attr('x', barEnd + (value >= 3 ? 8 : -8))
+            .attr('y', y(dim) + y.bandwidth() / 2)
+            .attr('dy', '0.35em')
+            .attr('text-anchor', value >= 3 ? 'start' : 'end')
+            .style('font-size', '13px')
+            .style('font-weight', 'bold')
+            .style('fill', barColor)
+            .text(value);
     });
 
-    // Overlay selected tradition's values as connected line with markers
-    if (tradition.complexityProfile) {
-        const traditionData = complexity_dims.map(dim => ({
-            dimension: dim,
-            value: tradition.complexityProfile[dim]
-        }));
-
-        // Draw line connecting the points
-        const line = d3.line()
-            .x(d => x(d.value))
-            .y(d => y(d.dimension) + y.bandwidth() / 2);
-
-        svg.append('path')
-            .datum(traditionData)
-            .attr('d', line)
-            .attr('fill', 'none')
-            .attr('stroke', '#e74c3c')
-            .attr('stroke-width', 3);
-
-        // Add markers for selected tradition
-        svg.selectAll('circle.tradition-marker')
-            .data(traditionData)
-            .enter()
-            .append('circle')
-            .attr('class', 'tradition-marker')
-            .attr('cx', d => x(d.value))
-            .attr('cy', d => y(d.dimension) + y.bandwidth() / 2)
-            .attr('r', 6)
-            .style('fill', '#e74c3c')
-            .style('stroke', 'white')
-            .style('stroke-width', 2);
-    }
-
-    // Add axis labels
+    // Add axis label
     svg.append('text')
         .attr('x', width / 2)
         .attr('y', height + 35)
@@ -1526,41 +1483,12 @@ function createVerticalViolinPlot(tradition) {
         .style('fill', '#7f8c8d')
         .text('Complexity Score');
 
+    // Add legend/note
     svg.append('text')
-        .attr('transform', 'rotate(-90)')
-        .attr('x', -height / 2)
-        .attr('y', -100)
+        .attr('x', x(3))
+        .attr('y', -5)
         .attr('text-anchor', 'middle')
-        .style('font-size', '13px')
+        .style('font-size', '11px')
         .style('fill', '#7f8c8d')
-        .text('Dimension');
-
-    // Add legend
-    const legend = svg.append('g')
-        .attr('transform', `translate(${width - 100}, 10)`);
-
-    legend.append('line')
-        .attr('x1', 0)
-        .attr('x2', 20)
-        .attr('y1', 0)
-        .attr('y2', 0)
-        .attr('stroke', '#e74c3c')
-        .attr('stroke-width', 3);
-
-    legend.append('text')
-        .attr('x', 25)
-        .attr('y', 4)
-        .style('font-size', '11px')
-        .text('Selected');
-
-    legend.append('path')
-        .attr('d', 'M0,15 Q10,5 20,15')
-        .style('fill', '#3498db')
-        .style('opacity', 0.3);
-
-    legend.append('text')
-        .attr('x', 25)
-        .attr('y', 19)
-        .style('font-size', '11px')
-        .text('All traditions');
+        .text('Center (3)');
 }
