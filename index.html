@@ -26,10 +26,20 @@
         <div id="quiz-section" class="section active">
             <div class="quiz-container">
                 <div id="quiz-intro" class="quiz-step active">
-                    <h2>Find Your Practice</h2>
-                    <p>Answer a few questions to discover contemplative practices that match your needs and circumstances.</p>
+                    <div style="text-align: center; max-width: 700px; margin: 0 auto 3rem auto;">
+                        <h2 style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--primary);">Find Your Contemplative Practice</h2>
+                        <p style="font-size: 1.2rem; margin-bottom: 0.5rem; color: var(--text);">Finding a practice to match your needs and circumstances.</p>
+                        <p style="font-size: 1rem; color: #666;">Answer 5 questions to discover practices suited to your goals.</p>
+                    </div>
                     <div style="text-align: center; margin-top: 2rem;">
-                        <button id="startQuiz" class="primary-button">Start Quiz</button>
+                        <button id="startQuiz" class="primary-button" style="font-size: 1.1rem; padding: 1rem 2.5rem;">Start Quiz</button>
+                    </div>
+                    <div style="text-align: center; margin-top: 2.5rem; font-size: 0.9rem;">
+                        <a href="#" onclick="document.getElementById('compareView').click(); return false;" style="color: var(--secondary); text-decoration: none; margin: 0 1rem;">Browse all practices</a>
+                        <span style="color: #ccc;">|</span>
+                        <a href="#" onclick="document.getElementById('complexityView').click(); return false;" style="color: var(--secondary); text-decoration: none; margin: 0 1rem;">View complexity mapping</a>
+                        <span style="color: #ccc;">|</span>
+                        <a href="#" onclick="document.getElementById('aboutView').click(); return false;" style="color: var(--secondary); text-decoration: none; margin: 0 1rem;">About this project</a>
                     </div>
                 </div>
 
