@@ -1412,14 +1412,23 @@ function createVerticalViolinPlot(tradition) {
         .range([height, 0])
         .padding(0.3);
 
-    // X scale for bar width (0-5)
-    const maxBarWidth = width * 0.7; // Use 70% of width for max bar
+    // X scale - use full width, centered at middle
+    const centerX = width / 2;
+    const maxHalfWidth = width * 0.35; // Max half-width for value 5
     const barScale = d3.scaleLinear()
         .domain([0, 5])
-        .range([0, maxBarWidth]);
+        .range([0, maxHalfWidth]);
 
-    // Calculate centering offset
-    const centerOffset = (width - maxBarWidth) / 2;
+    // Add center line
+    svg.append('line')
+        .attr('x1', centerX)
+        .attr('x2', centerX)
+        .attr('y1', 0)
+        .attr('y2', height)
+        .attr('stroke', '#bdc3c7')
+        .attr('stroke-width', 1)
+        .attr('stroke-dasharray', '4,4')
+        .attr('opacity', 0.3);
 
     // Add Y axis with dimension labels
     svg.append('g')
@@ -1428,34 +1437,45 @@ function createVerticalViolinPlot(tradition) {
         .style('font-size', '12px')
         .style('text-transform', 'capitalize');
 
-    // Add bars for each dimension
+    // Add bars for each dimension (symmetric from center)
     complexity_dims.forEach(dim => {
         const value = tradition.complexityProfile[dim];
-        const barWidth = barScale(value);
+        const halfWidth = barScale(value);
 
         // Color gradient based on value
         const colorScale = d3.scaleLinear()
             .domain([1, 3, 5])
             .range(['#e74c3c', '#f39c12', '#27ae60']);
 
+        // Draw symmetric bar (extends left and right from center)
         svg.append('rect')
-            .attr('x', centerOffset)
+            .attr('x', centerX - halfWidth)
             .attr('y', y(dim))
-            .attr('width', barWidth)
+            .attr('width', halfWidth * 2)
             .attr('height', y.bandwidth())
             .attr('fill', colorScale(value))
             .attr('opacity', 0.8)
             .attr('rx', 3);
 
-        // Add value label at end of bar
+        // Add value labels on both sides
         svg.append('text')
-            .attr('x', centerOffset + barWidth + 8)
+            .attr('x', centerX - halfWidth - 8)
+            .attr('y', y(dim) + y.bandwidth() / 2)
+            .attr('dy', '0.35em')
+            .attr('text-anchor', 'end')
+            .style('font-size', '12px')
+            .style('font-weight', 'bold')
+            .style('fill', '#7f8c8d')
+            .text(value);
+
+        svg.append('text')
+            .attr('x', centerX + halfWidth + 8)
             .attr('y', y(dim) + y.bandwidth() / 2)
             .attr('dy', '0.35em')
             .attr('text-anchor', 'start')
-            .style('font-size', '13px')
+            .style('font-size', '12px')
             .style('font-weight', 'bold')
-            .style('fill', '#2c3e50')
+            .style('fill', '#7f8c8d')
             .text(value);
     });
 }
