@@ -885,6 +885,7 @@ function initializeComplexityView() {
 function selectTradition(tradition) {
     if (!tradition) return;
     updateRadarChart(tradition);
+    createVerticalViolinPlot(tradition);
     showTraditionDetails(tradition);
     highlightTableRow(tradition.id);
 }
@@ -1373,4 +1374,193 @@ function createViolinPlot() {
         .attr('text-anchor', 'middle')
         .style('font-size', '14px')
         .text('Complexity Score (1-5)');
+}
+
+function createVerticalViolinPlot(tradition) {
+    console.log('Creating vertical violin plot for', tradition?.name);
+    if (!traditionsData || !traditionsData.traditions || !tradition) {
+        console.error('No tradition data for vertical violin plot');
+        return;
+    }
+
+    const container = document.getElementById('verticalViolinPlot');
+    if (!container) {
+        console.error('Vertical violin plot container not found');
+        return;
+    }
+    container.innerHTML = '';
+    container.style.display = 'block';
+
+    // Dimensions ordered from bottom to top: somatic -> transpersonal
+    const complexity_dims = ['somatic', 'intrapsychic', 'relational', 'collective', 'systemic', 'transpersonal'];
+
+    // Collect data for each dimension (all traditions)
+    const dimensionData = complexity_dims.map(dim => {
+        const values = traditionsData.traditions
+            .filter(t => t.complexityProfile)
+            .map(t => t.complexityProfile[dim]);
+        return { dimension: dim, values: values };
+    });
+
+    // Set up SVG (vertical orientation)
+    const margin = {top: 20, right: 30, bottom: 40, left: 120};
+    const width = 450 - margin.left - margin.right;
+    const height = 400 - margin.top - margin.bottom;
+
+    const svg = d3.select('#verticalViolinPlot')
+        .append('svg')
+        .attr('width', width + margin.left + margin.right)
+        .attr('height', height + margin.top + margin.bottom)
+        .append('g')
+        .attr('transform', `translate(${margin.left},${margin.top})`);
+
+    // Y scale - categorical for dimensions (reversed so somatic is at bottom)
+    const y = d3.scaleBand()
+        .domain(complexity_dims.reverse()) // Reverse so somatic is at bottom
+        .range([height, 0])
+        .padding(0.2);
+
+    // X scale - 1 to 5 for complexity scores
+    const x = d3.scaleLinear()
+        .domain([0, 6])
+        .range([0, width]);
+
+    // Add X axis
+    svg.append('g')
+        .attr('transform', `translate(0,${height})`)
+        .call(d3.axisBottom(x).ticks(5));
+
+    // Add Y axis with dimension labels
+    svg.append('g')
+        .call(d3.axisLeft(y))
+        .selectAll('text')
+        .style('font-size', '12px')
+        .style('text-transform', 'capitalize');
+
+    // Create violin shapes for each dimension (horizontal violins)
+    dimensionData.forEach(dimData => {
+        const values = dimData.values;
+        const dimension = dimData.dimension;
+
+        // Calculate histogram bins
+        const histogram = d3.bin()
+            .domain([0.5, 5.5])
+            .thresholds([0.5, 1.5, 2.5, 3.5, 4.5, 5.5])
+            (values);
+
+        // Find max bin size for scaling
+        const maxNum = d3.max(histogram, h => h.length);
+
+        // Y scale for violin height (now vertical dimension)
+        const yNum = d3.scaleLinear()
+            .domain([0, maxNum])
+            .range([0, y.bandwidth() / 2]);
+
+        // Create area generator for violin shape (rotated)
+        const area = d3.area()
+            .y0(d => y(dimension) + y.bandwidth() / 2 - yNum(d.length))
+            .y1(d => y(dimension) + y.bandwidth() / 2 + yNum(d.length))
+            .x(d => x((d.x0 + d.x1) / 2))
+            .curve(d3.curveCatmullRom);
+
+        // Draw violin
+        svg.append('path')
+            .datum(histogram)
+            .attr('d', area)
+            .style('fill', '#3498db')
+            .style('opacity', 0.3)
+            .style('stroke', '#2c3e50')
+            .style('stroke-width', 1);
+
+        // Add median line for all traditions
+        const median = d3.median(values);
+        svg.append('line')
+            .attr('x1', x(median))
+            .attr('x2', x(median))
+            .attr('y1', y(dimension) + y.bandwidth() / 2 - y.bandwidth() / 4)
+            .attr('y2', y(dimension) + y.bandwidth() / 2 + y.bandwidth() / 4)
+            .attr('stroke', '#95a5a6')
+            .attr('stroke-width', 1.5)
+            .attr('opacity', 0.5);
+    });
+
+    // Overlay selected tradition's values as connected line with markers
+    if (tradition.complexityProfile) {
+        const traditionData = complexity_dims.map(dim => ({
+            dimension: dim,
+            value: tradition.complexityProfile[dim]
+        }));
+
+        // Draw line connecting the points
+        const line = d3.line()
+            .x(d => x(d.value))
+            .y(d => y(d.dimension) + y.bandwidth() / 2);
+
+        svg.append('path')
+            .datum(traditionData)
+            .attr('d', line)
+            .attr('fill', 'none')
+            .attr('stroke', '#e74c3c')
+            .attr('stroke-width', 3);
+
+        // Add markers for selected tradition
+        svg.selectAll('circle.tradition-marker')
+            .data(traditionData)
+            .enter()
+            .append('circle')
+            .attr('class', 'tradition-marker')
+            .attr('cx', d => x(d.value))
+            .attr('cy', d => y(d.dimension) + y.bandwidth() / 2)
+            .attr('r', 6)
+            .style('fill', '#e74c3c')
+            .style('stroke', 'white')
+            .style('stroke-width', 2);
+    }
+
+    // Add axis labels
+    svg.append('text')
+        .attr('x', width / 2)
+        .attr('y', height + 35)
+        .attr('text-anchor', 'middle')
+        .style('font-size', '13px')
+        .style('fill', '#7f8c8d')
+        .text('Complexity Score');
+
+    svg.append('text')
+        .attr('transform', 'rotate(-90)')
+        .attr('x', -height / 2)
+        .attr('y', -100)
+        .attr('text-anchor', 'middle')
+        .style('font-size', '13px')
+        .style('fill', '#7f8c8d')
+        .text('Dimension');
+
+    // Add legend
+    const legend = svg.append('g')
+        .attr('transform', `translate(${width - 100}, 10)`);
+
+    legend.append('line')
+        .attr('x1', 0)
+        .attr('x2', 20)
+        .attr('y1', 0)
+        .attr('y2', 0)
+        .attr('stroke', '#e74c3c')
+        .attr('stroke-width', 3);
+
+    legend.append('text')
+        .attr('x', 25)
+        .attr('y', 4)
+        .style('font-size', '11px')
+        .text('Selected');
+
+    legend.append('path')
+        .attr('d', 'M0,15 Q10,5 20,15')
+        .style('fill', '#3498db')
+        .style('opacity', 0.3);
+
+    legend.append('text')
+        .attr('x', 25)
+        .attr('y', 19)
+        .style('font-size', '11px')
+        .text('All traditions');
 }
