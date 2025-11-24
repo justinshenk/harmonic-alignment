@@ -323,6 +323,7 @@ function initializeNavigation() {
     const buttons = {
         quizView: 'quiz-section',
         compareView: 'compare-section',
+        complexityView: 'complexity-section',
         treeView: 'tree-section',
         aboutView: 'about-section'
     };
@@ -336,6 +337,11 @@ function initializeNavigation() {
             // Update active section
             document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
             document.getElementById(buttons[buttonId]).classList.add('active');
+
+            // Initialize complexity visualizations when switching to that view
+            if (buttonId === 'complexityView') {
+                initializeComplexityView();
+            }
         });
     });
 
@@ -826,4 +832,233 @@ function buildTreeData() {
             }
         ]
     };
+}
+
+// Complexity visualization
+let radarChartInstance = null;
+
+function initializeComplexityView() {
+    if (!traditionsData || !traditionsData.traditions) return;
+
+    // Populate tradition selector
+    populateTraditionSelect();
+
+    // Create scatter plot
+    createScatterPlot();
+
+    // Set up tradition selector handler
+    const selector = document.getElementById('traditionSelect');
+    selector.addEventListener('change', (e) => {
+        if (e.target.value) {
+            const tradition = traditionsData.traditions.find(t => t.id === e.target.value);
+            updateRadarChart(tradition);
+        }
+    });
+
+    // Show first tradition by default
+    if (traditionsData.traditions.length > 0) {
+        const firstTradition = traditionsData.traditions[0];
+        selector.value = firstTradition.id;
+        updateRadarChart(firstTradition);
+    }
+}
+
+function populateTraditionSelect() {
+    const selector = document.getElementById('traditionSelect');
+
+    // Sort traditions by name
+    const sortedTraditions = [...traditionsData.traditions].sort((a, b) =>
+        a.name.localeCompare(b.name)
+    );
+
+    // Clear existing options except first
+    selector.innerHTML = '<option value="">Choose a tradition...</option>';
+
+    // Add all traditions
+    sortedTraditions.forEach(tradition => {
+        const option = document.createElement('option');
+        option.value = tradition.id;
+        option.textContent = `${tradition.name} (${tradition.origin})`;
+        selector.appendChild(option);
+    });
+}
+
+function updateRadarChart(tradition) {
+    if (!tradition || !tradition.complexityProfile) return;
+
+    const ctx = document.getElementById('radarChart').getContext('2d');
+    const profile = tradition.complexityProfile;
+
+    const data = {
+        labels: ['Somatic', 'Intrapsychic', 'Relational', 'Collective', 'Systemic', 'Transpersonal'],
+        datasets: [{
+            label: tradition.name,
+            data: [
+                profile.somatic,
+                profile.intrapsychic,
+                profile.relational,
+                profile.collective,
+                profile.systemic,
+                profile.transpersonal
+            ],
+            fill: true,
+            backgroundColor: 'rgba(52, 152, 219, 0.2)',
+            borderColor: 'rgb(52, 152, 219)',
+            pointBackgroundColor: 'rgb(52, 152, 219)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgb(52, 152, 219)'
+        }]
+    };
+
+    const config = {
+        type: 'radar',
+        data: data,
+        options: {
+            elements: {
+                line: {
+                    borderWidth: 3
+                }
+            },
+            scales: {
+                r: {
+                    angleLines: {
+                        display: true
+                    },
+                    suggestedMin: 0,
+                    suggestedMax: 5,
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    };
+
+    // Destroy existing chart if it exists
+    if (radarChartInstance) {
+        radarChartInstance.destroy();
+    }
+
+    radarChartInstance = new Chart(ctx, config);
+}
+
+function createScatterPlot() {
+    if (!traditionsData || !traditionsData.traditions) return;
+
+    // Clear any existing plot
+    const container = document.getElementById('scatterPlot');
+    container.innerHTML = '';
+
+    // Calculate average individual vs collective scores for each tradition
+    const plotData = traditionsData.traditions
+        .filter(t => t.complexityProfile)
+        .map(t => {
+            const profile = t.complexityProfile;
+            // X-axis: Individual focus (somatic + intrapsychic) / 2
+            const individual = (profile.somatic + profile.intrapsychic) / 2;
+            // Y-axis: Collective/Systemic focus (relational + collective + systemic + transpersonal) / 4
+            const collective = (profile.relational + profile.collective + profile.systemic + profile.transpersonal) / 4;
+            return {
+                name: t.name,
+                origin: t.origin,
+                x: individual,
+                y: collective,
+                profile: profile
+            };
+        });
+
+    // Set up SVG
+    const margin = {top: 20, right: 20, bottom: 60, left: 60};
+    const width = 600 - margin.left - margin.right;
+    const height = 500 - margin.top - margin.bottom;
+
+    const svg = d3.select('#scatterPlot')
+        .append('svg')
+        .attr('width', width + margin.left + margin.right)
+        .attr('height', height + margin.top + margin.bottom)
+        .append('g')
+        .attr('transform', `translate(${margin.left},${margin.top})`);
+
+    // Scales
+    const x = d3.scaleLinear()
+        .domain([0, 5])
+        .range([0, width]);
+
+    const y = d3.scaleLinear()
+        .domain([0, 5])
+        .range([height, 0]);
+
+    // Add axes
+    svg.append('g')
+        .attr('transform', `translate(0,${height})`)
+        .call(d3.axisBottom(x))
+        .append('text')
+        .attr('x', width / 2)
+        .attr('y', 40)
+        .attr('fill', 'black')
+        .style('text-anchor', 'middle')
+        .text('Individual Focus (Somatic + Intrapsychic)');
+
+    svg.append('g')
+        .call(d3.axisLeft(y))
+        .append('text')
+        .attr('transform', 'rotate(-90)')
+        .attr('x', -height / 2)
+        .attr('y', -45)
+        .attr('fill', 'black')
+        .style('text-anchor', 'middle')
+        .text('Social/Systemic Focus');
+
+    // Add tooltip
+    const tooltip = d3.select('body')
+        .append('div')
+        .style('position', 'absolute')
+        .style('background', 'white')
+        .style('padding', '8px')
+        .style('border', '1px solid #ddd')
+        .style('border-radius', '4px')
+        .style('pointer-events', 'none')
+        .style('opacity', 0)
+        .style('z-index', 1000);
+
+    // Add dots
+    svg.selectAll('circle')
+        .data(plotData)
+        .enter()
+        .append('circle')
+        .attr('cx', d => x(d.x))
+        .attr('cy', d => y(d.y))
+        .attr('r', 6)
+        .style('fill', '#3498db')
+        .style('opacity', 0.7)
+        .style('cursor', 'pointer')
+        .on('mouseover', function(event, d) {
+            d3.select(this)
+                .style('fill', '#e74c3c')
+                .attr('r', 8);
+
+            tooltip.transition()
+                .duration(200)
+                .style('opacity', .9);
+            tooltip.html(`<strong>${d.name}</strong> (${d.origin})<br/>
+                Individual: ${d.x.toFixed(1)}<br/>
+                Social/Systemic: ${d.y.toFixed(1)}`)
+                .style('left', (event.pageX + 10) + 'px')
+                .style('top', (event.pageY - 28) + 'px');
+        })
+        .on('mouseout', function() {
+            d3.select(this)
+                .style('fill', '#3498db')
+                .attr('r', 6);
+
+            tooltip.transition()
+                .duration(500)
+                .style('opacity', 0);
+        });
 }

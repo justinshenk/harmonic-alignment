@@ -519,4 +519,8 @@ footer a:hover {
     .recommendation-details {
         grid-template-columns: 1fr;
     }
+
+    #complexity-section > div[style*="grid"] {
+        grid-template-columns: 1fr !important;
+    }
 }
