@@ -330,6 +330,7 @@ function initializeNavigation() {
         quizView: 'quiz-section',
         compareView: 'compare-section',
         complexityView: 'complexity-section',
+        attentionView: 'attention-section',
         treeView: 'tree-section',
         aboutView: 'about-section'
     };
@@ -349,6 +350,11 @@ function initializeNavigation() {
         if (savedSection === 'complexityView') {
             initializeComplexityView();
         }
+
+        // Initialize attention view if needed
+        if (savedSection === 'attentionView') {
+            renderAttentionClassification();
+        }
     }
 
     Object.keys(buttons).forEach(buttonId => {
@@ -367,6 +373,11 @@ function initializeNavigation() {
             // Initialize complexity visualizations when switching to that view
             if (buttonId === 'complexityView') {
                 initializeComplexityView();
+            }
+
+            // Initialize attention mapping when switching to that view
+            if (buttonId === 'attentionView') {
+                renderAttentionClassification();
             }
         });
     });
@@ -1754,3 +1765,69 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// Attention mechanism classification
+function renderAttentionClassification() {
+    if (!traditionsData || !traditionsData.traditions) return;
+
+    // Simplified classification based on practice characteristics
+    const attentionTypes = {
+        'Focused Attention (FA)': [],
+        'Open Monitoring (OM)': [],
+        'Non-Dual Awareness (NDA)': [],
+        'Hybrid/Mixed': []
+    };
+
+    // Classification heuristics based on practice names and characteristics
+    traditionsData.traditions.forEach(t => {
+        const name = t.name.toLowerCase();
+
+        // FA practices - concentration on single object
+        if (name.includes('jhana') || name.includes('samadhi') || name.includes('mantra') ||
+            name.includes('breath') || name.includes('tm') || name.includes('transcendental')) {
+            attentionTypes['Focused Attention (FA)'].push(t);
+        }
+        // NDA practices - non-dual awareness
+        else if (name.includes('dzogchen') || name.includes('mahamudra') || name.includes('open awareness') ||
+                 name.includes('advaita') || name.includes('non-dual')) {
+            attentionTypes['Non-Dual Awareness (NDA)'].push(t);
+        }
+        // OM practices - open monitoring
+        else if (name.includes('vipassana') || name.includes('mindfulness') || name.includes('insight') ||
+                 name.includes('noting') || name.includes('choiceless')) {
+            attentionTypes['Open Monitoring (OM)'].push(t);
+        }
+        // Everything else as hybrid
+        else {
+            attentionTypes['Hybrid/Mixed'].push(t);
+        }
+    });
+
+    let html = '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">';
+
+    Object.entries(attentionTypes).forEach(([type, practices]) => {
+        const colorMap = {
+            'Focused Attention (FA)': { bg: '#e3f2fd', border: '#2196f3', text: '#1976d2' },
+            'Open Monitoring (OM)': { bg: '#f3e5f5', border: '#9c27b0', text: '#7b1fa2' },
+            'Non-Dual Awareness (NDA)': { bg: '#fce4ec', border: '#e91e63', text: '#c2185b' },
+            'Hybrid/Mixed': { bg: '#f5f5f5', border: '#757575', text: '#424242' }
+        };
+        const colors = colorMap[type];
+
+        html += `
+            <div style="background: ${colors.bg}; padding: 1.5rem; border-radius: 8px; border-left: 4px solid ${colors.border};">
+                <h4 style="margin: 0 0 1rem 0; color: ${colors.text};">${type}</h4>
+                <div style="font-size: 0.9rem;">
+                    ${practices.length > 0
+                        ? practices.slice(0, 10).map(p => `<div style="margin: 0.5rem 0;">${p.name}</div>`).join('')
+                        : '<div style="color: #888;">No practices classified yet</div>'}
+                    ${practices.length > 10 ? `<div style="margin-top: 0.5rem; color: #666; font-style: italic;">...and ${practices.length - 10} more</div>` : ''}
+                </div>
+            </div>
+        `;
+    });
+
+    html += '</div>';
+
+    document.getElementById('attentionClassification').innerHTML = html;
+}

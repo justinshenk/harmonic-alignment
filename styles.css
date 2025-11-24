@@ -729,6 +729,20 @@ details.dimension-legend[open] summary span {
         grid-template-columns: 1fr;
     }
 
+    /* Attention mapping mobile styles */
+    #attention-section .pathway-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    #attention-section table {
+        font-size: 0.85rem;
+    }
+
+    #attention-section table th,
+    #attention-section table td {
+        padding: 0.5rem;
+    }
+
     /* Make tradition details more compact on mobile */
     #traditionDetails .meta {
         grid-template-columns: 1fr !important;

@@ -16,6 +16,7 @@
             <button id="quizView" class="active">Find Your Practice</button>
             <button id="compareView">Compare</button>
             <button id="complexityView">Complexity</button>
+            <button id="attentionView">Attention Mapping</button>
             <button id="treeView">Evolution</button>
             <button id="aboutView">About</button>
         </nav>
@@ -169,6 +170,97 @@
                     </table>
                 </div>
             </div>
+        </div>
+
+        <div id="attention-section" class="section">
+            <h2>Attention Mechanism Mapping</h2>
+            <p style="max-width: 900px; margin-bottom: 2rem;">Contemplative practices can be understood through their attention mechanisms and how these mechanisms produce psychological outcomes. This framework maps practices to attention types and shows pathways to specific benefits.</p>
+
+            <h3 style="margin-top: 2rem; color: var(--primary);">Core Attention Types</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
+                <div style="background: #e3f2fd; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #2196f3;">
+                    <h4 style="margin: 0 0 0.5rem 0; color: #1976d2;">Focused Attention (FA)</h4>
+                    <p style="margin: 0 0 0.5rem 0; font-size: 0.9rem;">Sustained focus on a single object (breath, mantra, sensation)</p>
+                    <p style="margin: 0; font-size: 0.85rem; color: #555;"><strong>Trains:</strong> Sustained attention, concentration, impulse control</p>
+                </div>
+                <div style="background: #f3e5f5; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #9c27b0;">
+                    <h4 style="margin: 0 0 0.5rem 0; color: #7b1fa2;">Open Monitoring (OM)</h4>
+                    <p style="margin: 0 0 0.5rem 0; font-size: 0.9rem;">Receptive awareness of all arising phenomena without selection</p>
+                    <p style="margin: 0; font-size: 0.85rem; color: #555;"><strong>Trains:</strong> Cognitive flexibility, meta-awareness, equanimity</p>
+                </div>
+                <div style="background: #fce4ec; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #e91e63;">
+                    <h4 style="margin: 0 0 0.5rem 0; color: #c2185b;">Non-Dual Awareness (NDA)</h4>
+                    <p style="margin: 0 0 0.5rem 0; font-size: 0.9rem;">Effortless presence without subject-object distinction</p>
+                    <p style="margin: 0; font-size: 0.85rem; color: #555;"><strong>Trains:</strong> Witness consciousness, liberation from identification</p>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 3rem; color: var(--primary);">Practice Classification by Attention Type</h3>
+            <div id="attentionClassification" style="margin: 2rem 0;"></div>
+
+            <h3 style="margin-top: 3rem; color: var(--primary);">Attention → Outcome Pathways</h3>
+            <div style="background: #f8f9fa; padding: 2rem; border-radius: 8px; margin: 2rem 0;">
+                <div style="display: grid; gap: 1.5rem;">
+                    <div style="display: grid; grid-template-columns: 200px auto 200px; gap: 1rem; align-items: center;">
+                        <div style="background: #e3f2fd; padding: 1rem; border-radius: 5px; text-align: center; font-weight: 600; color: #1976d2;">Focused Attention</div>
+                        <div style="text-align: center; color: #666;">→ ACC/PFC activation → Impulse control →</div>
+                        <div style="background: #c8e6c9; padding: 1rem; border-radius: 5px; text-align: center; font-weight: 600; color: #388e3c;">ADHD, Focus</div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 200px auto 200px; gap: 1rem; align-items: center;">
+                        <div style="background: #f3e5f5; padding: 1rem; border-radius: 5px; text-align: center; font-weight: 600; color: #7b1fa2;">Open Monitoring</div>
+                        <div style="text-align: center; color: #666;">→ DMN regulation → Reduced rumination →</div>
+                        <div style="background: #c8e6c9; padding: 1rem; border-radius: 5px; text-align: center; font-weight: 600; color: #388e3c;">Depression, Anxiety</div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 200px auto 200px; gap: 1rem; align-items: center;">
+                        <div style="background: #e3f2fd; padding: 1rem; border-radius: 5px; text-align: center; font-weight: 600; color: #1976d2;">Body-Focused Attention</div>
+                        <div style="text-align: center; color: #666;">→ Insula sensitivity → Interoception →</div>
+                        <div style="background: #c8e6c9; padding: 1rem; border-radius: 5px; text-align: center; font-weight: 600; color: #388e3c;">Emotional Regulation</div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 200px auto 200px; gap: 1rem; align-items: center;">
+                        <div style="background: #f3e5f5; padding: 1rem; border-radius: 5px; text-align: center; font-weight: 600; color: #7b1fa2;">Meta-Awareness</div>
+                        <div style="text-align: center; color: #666;">→ Insight into patterns → Cognitive restructuring →</div>
+                        <div style="background: #c8e6c9; padding: 1rem; border-radius: 5px; text-align: center; font-weight: 600; color: #388e3c;">Insight, Metacognition</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 3rem; color: var(--primary);">Attention Objects & Modalities</h3>
+            <table style="width: 100%; margin: 2rem 0; border-collapse: collapse;">
+                <thead>
+                    <tr style="background: var(--primary); color: white;">
+                        <th style="padding: 0.75rem; text-align: left;">Object Type</th>
+                        <th style="padding: 0.75rem; text-align: left;">Examples</th>
+                        <th style="padding: 0.75rem; text-align: left;">Primary Benefits</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid var(--border);">
+                        <td style="padding: 0.75rem; font-weight: 600;">Interoceptive</td>
+                        <td style="padding: 0.75rem;">Breath, body sensations, emotions, heartbeat</td>
+                        <td style="padding: 0.75rem;">Body awareness, emotional regulation, somatic processing</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--border);">
+                        <td style="padding: 0.75rem; font-weight: 600;">Cognitive</td>
+                        <td style="padding: 0.75rem;">Thoughts, mental images, beliefs, narratives</td>
+                        <td style="padding: 0.75rem;">Metacognition, insight, cognitive restructuring</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--border);">
+                        <td style="padding: 0.75rem; font-weight: 600;">Affective</td>
+                        <td style="padding: 0.75rem;">Loving-kindness, compassion, gratitude, forgiveness</td>
+                        <td style="padding: 0.75rem;">Compassion, empathy, positive emotions</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--border);">
+                        <td style="padding: 0.75rem; font-weight: 600;">Relational</td>
+                        <td style="padding: 0.75rem;">Other people, social field, group dynamics</td>
+                        <td style="padding: 0.75rem;">Communication, empathy, relational awareness</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--border);">
+                        <td style="padding: 0.75rem; font-weight: 600;">Abstract</td>
+                        <td style="padding: 0.75rem;">Concepts, values, questions, koans</td>
+                        <td style="padding: 0.75rem;">Conceptual understanding, meaning-making</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
         <div id="tree-section" class="section">
