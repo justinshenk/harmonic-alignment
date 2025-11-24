@@ -1540,9 +1540,15 @@ function createVerticalViolinPlot(tradition) {
     const complexity_dims = ['somatic', 'intrapsychic', 'relational', 'collective', 'systemic', 'transpersonal'];
 
     // Set up SVG with responsive sizing
-    const margin = {top: 20, right: 40, bottom: 40, left: 120};
+    const isMobile = window.innerWidth <= 768;
+    const margin = {
+        top: 20,
+        right: isMobile ? 20 : 40,
+        bottom: 40,
+        left: isMobile ? 80 : 120
+    };
     const containerWidth = container.clientWidth || 450;
-    const width = Math.min(containerWidth, 450) - margin.left - margin.right;
+    const width = containerWidth - margin.left - margin.right;
     const height = 400 - margin.top - margin.bottom;
 
     const svg = d3.select('#verticalViolinPlot')
