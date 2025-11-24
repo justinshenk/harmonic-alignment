@@ -112,12 +112,18 @@ main {
 
 #comparison-table {
     overflow-x: auto;
+    overflow-y: auto;
     max-width: 100%;
+    max-height: 70vh;
+    position: relative;
+    /* Enable hardware acceleration for better mobile performance */
+    -webkit-overflow-scrolling: touch;
 }
 
 table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     margin-top: 1rem;
     position: relative;
 }
@@ -125,7 +131,7 @@ table {
 thead {
     position: sticky;
     top: 0;
-    z-index: 10;
+    z-index: 100;
 }
 
 th, td {
@@ -140,9 +146,14 @@ th {
     font-weight: 600;
     position: sticky;
     top: 0;
-    z-index: 10;
-    /* Ensure header stays above content on scroll */
+    z-index: 100;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    /* Force GPU acceleration on mobile */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    /* Prevent visual glitches */
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 th.sortable {
