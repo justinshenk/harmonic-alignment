@@ -26,7 +26,7 @@ export default async function handler(req, res) {
         const record = {
             fields: {
                 'email': email,
-                'name': name || '',
+                'Name': name || '',
                 'message': message,
                 'created_at': new Date().toISOString(),
                 'type': 'Contact'
