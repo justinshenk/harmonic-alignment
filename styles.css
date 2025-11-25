@@ -162,28 +162,33 @@ td:first-child {
     position: sticky;
     left: 0;
     z-index: 10;
-    background: inherit;
 }
 
 th:first-child {
     z-index: 110; /* Higher than other headers to stay on top when scrolling both directions */
     background: var(--primary);
+    box-shadow: 4px 0 8px rgba(0,0,0,0.15);
+    border-right: 1px solid rgba(255,255,255,0.2);
 }
 
 td:first-child {
-    background: white;
+    background: white !important;
+    box-shadow: 4px 0 8px rgba(0,0,0,0.1);
+    border-right: 1px solid var(--border);
 }
 
 tr:hover td:first-child {
-    background: rgba(52, 152, 219, 0.05);
+    background: #f5f9fc !important;
 }
 
 tr.selected-row td:first-child {
-    background: rgba(39, 174, 96, 0.15);
+    background: #d9f2e4 !important;
+    box-shadow: 4px 0 8px rgba(0,0,0,0.1);
+    border-right: 1px solid var(--border);
 }
 
 tr.selected-row:hover td:first-child {
-    background: rgba(39, 174, 96, 0.2);
+    background: #c9edda !important;
 }
 
 th.sortable {
@@ -712,6 +717,21 @@ details.dimension-legend[open] summary span {
     /* Ensure complexity section containers don't overflow */
     #complexity-section .visualization-grid > div {
         overflow: hidden;
+    }
+
+    /* Complexity table sticky column fix */
+    #complexityTable td:first-child {
+        background: white;
+        box-shadow: 2px 0 4px rgba(0,0,0,0.05);
+    }
+    #complexityTable tr.selected-row td:first-child {
+        background: #d9f2e4;
+    }
+    #complexityTable tr:hover td:first-child {
+        background: #f5f9fc;
+    }
+    #complexityTable tr.selected-row:hover td:first-child {
+        background: #c9edda;
     }
 
     #scatterPlot,
