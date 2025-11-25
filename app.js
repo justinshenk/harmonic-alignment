@@ -768,10 +768,7 @@ function renderComparisonTable() {
     };
 
     html += createSortableHeader('Framework', 'name');
-    html += '<th>Description</th>';
-    html += '<th>Practices</th>';
     html += createSortableHeader('Origin', 'origin');
-    html += createSortableHeader('Time/Day', 'timeCommitment');
     html += createSortableHeader('Guidance', 'guidanceNeeded');
 
     metricsToShow.forEach(metric => {
@@ -783,11 +780,18 @@ function renderComparisonTable() {
 
     sortedTraditions.forEach(tradition => {
         html += '<tr>';
-        html += `<td><div class="tradition-name">${tradition.name}</div></td>`;
-        html += `<td>${tradition.description}</td>`;
-        html += `<td>${tradition.practices.join(', ')}</td>`;
+        html += `<td>
+            <div class="tradition-name-wrapper">
+                <div class="tradition-name">${tradition.name}</div>
+                <span class="info-icon">ⓘ</span>
+                <div class="tradition-popover">
+                    <div class="popover-description">${tradition.description}</div>
+                    <div class="popover-practices"><strong>Practices:</strong> ${tradition.practices.join(', ')}</div>
+                    <div class="popover-time"><strong>Time/Day:</strong> ${tradition.timeCommitment}</div>
+                </div>
+            </div>
+        </td>`;
         html += `<td><div class="tradition-origin">${tradition.origin}</div></td>`;
-        html += `<td>${tradition.timeCommitment}</td>`;
         html += `<td>${tradition.guidanceNeeded}</td>`;
 
         metricsToShow.forEach(metric => {

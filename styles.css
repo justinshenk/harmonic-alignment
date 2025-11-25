@@ -234,6 +234,62 @@ tr.selected-row:hover {
     color: var(--secondary);
 }
 
+.tradition-name-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.info-icon {
+    color: var(--secondary);
+    cursor: pointer;
+    font-size: 0.9rem;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.info-icon:hover {
+    opacity: 1;
+}
+
+.tradition-popover {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 100%;
+    z-index: 200;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    min-width: 300px;
+    max-width: 400px;
+}
+
+.tradition-name-wrapper:hover .tradition-popover {
+    display: block;
+}
+
+.popover-description {
+    margin-bottom: 0.75rem;
+    color: var(--text);
+    line-height: 1.5;
+}
+
+.popover-practices,
+.popover-time {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 0.5rem;
+}
+
+.popover-practices strong,
+.popover-time strong {
+    color: var(--primary);
+}
+
 .tradition-origin {
     font-size: 0.85rem;
     color: #7f8c8d;
