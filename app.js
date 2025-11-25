@@ -827,20 +827,35 @@ function renderComparisonTable() {
     });
 
     // Position popovers on hover/click
+    // Move popovers to body to escape sticky column stacking context
     document.querySelectorAll('.tradition-name-wrapper').forEach(wrapper => {
         const popover = wrapper.querySelector('.tradition-popover');
+        if (!popover) return;
 
-        const positionPopover = () => {
+        // Move popover to body on first interaction
+        let movedToBody = false;
+        const moveToBody = () => {
+            if (!movedToBody) {
+                document.body.appendChild(popover);
+                movedToBody = true;
+            }
+        };
+
+        const showPopover = () => {
+            moveToBody();
             const rect = wrapper.getBoundingClientRect();
             const isMobile = window.innerWidth < 768;
 
+            popover.style.display = 'block';
+
             if (isMobile) {
-                // On mobile, position below the row, centered
-                popover.style.left = '10px';
-                popover.style.right = '10px';
-                popover.style.width = 'auto';
-                popover.style.maxWidth = 'calc(100vw - 20px)';
-                popover.style.top = `${rect.bottom + 5}px`;
+                // On mobile, CSS handles positioning as bottom sheet
+                // Just clear any inline styles that might interfere
+                popover.style.left = '';
+                popover.style.right = '';
+                popover.style.top = '';
+                popover.style.width = '';
+                popover.style.maxWidth = '';
             } else {
                 // On desktop, position to the right
                 popover.style.left = `${rect.right + 10}px`;
@@ -848,24 +863,40 @@ function renderComparisonTable() {
                 popover.style.right = 'auto';
                 popover.style.width = '';
                 popover.style.maxWidth = '400px';
-            }
 
-            // Ensure popover doesn't go off screen
-            requestAnimationFrame(() => {
-                const popoverRect = popover.getBoundingClientRect();
-                if (!isMobile && popoverRect.right > window.innerWidth) {
-                    popover.style.left = `${rect.left - popoverRect.width - 10}px`;
-                }
-                if (popoverRect.bottom > window.innerHeight) {
-                    popover.style.top = `${Math.max(10, window.innerHeight - popoverRect.height - 10)}px`;
-                }
-            });
+                // Ensure popover doesn't go off screen
+                requestAnimationFrame(() => {
+                    const popoverRect = popover.getBoundingClientRect();
+                    if (popoverRect.right > window.innerWidth) {
+                        popover.style.left = `${rect.left - popoverRect.width - 10}px`;
+                    }
+                    if (popoverRect.bottom > window.innerHeight) {
+                        popover.style.top = `${Math.max(10, window.innerHeight - popoverRect.height - 10)}px`;
+                    }
+                });
+            }
         };
 
-        wrapper.addEventListener('mouseenter', positionPopover);
+        const hidePopover = () => {
+            popover.style.display = 'none';
+        };
+
+        wrapper.addEventListener('mouseenter', showPopover);
+        wrapper.addEventListener('mouseleave', hidePopover);
         wrapper.addEventListener('click', (e) => {
             e.stopPropagation();
-            positionPopover();
+            if (popover.style.display === 'block') {
+                hidePopover();
+            } else {
+                showPopover();
+            }
+        });
+    });
+
+    // Close popovers when clicking elsewhere
+    document.addEventListener('click', () => {
+        document.querySelectorAll('.tradition-popover').forEach(p => {
+            p.style.display = 'none';
         });
     });
 }
@@ -1698,8 +1729,8 @@ function createVerticalViolinPlot(tradition) {
 // Form handling
 document.addEventListener('DOMContentLoaded', () => {
     // Handle "Other" source field visibility
-    const sourceSelect = document.getElementById('signup-source');
-    const sourceOtherGroup = document.getElementById('signup-source-other-group');
+    const sourceSelect = document.getElementById('contact-source');
+    const sourceOtherGroup = document.getElementById('contact-source-other-group');
     if (sourceSelect && sourceOtherGroup) {
         sourceSelect.addEventListener('change', (e) => {
             if (e.target.value === 'Other') {
@@ -1710,23 +1741,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Signup form
-    const signupForm = document.getElementById('signupForm');
-    if (signupForm) {
-        signupForm.addEventListener('submit', async (e) => {
+    // Combined contact/signup form
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+        contactForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            const submitButton = signupForm.querySelector('button[type="submit"]');
-            const messageDiv = document.getElementById('signup-message');
+            const submitButton = contactForm.querySelector('button[type="submit"]');
+            const messageDiv = document.getElementById('contact-form-message');
 
             // Disable button and show loading
             submitButton.disabled = true;
-            submitButton.textContent = 'Signing up...';
+            submitButton.textContent = 'Submitting...';
             messageDiv.className = 'form-message';
             messageDiv.textContent = '';
 
             try {
-                const formData = new FormData(signupForm);
+                const formData = new FormData(contactForm);
 
                 // Get source value - use sourceOther if "Other" is selected
                 let source = formData.get('source');
@@ -1734,55 +1765,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     const otherValue = formData.get('sourceOther');
                     source = otherValue ? `Other: ${otherValue}` : 'Other';
                 }
-
-                const response = await fetch('/api/signup', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        email: formData.get('email'),
-                        name: formData.get('name'),
-                        source: source
-                    })
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    messageDiv.className = 'form-message success';
-                    messageDiv.textContent = data.message;
-                    signupForm.reset();
-                } else {
-                    throw new Error(data.error || 'Failed to sign up');
-                }
-            } catch (error) {
-                messageDiv.className = 'form-message error';
-                messageDiv.textContent = error.message || 'An error occurred. Please try again.';
-            } finally {
-                submitButton.disabled = false;
-                submitButton.textContent = 'Sign Up';
-            }
-        });
-    }
-
-    // Contact form
-    const contactForm = document.getElementById('contactForm');
-    if (contactForm) {
-        contactForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const submitButton = contactForm.querySelector('button[type="submit"]');
-            const messageDiv = document.getElementById('contact-message');
-
-            // Disable button and show loading
-            submitButton.disabled = true;
-            submitButton.textContent = 'Sending...';
-            messageDiv.className = 'form-message';
-            messageDiv.textContent = '';
-
-            try {
-                const formData = new FormData(contactForm);
 
                 const response = await fetch('/api/contact', {
                     method: 'POST',
@@ -1792,7 +1774,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify({
                         email: formData.get('email'),
                         name: formData.get('name'),
-                        message: formData.get('message')
+                        message: formData.get('message'),
+                        subscribe: formData.get('subscribe') === 'on',
+                        source: source
                     })
                 });
 
@@ -1803,14 +1787,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     messageDiv.textContent = data.message;
                     contactForm.reset();
                 } else {
-                    throw new Error(data.error || 'Failed to send message');
+                    throw new Error(data.error || 'Failed to submit');
                 }
             } catch (error) {
                 messageDiv.className = 'form-message error';
                 messageDiv.textContent = error.message || 'An error occurred. Please try again.';
             } finally {
                 submitButton.disabled = false;
-                submitButton.textContent = 'Send Message';
+                submitButton.textContent = 'Submit';
             }
         });
     }

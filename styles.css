@@ -264,11 +264,37 @@ tr.selected-row:hover {
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     min-width: 300px;
     max-width: 400px;
-    pointer-events: none;
+    max-height: 50vh;
+    overflow-y: auto;
+    pointer-events: auto;
 }
 
-.tradition-name-wrapper:hover .tradition-popover {
-    display: block;
+/* On mobile, show as bottom sheet */
+@media (max-width: 768px) {
+    .tradition-popover {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: auto !important;
+        max-width: 100%;
+        width: 100%;
+        max-height: 60vh;
+        border-radius: 16px 16px 0 0;
+        box-shadow: 0 -4px 20px rgba(0,0,0,0.2);
+        padding: 1.5rem;
+        padding-bottom: 2rem;
+    }
+
+    .tradition-popover::before {
+        content: '';
+        display: block;
+        width: 40px;
+        height: 4px;
+        background: #ccc;
+        border-radius: 2px;
+        margin: 0 auto 1rem;
+    }
 }
 
 .popover-description {
