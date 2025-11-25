@@ -1,6 +1,6 @@
 # Harmonic Alignment Project
 
-![Harmonic Alignment Preview](harmonicalignment.jpg)
+![Harmonic Alignment Preview](harmonicalignment.png)
 
 Cataloguing wisdom traditions as reference for multi-scale alignment—from individual development to institutional coordination to AGI values.
 
