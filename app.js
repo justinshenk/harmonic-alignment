@@ -87,6 +87,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initializeQuiz();
     renderComparisonTable();
     renderEvolutionTree();
+    initializeResearchSection();
 });
 
 async function loadData() {
@@ -330,6 +331,7 @@ function initializeNavigation() {
     const buttons = {
         quizView: 'quiz-section',
         compareView: 'compare-section',
+        researchView: 'research-section',
         complexityView: 'complexity-section',
         attentionView: 'attention-section',
         treeView: 'tree-section',
@@ -817,28 +819,53 @@ function renderComparisonTable() {
             } else {
                 // New column
                 sortState.column = column;
-                sortState.direction = 'asc';
+                sortState.direction = 'desc';
             }
 
             renderComparisonTable();
         });
     });
 
-    // Position popovers on hover
+    // Position popovers on hover/click
     document.querySelectorAll('.tradition-name-wrapper').forEach(wrapper => {
         const popover = wrapper.querySelector('.tradition-popover');
-        wrapper.addEventListener('mouseenter', (e) => {
+
+        const positionPopover = () => {
             const rect = wrapper.getBoundingClientRect();
-            popover.style.left = `${rect.right + 10}px`;
-            popover.style.top = `${rect.top}px`;
+            const isMobile = window.innerWidth < 768;
+
+            if (isMobile) {
+                // On mobile, position below the row, centered
+                popover.style.left = '10px';
+                popover.style.right = '10px';
+                popover.style.width = 'auto';
+                popover.style.maxWidth = 'calc(100vw - 20px)';
+                popover.style.top = `${rect.bottom + 5}px`;
+            } else {
+                // On desktop, position to the right
+                popover.style.left = `${rect.right + 10}px`;
+                popover.style.top = `${rect.top}px`;
+                popover.style.right = 'auto';
+                popover.style.width = '';
+                popover.style.maxWidth = '400px';
+            }
+
             // Ensure popover doesn't go off screen
-            const popoverRect = popover.getBoundingClientRect();
-            if (popoverRect.right > window.innerWidth) {
-                popover.style.left = `${rect.left - popoverRect.width - 10}px`;
-            }
-            if (popoverRect.bottom > window.innerHeight) {
-                popover.style.top = `${window.innerHeight - popoverRect.height - 10}px`;
-            }
+            requestAnimationFrame(() => {
+                const popoverRect = popover.getBoundingClientRect();
+                if (!isMobile && popoverRect.right > window.innerWidth) {
+                    popover.style.left = `${rect.left - popoverRect.width - 10}px`;
+                }
+                if (popoverRect.bottom > window.innerHeight) {
+                    popover.style.top = `${Math.max(10, window.innerHeight - popoverRect.height - 10)}px`;
+                }
+            });
+        };
+
+        wrapper.addEventListener('mouseenter', positionPopover);
+        wrapper.addEventListener('click', (e) => {
+            e.stopPropagation();
+            positionPopover();
         });
     });
 }
@@ -1853,4 +1880,130 @@ function renderAttentionClassification() {
     html += '</div>';
 
     document.getElementById('attentionClassification').innerHTML = html;
+}
+
+// Research Section
+let researchData = null;
+
+async function initializeResearchSection() {
+    try {
+        const response = await fetch('data/score-justifications.json');
+        researchData = await response.json();
+        populateResearchDropdown();
+    } catch (error) {
+        console.error('Failed to load research data:', error);
+        document.getElementById('researchContent').innerHTML = '<p style="color: #e74c3c;">Failed to load research data.</p>';
+    }
+}
+
+function populateResearchDropdown() {
+    const select = document.getElementById('researchTraditionSelect');
+    if (!select || !researchData) return;
+
+    // Get tradition names from the research data
+    const traditions = Object.keys(researchData.traditions).sort((a, b) => {
+        const nameA = traditionsData?.traditions.find(t => t.id === a)?.name || a;
+        const nameB = traditionsData?.traditions.find(t => t.id === b)?.name || b;
+        return nameA.localeCompare(nameB);
+    });
+
+    traditions.forEach(id => {
+        const tradition = traditionsData?.traditions.find(t => t.id === id);
+        const name = tradition?.name || id;
+        const option = document.createElement('option');
+        option.value = id;
+        option.textContent = name;
+        select.appendChild(option);
+    });
+
+    select.addEventListener('change', () => {
+        renderResearchContent(select.value);
+    });
+}
+
+function renderResearchContent(traditionId) {
+    const container = document.getElementById('researchContent');
+    if (!traditionId || !researchData) {
+        container.innerHTML = '<p style="color: #666; font-style: italic;">Select a tradition above to view research justifications.</p>';
+        return;
+    }
+
+    const data = researchData.traditions[traditionId];
+    if (!data) {
+        container.innerHTML = '<p style="color: #e74c3c;">No research data found for this tradition.</p>';
+        return;
+    }
+
+    const tradition = traditionsData?.traditions.find(t => t.id === traditionId);
+    const name = tradition?.name || traditionId;
+
+    const confidenceColor = {
+        high: '#27ae60',
+        medium: '#f39c12',
+        low: '#e74c3c'
+    };
+
+    let html = `
+        <h3 style="margin-bottom: 0.5rem;">${name}</h3>
+        <p style="margin-bottom: 0.5rem;">
+            <strong>Overall Confidence:</strong>
+            <span style="color: ${confidenceColor[data.overallConfidence]}; font-weight: 600;">
+                ${data.overallConfidence.charAt(0).toUpperCase() + data.overallConfidence.slice(1)}
+            </span>
+        </p>
+        <p style="margin-bottom: 1.5rem; color: #666;">${data.researchBasis}</p>
+
+        <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="background: var(--primary); color: white;">
+                    <th style="padding: 0.75rem; text-align: left;">Dimension</th>
+                    <th style="padding: 0.75rem; text-align: center;">Score</th>
+                    <th style="padding: 0.75rem; text-align: center;">Confidence</th>
+                    <th style="padding: 0.75rem; text-align: left;">Justification</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+    const dimensionNames = {
+        adhd: 'ADHD',
+        depression: 'Depression',
+        anxiety: 'Anxiety',
+        trauma: 'Trauma',
+        focus: 'Focus',
+        metacognition: 'Metacognition',
+        insight: 'Insight',
+        compassion: 'Compassion',
+        communication: 'Communication',
+        empathy: 'Empathy',
+        bodyAwareness: 'Body Awareness',
+        emotionalRegulation: 'Emotional Regulation'
+    };
+
+    Object.entries(data.scores).forEach(([dimension, scoreData]) => {
+        const concerns = scoreData.concerns ? `<br><em style="color: #e67e22; font-size: 0.85rem;">⚠ ${scoreData.concerns}</em>` : '';
+        const citations = scoreData.keyCitations ? `<br><span style="color: #666; font-size: 0.85rem;">📚 ${scoreData.keyCitations.join(', ')}</span>` : '';
+
+        html += `
+            <tr style="border-bottom: 1px solid var(--border);">
+                <td style="padding: 0.75rem; font-weight: 500;">${dimensionNames[dimension] || dimension}</td>
+                <td style="padding: 0.75rem; text-align: center;">
+                    <span class="score score-${scoreData.score}">${scoreData.score}</span>
+                </td>
+                <td style="padding: 0.75rem; text-align: center;">
+                    <span style="color: ${confidenceColor[scoreData.confidence]}; font-weight: 600;">
+                        ${scoreData.confidence.charAt(0).toUpperCase() + scoreData.confidence.slice(1)}
+                    </span>
+                </td>
+                <td style="padding: 0.75rem; font-size: 0.9rem;">
+                    ${scoreData.justification}${concerns}${citations}
+                </td>
+            </tr>
+        `;
+    });
+
+    html += '</tbody></table></div>';
+
+    container.innerHTML = html;
 }

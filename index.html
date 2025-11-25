@@ -27,6 +27,7 @@
             <button id="complexityView">Complexity</button>
             <button id="attentionView">Attention Mapping</button>
             <button id="treeView">Evolution</button>
+            <button id="researchView">Research</button>
             <button id="aboutView">About</button>
         </nav>
     </header>
@@ -283,6 +284,33 @@
 
         <div id="tree-section" class="section">
             <div id="evolution-tree"></div>
+        </div>
+
+        <div id="research-section" class="section">
+            <div class="content" style="max-width: 1200px;">
+                <h2>Research Justifications</h2>
+                <p style="margin-bottom: 1rem;">This page documents the evidence basis for effectiveness scores. Each score includes a confidence level and research justification.</p>
+
+                <p style="background: #e8f4f8; padding: 1rem; border-radius: 5px; border-left: 4px solid var(--secondary); margin-bottom: 2rem;">
+                    <strong>Confidence Levels:</strong><br>
+                    <span style="color: #27ae60;">●</span> <strong>High:</strong> Multiple RCTs, meta-analyses, or well-established research<br>
+                    <span style="color: #f39c12;">●</span> <strong>Medium:</strong> Some controlled studies, strong theoretical basis, or consistent clinical reports<br>
+                    <span style="color: #e74c3c;">●</span> <strong>Low:</strong> Limited research, primarily phenomenological reports or extrapolation
+                </p>
+
+                <div class="controls" style="margin-bottom: 1.5rem;">
+                    <label>
+                        Select tradition:
+                        <select id="researchTraditionSelect">
+                            <option value="">-- Select a tradition --</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div id="researchContent">
+                    <p style="color: #666; font-style: italic;">Select a tradition above to view research justifications.</p>
+                </div>
+            </div>
         </div>
 
         <div id="about-section" class="section">
