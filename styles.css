@@ -873,24 +873,6 @@ details.dimension-legend[open] summary span {
     #attention-section [style*="grid-template-columns: 200px"] > div {
         width: 100% !important;
     }
-
-    /* Table scroll hint */
-    #comparison-table {
-        position: relative;
-    }
-
-    #comparison-table::after {
-        content: "← Scroll →";
-        position: absolute;
-        bottom: 10px;
-        right: 10px;
-        background: rgba(0,0,0,0.7);
-        color: white;
-        padding: 0.25rem 0.5rem;
-        border-radius: 3px;
-        font-size: 0.75rem;
-        pointer-events: none;
-    }
 }
 
 /* Medium screens (tablets) */
