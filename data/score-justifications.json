@@ -1,0 +1,2780 @@
+{
+  "metadata": {
+    "created": "2024-11-25",
+    "purpose": "Research justifications for effectiveness scores",
+    "confidenceLevels": {
+      "high": "Multiple RCTs, meta-analyses, or well-established research",
+      "medium": "Some controlled studies, strong theoretical basis, or consistent clinical reports",
+      "low": "Limited research, primarily phenomenological reports or extrapolation from related practices"
+    },
+    "scoreScale": {
+      "1": "Minimal/No evidence of effectiveness",
+      "2": "Low effectiveness",
+      "3": "Moderate effectiveness",
+      "4": "High effectiveness",
+      "5": "Very high effectiveness"
+    }
+  },
+  "traditions": {
+    "vipassana": {
+      "overallConfidence": "high",
+      "researchBasis": "Extensive research through MBSR/MBCT derivatives; multiple meta-analyses",
+      "scores": {
+        "adhd": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Attention training component well-supported. Zylowska (2008) showed benefits for adult ADHD. However, requires sustained practice which can be challenging for ADHD population.",
+          "concerns": "May be difficult to establish practice without support structures"
+        },
+        "depression": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Strong evidence from MBCT trials. Kuyken et al. (2016) meta-analysis shows equivalent to antidepressants for relapse prevention. Goyal et al. (2014) moderate effect sizes.",
+          "keyCitations": ["Khoury et al. (2013)", "Goleman & Davidson (2017)"]
+        },
+        "anxiety": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Robust evidence across multiple meta-analyses. Hofmann et al. (2010) showed moderate effect sizes for anxiety. Mechanism: decentering from anxious thoughts.",
+          "keyCitations": ["Hofmann et al. (2010)", "Khoury et al. (2013)"]
+        },
+        "trauma": {
+          "score": 3,
+          "confidence": "medium",
+          "justification": "Mixed evidence. Can be helpful for processing but may trigger overwhelm. Trauma-sensitive modifications (TCTSY) show better results. Not first-line treatment.",
+          "concerns": "Risk of re-traumatization without proper support; needs trauma-informed adaptation"
+        },
+        "focus": {
+          "score": 4,
+          "confidence": "high",
+          "justification": "Well-established attention training effects. MacLean et al. (2010) shamatha retreat showed sustained attention improvements. Jha et al. (2007) showed attention improvements.",
+          "keyCitations": ["Jha et al. (2007)", "MacLean et al. (2010)"]
+        },
+        "metacognition": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Core mechanism of vipassana is observing mental processes. Research shows increased metacognitive awareness. Teasdale et al. (2002) on decentering.",
+          "keyCitations": ["Teasdale et al. (2002)"]
+        },
+        "insight": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Traditional purpose of practice; 'vipassana' literally means insight. Phenomenological reports consistent with increased self-understanding.",
+          "keyCitations": ["Traditional texts", "Goleman & Davidson (2017)"]
+        },
+        "compassion": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Secondary effect through reduced reactivity and increased equanimity. Often combined with metta practice. Less direct than loving-kindness meditation.",
+          "concerns": "Score might be inflated; compassion not primary focus"
+        },
+        "communication": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Indirect benefits through reduced reactivity. No direct communication training component.",
+          "concerns": "Extrapolated rather than directly studied"
+        },
+        "empathy": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Increased emotional awareness may enhance empathic accuracy. Klimecki et al. (2013) showed brain changes related to empathy.",
+          "keyCitations": ["Klimecki et al. (2013)"]
+        },
+        "bodyAwareness": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Body scanning is core practice. Increased interoceptive awareness well-documented. Farb et al. (2013) on interoception changes.",
+          "keyCitations": ["Farb et al. (2013)"]
+        },
+        "emotionalRegulation": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Primary mechanism: observing emotions without reactivity. Robustly supported. Goldin & Gross (2010) showed improved emotion regulation.",
+          "keyCitations": ["Goldin & Gross (2010)"]
+        }
+      }
+    },
+    "focusing": {
+      "overallConfidence": "medium",
+      "researchBasis": "Good theoretical foundation, moderate empirical research, primarily in psychotherapy contexts",
+      "scores": {
+        "adhd": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "No direct research. May help with emotional aspects of ADHD. Requires sustained introspection which may be challenging.",
+          "concerns": "Speculative score"
+        },
+        "depression": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Hendricks (2009) meta-analysis of focusing in psychotherapy shows positive effects. Mechanism: accessing and processing implicit emotional content.",
+          "keyCitations": ["Hendricks (2009)"]
+        },
+        "anxiety": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Strong theoretical fit - anxiety often involves disconnection from bodily knowing. Gendlin's research showed therapy outcomes improved with focusing ability.",
+          "keyCitations": ["Gendlin (1996)"]
+        },
+        "trauma": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Excellent fit for trauma work - gentle, titrated approach to bodily experience. Shares principles with Somatic Experiencing. Used in trauma-informed therapy.",
+          "keyCitations": ["Cornell (2013)"]
+        },
+        "focus": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Not primarily an attention practice. Some concentration involved but not systematic attention training.",
+          "concerns": "Score may be accurate but not well-researched"
+        },
+        "metacognition": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Involves observing inner experience and its qualities. Develops awareness of pre-verbal knowing.",
+          "concerns": "Different type of metacognition than meditation-based"
+        },
+        "insight": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Core purpose of practice - accessing implicit knowing that emerges as 'felt shifts'. Well-documented phenomenologically.",
+          "keyCitations": ["Gendlin (1996)"]
+        },
+        "compassion": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "The 'friendly attending' stance toward inner experience cultivates self-compassion. Extends to others through similar listening.",
+          "concerns": "Less direct than compassion-focused practices"
+        },
+        "communication": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Can improve listening skills through Focusing Partnerships. Not primary focus of practice.",
+          "concerns": "Indirect benefit"
+        },
+        "empathy": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Focusing Partnerships explicitly develop empathic listening. Attunement to others' felt sense.",
+          "keyCitations": ["Cornell (2013)"]
+        },
+        "bodyAwareness": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Core of practice - attending to 'felt sense' in body. Interoceptive awareness is foundational skill.",
+          "keyCitations": ["Gendlin (1996)"]
+        },
+        "emotionalRegulation": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Learning to be with difficult emotions without overwhelm. 'Clearing a space' technique specifically for regulation.",
+          "keyCitations": ["Gendlin (1996)"]
+        }
+      }
+    },
+    "jhana": {
+      "overallConfidence": "medium",
+      "researchBasis": "Traditional Buddhist texts, limited modern research, strong phenomenological consistency",
+      "scores": {
+        "adhd": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Systematically trains sustained attention. Brasington reports ADHD practitioners often excel. However, initial difficulty may be high.",
+          "concerns": "Requires high initial motivation and skilled guidance"
+        },
+        "depression": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Access to jhanic joy/pleasure states may help counter anhedonia. However, not directly addressing cognitive patterns of depression.",
+          "concerns": "May not address root causes"
+        },
+        "anxiety": {
+          "score": 3,
+          "confidence": "medium",
+          "justification": "Concentrated states reduce anxiety during practice, but may not transfer to daily life as well as insight practices.",
+          "concerns": "State-dependent benefits"
+        },
+        "trauma": {
+          "score": 2,
+          "confidence": "medium",
+          "justification": "Deep concentration can suppress trauma material rather than process it. Not designed for trauma work.",
+          "concerns": "May bypass important material; not therapeutic"
+        },
+        "focus": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Primary purpose is concentration development. Systematic progression through absorption states requires extreme focus.",
+          "keyCitations": ["Brasington (2015)"]
+        },
+        "metacognition": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "High awareness of mental states required to navigate jhanic factors. However, insight-focused practices may be superior for this.",
+          "concerns": "Different type than vipassana metacognition"
+        },
+        "insight": {
+          "score": 3,
+          "confidence": "medium",
+          "justification": "Traditional view: jhana provides stable platform for insight. But jhana itself is not insight practice.",
+          "concerns": "Concentration ≠ wisdom"
+        },
+        "compassion": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Some jhana practices use metta as object. But not primary purpose of concentration practice.",
+          "concerns": "Indirect effect"
+        },
+        "communication": {
+          "score": 2,
+          "confidence": "low",
+          "justification": "No direct relationship. Solitary practice.",
+          "concerns": "Speculative"
+        },
+        "empathy": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Increased equanimity may support empathy. No direct training.",
+          "concerns": "Speculative"
+        },
+        "bodyAwareness": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Whole-body awareness is key jhana factor. Pleasure suffuses body in higher jhanas.",
+          "keyCitations": ["Brasington (2015)"]
+        },
+        "emotionalRegulation": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Access to calm states on demand. Equanimity development. However, may be state-dependent.",
+          "concerns": "Transfer to daily life uncertain"
+        }
+      }
+    },
+    "mbsr": {
+      "overallConfidence": "high",
+      "researchBasis": "Most researched contemplative program; thousands of studies; multiple meta-analyses",
+      "scores": {
+        "adhd": {
+          "score": 3,
+          "confidence": "medium",
+          "justification": "Zylowska (2008) adapted mindfulness for ADHD. MBSR not specifically designed for ADHD but provides attention training benefits.",
+          "keyCitations": ["Zylowska et al. (2008)"]
+        },
+        "depression": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Extensive evidence base. Grossman et al. (2004) meta-analysis. Not as specific as MBCT but strong effects.",
+          "keyCitations": ["Grossman et al. (2004)", "Kabat-Zinn (1990)"]
+        },
+        "anxiety": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Original development was for stress/anxiety. Robust evidence across populations. Hofmann et al. (2010) meta-analysis.",
+          "keyCitations": ["Hofmann et al. (2010)", "Kabat-Zinn (1990)"]
+        },
+        "trauma": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Helpful but not trauma-specific. Body scan can be activating for trauma survivors. Trauma-sensitive modifications needed.",
+          "concerns": "Requires trauma-informed delivery"
+        },
+        "focus": {
+          "score": 4,
+          "confidence": "high",
+          "justification": "Attention training is core component. Well-documented attention improvements.",
+          "keyCitations": ["Jha et al. (2007)"]
+        },
+        "metacognition": {
+          "score": 4,
+          "confidence": "high",
+          "justification": "Develops observer perspective on thoughts and feelings. Central teaching of program.",
+          "keyCitations": ["Shapiro et al. (2006)"]
+        },
+        "insight": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Promotes self-understanding through sustained observation. Less emphasis than traditional vipassana.",
+          "concerns": "Pragmatic focus may limit depth"
+        },
+        "compassion": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Some loving-kindness included. Self-compassion develops through non-judgmental attention.",
+          "concerns": "Not primary focus"
+        },
+        "communication": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Mindful communication mentioned but not primary focus. Some programs include it.",
+          "concerns": "Variable implementation"
+        },
+        "empathy": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Increased emotional awareness supports empathy. Healthcare worker studies show improved patient relationships.",
+          "keyCitations": ["Shapiro et al. (2005)"]
+        },
+        "bodyAwareness": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Body scan is foundational practice. Yoga component. Well-documented interoceptive changes.",
+          "keyCitations": ["Farb et al. (2013)"]
+        },
+        "emotionalRegulation": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Core outcome of program. Strong evidence for stress reduction translating to emotional regulation.",
+          "keyCitations": ["Goldin & Gross (2010)"]
+        }
+      }
+    },
+    "ifs": {
+      "overallConfidence": "medium",
+      "researchBasis": "Growing evidence base; RCTs emerging; strong clinical acceptance",
+      "scores": {
+        "adhd": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "May help with emotional dysregulation component of ADHD. No specific research on ADHD.",
+          "concerns": "Speculative"
+        },
+        "depression": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Parts work effective for depression. Addresses self-criticism through exile/protector framework. Growing RCT evidence.",
+          "keyCitations": ["Schwartz & Sweezy (2020)"]
+        },
+        "anxiety": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Working with anxious parts and their protective functions. Effective clinical model.",
+          "keyCitations": ["Schwartz & Sweezy (2020)"]
+        },
+        "trauma": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Excellent trauma model - allows titrated approach through parts. Schwartz developed specifically for complex trauma. Growing research support.",
+          "keyCitations": ["Schwartz & Sweezy (2020)", "Shadick et al. (2013)"]
+        },
+        "focus": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Some attention to internal experience but not systematic attention training.",
+          "concerns": "Not primary purpose"
+        },
+        "metacognition": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Core skill is observing internal parts and their dynamics. Highly metacognitive framework.",
+          "keyCitations": ["Schwartz & Sweezy (2020)"]
+        },
+        "insight": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Deep self-understanding through parts exploration. Origins and functions of patterns revealed.",
+          "keyCitations": ["Schwartz & Sweezy (2020)"]
+        },
+        "compassion": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Self-compassion is core mechanism - 'Self' energy is inherently compassionate. Learning to relate kindly to all parts.",
+          "keyCitations": ["Schwartz & Sweezy (2020)"]
+        },
+        "communication": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Less reactivity improves communication. Some applications to couples work.",
+          "concerns": "Indirect benefit"
+        },
+        "empathy": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Understanding own parts helps understand others' parts. Extends compassionate framework outward.",
+          "keyCitations": ["Schwartz & Sweezy (2020)"]
+        },
+        "bodyAwareness": {
+          "score": 3,
+          "confidence": "medium",
+          "justification": "Parts often located in body but not primary somatic practice. Can integrate with somatic approaches.",
+          "concerns": "Less somatic than body-based approaches"
+        },
+        "emotionalRegulation": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Core outcome - less hijacking by parts, more Self-leadership. Well-documented clinical improvements.",
+          "keyCitations": ["Schwartz & Sweezy (2020)"]
+        }
+      }
+    },
+    "somatic-experiencing": {
+      "overallConfidence": "medium",
+      "researchBasis": "Moderate research; RCTs emerging; strong theoretical foundation in neuroscience",
+      "scores": {
+        "adhd": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "May help with nervous system regulation but not specific ADHD intervention.",
+          "concerns": "Speculative"
+        },
+        "depression": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Depression often involves freeze/shutdown states. SE addresses nervous system regulation.",
+          "keyCitations": ["Levine (1997)"]
+        },
+        "anxiety": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Directly addresses sympathetic arousal. Pendulation and titration core techniques. Growing evidence base.",
+          "keyCitations": ["Payne et al. (2015)"]
+        },
+        "trauma": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Designed specifically for trauma. Addresses physiological imprint. RCTs show effectiveness for PTSD.",
+          "keyCitations": ["Levine (1997)", "Payne et al. (2015)"]
+        },
+        "focus": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Requires attending to sensations but not systematic attention training.",
+          "concerns": "Not primary purpose"
+        },
+        "metacognition": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Develops awareness of body states but less cognitive metacognition than mindfulness.",
+          "concerns": "Different type of awareness"
+        },
+        "insight": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Understanding emerges through body. Trauma patterns revealed through sensation.",
+          "keyCitations": ["Levine (1997)"]
+        },
+        "compassion": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Self-care implicit in practice but not explicit compassion training.",
+          "concerns": "Not primary focus"
+        },
+        "communication": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Less reactive nervous system may improve communication indirectly.",
+          "concerns": "Indirect benefit"
+        },
+        "empathy": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Regulated nervous system may support empathy but not trained directly.",
+          "concerns": "Indirect benefit"
+        },
+        "bodyAwareness": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Core of practice - tracking sensations is foundational skill.",
+          "keyCitations": ["Levine (1997)"]
+        },
+        "emotionalRegulation": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Primary outcome - expanding window of tolerance. Pendulation teaches regulation.",
+          "keyCitations": ["Levine (1997)", "Payne et al. (2015)"]
+        }
+      }
+    },
+    "act": {
+      "overallConfidence": "high",
+      "researchBasis": "Extensive RCT evidence; multiple meta-analyses; well-established therapy",
+      "scores": {
+        "adhd": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Defusion and values work helpful for ADHD. Some specific research. Addresses emotional components well.",
+          "keyCitations": ["Hayes et al. (2006)"]
+        },
+        "depression": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Strong evidence base. A-Tjak et al. (2015) meta-analysis shows effectiveness. Values-based action counters avoidance.",
+          "keyCitations": ["A-Tjak et al. (2015)", "Hayes et al. (2006)"]
+        },
+        "anxiety": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Acceptance stance well-suited for anxiety. Multiple RCTs. Defusion from anxious thoughts.",
+          "keyCitations": ["A-Tjak et al. (2015)"]
+        },
+        "trauma": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Acceptance framework helpful but not trauma-specific. Often combined with other approaches.",
+          "concerns": "May need augmentation for complex trauma"
+        },
+        "focus": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Present-moment awareness is core process. Mindfulness component trains attention.",
+          "keyCitations": ["Hayes et al. (2006)"]
+        },
+        "metacognition": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Cognitive defusion is highly metacognitive - observing thoughts as thoughts. Core ACT process.",
+          "keyCitations": ["Hayes et al. (2006)"]
+        },
+        "insight": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Values clarification provides self-understanding. Understanding psychological inflexibility patterns.",
+          "keyCitations": ["Hayes et al. (2006)"]
+        },
+        "compassion": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Self-as-context promotes self-compassion. Not explicit compassion training but implicit.",
+          "concerns": "Less direct than compassion-focused therapies"
+        },
+        "communication": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Values-guided action improves relationship behaviors. Less reactivity.",
+          "keyCitations": ["Hayes et al. (2006)"]
+        },
+        "empathy": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Perspective-taking skill trained through self-as-context. Flexibility extends to understanding others.",
+          "keyCitations": ["Hayes et al. (2006)"]
+        },
+        "bodyAwareness": {
+          "score": 3,
+          "confidence": "medium",
+          "justification": "Some somatic awareness through mindfulness component but not primary focus.",
+          "concerns": "Less emphasis than body-based approaches"
+        },
+        "emotionalRegulation": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Core outcome - psychological flexibility includes emotional flexibility. Strong evidence.",
+          "keyCitations": ["A-Tjak et al. (2015)"]
+        }
+      }
+    },
+    "stoicism": {
+      "overallConfidence": "medium",
+      "researchBasis": "Philosophical tradition; CBT connection provides indirect evidence; limited direct research",
+      "scores": {
+        "adhd": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Cognitive techniques may help with emotional regulation in ADHD. No direct research.",
+          "concerns": "Speculative"
+        },
+        "depression": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "CBT (derived from Stoicism) has strong evidence. Reframing and acceptance reduce rumination.",
+          "keyCitations": ["Robertson (2019)", "CBT research"]
+        },
+        "anxiety": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Dichotomy of control directly addresses anxiety's focus on uncontrollables. CBT connection. Premeditatio malorum.",
+          "keyCitations": ["Robertson (2019)"]
+        },
+        "trauma": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Cognitive reframing alone insufficient for trauma. May intellectualize rather than process.",
+          "concerns": "Lacks somatic component; may suppress"
+        },
+        "focus": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Attention to present moment emphasized. Prosoche (attention) is core practice.",
+          "keyCitations": ["Traditional texts"]
+        },
+        "metacognition": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Core practice is examining impressions and judgments. Highly metacognitive philosophy.",
+          "keyCitations": ["Traditional texts", "Robertson (2019)"]
+        },
+        "insight": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Self-examination central. Understanding one's judgments and values.",
+          "keyCitations": ["Traditional texts"]
+        },
+        "compassion": {
+          "score": 3,
+          "confidence": "medium",
+          "justification": "Cosmopolitanism and oikeiosis extend care outward. But often perceived as emotionally detached.",
+          "concerns": "Popular perception vs. actual practice"
+        },
+        "communication": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Less reactivity improves communication. Philosophical training in rhetoric.",
+          "concerns": "Limited direct evidence"
+        },
+        "empathy": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Universal human nature understanding. But may prioritize equanimity over emotional attunement.",
+          "concerns": "May reduce emotional responsiveness"
+        },
+        "bodyAwareness": {
+          "score": 1,
+          "confidence": "high",
+          "justification": "Primarily cognitive practice. Body not emphasized in traditional or modern applications.",
+          "keyCitations": ["Traditional texts"]
+        },
+        "emotionalRegulation": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Core purpose - reducing pathological emotions through cognitive reappraisal. CBT evidence supports this mechanism.",
+          "keyCitations": ["Robertson (2019)", "CBT research"]
+        }
+      }
+    },
+    "metta": {
+      "overallConfidence": "high",
+      "researchBasis": "Strong research base; multiple RCTs; well-documented mechanisms",
+      "scores": {
+        "adhd": {
+          "score": 2,
+          "confidence": "low",
+          "justification": "Not attention-focused practice. May help with emotional aspects but not core ADHD symptoms.",
+          "concerns": "Not designed for attention"
+        },
+        "depression": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Strong evidence for positive affect increase. Counters self-criticism central to depression. Zeng et al. (2015).",
+          "keyCitations": ["Hofmann et al. (2011)", "Zeng et al. (2015)"]
+        },
+        "anxiety": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Less direct than mindfulness for anxiety but positive emotions buffer anxiety. Social anxiety specific benefits.",
+          "keyCitations": ["Hofmann et al. (2011)"]
+        },
+        "trauma": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Self-compassion component helpful. May need modification for complex trauma. Can activate attachment wounds.",
+          "concerns": "May be difficult for trauma survivors initially"
+        },
+        "focus": {
+          "score": 3,
+          "confidence": "medium",
+          "justification": "Some concentration required to maintain phrases/intentions but not systematic attention training.",
+          "concerns": "Not primary purpose"
+        },
+        "metacognition": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Some awareness of mental states but less metacognitive than insight practices.",
+          "concerns": "Not primary focus"
+        },
+        "insight": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Traditional view: insight into nature of love/connection. But not systematic insight practice.",
+          "concerns": "Different type of insight than vipassana"
+        },
+        "compassion": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Primary purpose of practice. Strong evidence for compassion increases. Klimecki et al. brain changes.",
+          "keyCitations": ["Hofmann et al. (2011)", "Klimecki et al. (2013)"]
+        },
+        "communication": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Increased goodwill improves relationships. Less reactivity. Warmth in interactions.",
+          "keyCitations": ["Hutcherson et al. (2008)"]
+        },
+        "empathy": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Directly trains empathic concern. Brain changes in empathy circuits documented.",
+          "keyCitations": ["Klimecki et al. (2013)"]
+        },
+        "bodyAwareness": {
+          "score": 2,
+          "confidence": "medium",
+          "justification": "Heart area sometimes focused on, but primarily cognitive-affective practice.",
+          "concerns": "Not somatic practice"
+        },
+        "emotionalRegulation": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Positive emotions provide regulation resources. Less direct than mindfulness but effective.",
+          "keyCitations": ["Hofmann et al. (2011)"]
+        }
+      }
+    },
+    "psilocybin-therapy": {
+      "overallConfidence": "high",
+      "researchBasis": "Multiple Phase 2/3 RCTs; breakthrough therapy designation; rigorous research",
+      "scores": {
+        "adhd": {
+          "score": 2,
+          "confidence": "low",
+          "justification": "No research on ADHD. May help with emotional comorbidities but not attention specifically.",
+          "concerns": "Speculative"
+        },
+        "depression": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Multiple RCTs show large effects for treatment-resistant depression. Carhart-Harris et al. breakthrough research.",
+          "keyCitations": ["Carhart-Harris et al. (2016)", "Davis et al. (2021)"]
+        },
+        "anxiety": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Strong effects for cancer-related anxiety. Griffiths et al. showed sustained reductions.",
+          "keyCitations": ["Griffiths et al. (2016)"]
+        },
+        "trauma": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Promising but less researched than depression/anxiety. May facilitate trauma processing. Requires careful support.",
+          "concerns": "Risk of overwhelm; needs trauma-informed protocol"
+        },
+        "focus": {
+          "score": 2,
+          "confidence": "low",
+          "justification": "Acute effects disrupt normal attention. Post-treatment attention not systematically studied.",
+          "concerns": "Not designed for attention"
+        },
+        "metacognition": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Profound alterations in self-reflection. 'Ego dissolution' provides unique metacognitive perspective.",
+          "keyCitations": ["Carhart-Harris & Friston (2019)"]
+        },
+        "insight": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Mystical-type experiences reliably produce lasting insights. Rated as among most meaningful experiences.",
+          "keyCitations": ["Griffiths et al. (2006)", "MacLean et al. (2011)"]
+        },
+        "compassion": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Increases in openness and prosocial behavior documented. Love/connection common themes.",
+          "keyCitations": ["MacLean et al. (2011)"]
+        },
+        "communication": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Indirect benefits through reduced defensiveness. Not specifically studied.",
+          "concerns": "Speculative"
+        },
+        "empathy": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Increased emotional empathy documented. Nature relatedness increases suggest expanded concern.",
+          "keyCitations": ["Pokorny et al. (2017)"]
+        },
+        "bodyAwareness": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Somatic experiences during sessions. Integration may increase body awareness long-term.",
+          "concerns": "Acute vs. lasting effects unclear"
+        },
+        "emotionalRegulation": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Reduced emotional avoidance. May improve by addressing root causes rather than building skills.",
+          "keyCitations": ["Watts et al. (2017)"]
+        }
+      }
+    },
+    "circling": {
+      "overallConfidence": "low",
+      "researchBasis": "Primarily phenomenological reports; no RCTs; emerging practice",
+      "scores": {
+        "adhd": {
+          "score": 2,
+          "confidence": "low",
+          "justification": "Group format may be challenging for ADHD. Some attention training through sustained contact.",
+          "concerns": "Speculative; may be difficult for ADHD"
+        },
+        "depression": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Connection and being seen may help depression. Counters isolation. No direct research.",
+          "concerns": "Speculative based on relational theory"
+        },
+        "anxiety": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Exposure to vulnerability may help social anxiety. But format may be anxiety-provoking initially.",
+          "concerns": "May increase anxiety before helping"
+        },
+        "trauma": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Relational healing potential but not trauma-specific. May activate attachment wounds without resolution.",
+          "concerns": "Not trauma-informed by design"
+        },
+        "focus": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Present-moment relational attention required. Some attention training through sustained contact.",
+          "concerns": "Different type of attention"
+        },
+        "metacognition": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Core practice involves noticing internal experience and naming it. Highly metacognitive framework.",
+          "keyCitations": ["Phenomenological reports"]
+        },
+        "insight": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Relational mirrors reveal blind spots. Self-understanding through others' experience of you.",
+          "keyCitations": ["Phenomenological reports"]
+        },
+        "compassion": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Being with others' experience without fixing. Holding space is compassionate practice.",
+          "keyCitations": ["Phenomenological reports"]
+        },
+        "communication": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Primary training ground for communication. Explicit practice of sharing impact, owning experience.",
+          "keyCitations": ["Phenomenological reports"]
+        },
+        "empathy": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Core skill is sensing into others' experience. Explicit empathic attunement practice.",
+          "keyCitations": ["Phenomenological reports"]
+        },
+        "bodyAwareness": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Noticing somatic experience part of practice. Relational-somatic connection emphasized.",
+          "concerns": "Secondary to relational focus"
+        },
+        "emotionalRegulation": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Co-regulation through group container. Learning to stay present with difficult emotions.",
+          "concerns": "Group-dependent; may not transfer"
+        }
+      }
+    },
+    "nvc": {
+      "overallConfidence": "low",
+      "researchBasis": "Limited research; primarily training-based evidence; growing academic interest",
+      "scores": {
+        "adhd": {
+          "score": 2,
+          "confidence": "low",
+          "justification": "Communication framework not designed for ADHD. May help with relationship aspects.",
+          "concerns": "Not relevant to core ADHD"
+        },
+        "depression": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Self-empathy component may help. Connection needs addressed. No direct research.",
+          "concerns": "Speculative"
+        },
+        "anxiety": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Identifying needs may reduce anxiety from unmet needs. No direct research.",
+          "concerns": "Speculative"
+        },
+        "trauma": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Self-empathy helpful but not trauma-specific. May help with relational trauma patterns.",
+          "concerns": "Not designed for trauma"
+        },
+        "focus": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Requires attention to distinguish observations, feelings, needs. Some training.",
+          "concerns": "Not primary purpose"
+        },
+        "metacognition": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Requires distinguishing observations from evaluations, feelings from thoughts. Highly metacognitive framework.",
+          "keyCitations": ["Rosenberg (2003)"]
+        },
+        "insight": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Understanding underlying needs provides self-insight. Pattern recognition in conflicts.",
+          "keyCitations": ["Rosenberg (2003)"]
+        },
+        "compassion": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Core of practice - connecting with universal needs in self and others. Compassionate framework.",
+          "keyCitations": ["Rosenberg (2003)"]
+        },
+        "communication": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Primary purpose. Training studies show improved communication. Structured approach to difficult conversations.",
+          "keyCitations": ["Rosenberg (2003)", "Steckal (2007)"]
+        },
+        "empathy": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Empathic listening is core skill. Understanding others' needs without judgment.",
+          "keyCitations": ["Rosenberg (2003)"]
+        },
+        "bodyAwareness": {
+          "score": 2,
+          "confidence": "medium",
+          "justification": "Feelings connected to body but not systematic somatic practice.",
+          "concerns": "Primarily cognitive framework"
+        },
+        "emotionalRegulation": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Needs framework helps with emotional understanding. Less reactive communication.",
+          "keyCitations": ["Rosenberg (2003)"]
+        }
+      }
+    },
+    "dbt": {
+      "overallConfidence": "high",
+      "researchBasis": "Extensive RCT evidence; gold standard for BPD; well-established protocol",
+      "scores": {
+        "adhd": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Adapted DBT for ADHD shows promise. Emotion regulation component particularly helpful.",
+          "keyCitations": ["Philipsen et al. (2015)"]
+        },
+        "depression": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Strong evidence especially for depression with suicidality. Harned et al. research.",
+          "keyCitations": ["Linehan (1993)", "Panos et al. (2014)"]
+        },
+        "anxiety": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Distress tolerance skills directly address anxiety. Evidence across populations.",
+          "keyCitations": ["Linehan (1993)"]
+        },
+        "trauma": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "DBT-PTSD protocol shows effectiveness. Stabilization before trauma processing.",
+          "keyCitations": ["Bohus et al. (2013)"]
+        },
+        "focus": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Mindfulness module trains attention. What/How skills explicit attention training.",
+          "keyCitations": ["Linehan (1993)"]
+        },
+        "metacognition": {
+          "score": 4,
+          "confidence": "high",
+          "justification": "Observing and describing skills are metacognitive. Emotion identification training.",
+          "keyCitations": ["Linehan (1993)"]
+        },
+        "insight": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Understanding emotion triggers and patterns. Behavioral chain analysis.",
+          "keyCitations": ["Linehan (1993)"]
+        },
+        "compassion": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Radical acceptance component. Self-validation emphasized. Less explicit than CFT.",
+          "concerns": "Secondary to skills focus"
+        },
+        "communication": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Interpersonal effectiveness module explicitly trains communication. DEAR MAN, GIVE, FAST.",
+          "keyCitations": ["Linehan (1993)"]
+        },
+        "empathy": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "GIVE skills train empathy in relationships. Validation skills.",
+          "keyCitations": ["Linehan (1993)"]
+        },
+        "bodyAwareness": {
+          "score": 3,
+          "confidence": "medium",
+          "justification": "Some somatic mindfulness but less emphasis than body-based approaches.",
+          "concerns": "Not primary focus"
+        },
+        "emotionalRegulation": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Primary outcome and core module. Extensive evidence for emotion regulation improvement.",
+          "keyCitations": ["Linehan (1993)", "Panos et al. (2014)"]
+        }
+      }
+    },
+    "emdr": {
+      "overallConfidence": "high",
+      "researchBasis": "Extensive RCTs; WHO recommended for PTSD; well-established protocol",
+      "scores": {
+        "adhd": {
+          "score": 2,
+          "confidence": "low",
+          "justification": "Not designed for ADHD. May help if ADHD complicated by trauma.",
+          "concerns": "Not appropriate primary intervention"
+        },
+        "depression": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Effective for depression with trauma component. Less evidence for depression without trauma.",
+          "keyCitations": ["Shapiro (2001)"]
+        },
+        "anxiety": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Strong evidence especially for trauma-related anxiety. Phobia protocols effective.",
+          "keyCitations": ["Chen et al. (2014)"]
+        },
+        "trauma": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Primary indication. Multiple meta-analyses. WHO and APA recommended.",
+          "keyCitations": ["Shapiro (2001)", "Chen et al. (2014)"]
+        },
+        "focus": {
+          "score": 2,
+          "confidence": "medium",
+          "justification": "Not attention training. Dual attention required during processing but not trained.",
+          "concerns": "Not designed for attention"
+        },
+        "metacognition": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Some awareness of cognitions/beliefs but not systematic metacognitive training.",
+          "concerns": "Not primary focus"
+        },
+        "insight": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Insights often emerge during processing. Adaptive resolution includes understanding.",
+          "keyCitations": ["Shapiro (2001)"]
+        },
+        "compassion": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Self-compassion may emerge through processing. Not explicitly trained.",
+          "concerns": "Secondary effect"
+        },
+        "communication": {
+          "score": 2,
+          "confidence": "low",
+          "justification": "Not a communication intervention. May improve indirectly through reduced trauma symptoms.",
+          "concerns": "Not relevant"
+        },
+        "empathy": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Trauma resolution may free up empathic capacity. Not directly trained.",
+          "concerns": "Indirect effect"
+        },
+        "bodyAwareness": {
+          "score": 3,
+          "confidence": "medium",
+          "justification": "Body scan component. Tracking somatic experience during processing.",
+          "keyCitations": ["Shapiro (2001)"]
+        },
+        "emotionalRegulation": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Reduced trauma reactivity is primary outcome. Less emotional hijacking.",
+          "keyCitations": ["Chen et al. (2014)"]
+        }
+      }
+    },
+    "hatha-yoga": {
+      "overallConfidence": "high",
+      "researchBasis": "Extensive research; multiple meta-analyses; well-documented physiological mechanisms",
+      "scores": {
+        "adhd": {
+          "score": 3,
+          "confidence": "medium",
+          "justification": "Some studies show benefits. Movement component may help. Less evidence than for other conditions.",
+          "keyCitations": ["Jensen & Kenny (2004)"]
+        },
+        "depression": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Multiple meta-analyses show moderate-large effects. GABA increases documented.",
+          "keyCitations": ["Cramer et al. (2013)", "Streeter et al. (2012)"]
+        },
+        "anxiety": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Strong evidence. Physiological mechanisms well-understood. Multiple meta-analyses.",
+          "keyCitations": ["Cramer et al. (2013)"]
+        },
+        "trauma": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Trauma-sensitive yoga (TCTSY) has RCT evidence. Standard yoga needs modification.",
+          "keyCitations": ["van der Kolk et al. (2014)"]
+        },
+        "focus": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Sustained attention required for poses. Some attention improvements documented.",
+          "keyCitations": ["Gothe & McAuley (2015)"]
+        },
+        "metacognition": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Some awareness of body/mind but less metacognitive than meditation practices.",
+          "concerns": "Not primary focus"
+        },
+        "insight": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Self-understanding through body awareness. Less cognitive insight than meditation.",
+          "concerns": "Different type of insight"
+        },
+        "compassion": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Self-care through practice. Philosophical framework includes compassion.",
+          "concerns": "Not explicitly trained"
+        },
+        "communication": {
+          "score": 2,
+          "confidence": "low",
+          "justification": "Primarily solitary practice. Less reactivity may help indirectly.",
+          "concerns": "Not relevant"
+        },
+        "empathy": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Increased body awareness may support empathy. Not directly trained.",
+          "concerns": "Speculative"
+        },
+        "bodyAwareness": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Primary purpose. Interoceptive awareness well-documented. Poses require body attention.",
+          "keyCitations": ["Cramer et al. (2013)"]
+        },
+        "emotionalRegulation": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Strong evidence. Physiological regulation through nervous system. HRV improvements.",
+          "keyCitations": ["Streeter et al. (2012)"]
+        }
+      }
+    },
+    "mussar": {
+      "overallConfidence": "low",
+      "researchBasis": "Limited empirical research; rich philosophical tradition; some longitudinal observational data",
+      "scores": {
+        "adhd": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Structured practice may help with self-regulation. Accountability partnerships provide external structure.",
+          "concerns": "Speculative"
+        },
+        "depression": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Gratitude and character cultivation may help. Community aspect counters isolation. No direct research.",
+          "concerns": "Based on general positive psychology principles"
+        },
+        "anxiety": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Trust (bitachon) practices address anxiety directly. Equanimity cultivation.",
+          "concerns": "No direct research"
+        },
+        "trauma": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Community support helpful. Not trauma-specific. May intellectualize.",
+          "concerns": "Not designed for trauma"
+        },
+        "focus": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Daily practice requires sustained attention. Focus on one trait at a time.",
+          "concerns": "Speculative"
+        },
+        "metacognition": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Core of practice - examining one's middot and motivations. Daily cheshbon hanefesh (soul accounting).",
+          "keyCitations": ["Morinis (2007)"]
+        },
+        "insight": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Self-examination central to practice. Understanding character patterns.",
+          "keyCitations": ["Morinis (2007)"]
+        },
+        "compassion": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Chesed (loving-kindness) is core middah. Explicit compassion cultivation.",
+          "keyCitations": ["Morinis (2007)"]
+        },
+        "communication": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Speech ethics (shmirat halashon) explicitly addressed. Accountability partnerships require communication.",
+          "concerns": "Limited research"
+        },
+        "empathy": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Multiple middot address empathy (rachamim, nosei b'ol). Explicit training.",
+          "keyCitations": ["Morinis (2007)"]
+        },
+        "bodyAwareness": {
+          "score": 2,
+          "confidence": "medium",
+          "justification": "Primarily cognitive-behavioral practice. Body not emphasized.",
+          "keyCitations": ["Traditional texts"]
+        },
+        "emotionalRegulation": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Equanimity (menuchat hanefesh) explicitly cultivated. Anger management middot.",
+          "concerns": "No direct research"
+        }
+      }
+    },
+    "open-awareness": {
+      "overallConfidence": "medium",
+      "researchBasis": "Growing research on non-dual awareness; taxonomy papers; some experimental studies",
+      "scores": {
+        "adhd": {
+          "score": 2,
+          "confidence": "medium",
+          "justification": "Non-directive practice may be challenging for ADHD. Less structure than focused attention.",
+          "concerns": "May be frustrating without concentration foundation"
+        },
+        "depression": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Spacious awareness may help with rumination. Acceptance of what is. Less studied than focused practices.",
+          "keyCitations": ["Travis & Shear (2010)"]
+        },
+        "anxiety": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Not focusing on anxious content may reduce amplification. Equanimity development.",
+          "keyCitations": ["Travis & Shear (2010)"]
+        },
+        "trauma": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Open awareness may encounter trauma material unexpectedly. Needs foundation and support.",
+          "concerns": "May be destabilizing"
+        },
+        "focus": {
+          "score": 3,
+          "confidence": "medium",
+          "justification": "Different type of attention - panoramic vs. focused. May develop after concentration practice.",
+          "keyCitations": ["Lutz et al. (2008)"]
+        },
+        "metacognition": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Pure awareness of awareness. Highest metacognitive achievement in contemplative traditions.",
+          "keyCitations": ["Travis & Shear (2010)"]
+        },
+        "insight": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Direct recognition of nature of mind. Profound insights reported.",
+          "keyCitations": ["Traditional texts", "Travis & Shear (2010)"]
+        },
+        "compassion": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Compassion may arise naturally from non-dual perspective. Not explicitly trained.",
+          "concerns": "Indirect effect"
+        },
+        "communication": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Less reactivity may help. Solitary practice.",
+          "concerns": "Speculative"
+        },
+        "empathy": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Non-separation may enhance empathy. Reduced self-other boundary.",
+          "concerns": "Speculative"
+        },
+        "bodyAwareness": {
+          "score": 3,
+          "confidence": "medium",
+          "justification": "Body included in open field but not specifically focused on.",
+          "concerns": "Not primary emphasis"
+        },
+        "emotionalRegulation": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Equanimity central to practice. Emotions arise and pass without reactivity.",
+          "keyCitations": ["Lutz et al. (2008)"]
+        }
+      }
+    },
+    "idp": {
+      "overallConfidence": "low",
+      "researchBasis": "Based on adult development research; limited direct study of IDP practice; theoretical foundation strong",
+      "scores": {
+        "adhd": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Structured practice may help. Executive function development implicit.",
+          "concerns": "Speculative"
+        },
+        "depression": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Meaning-making may help existential aspects. Less direct than clinical interventions.",
+          "concerns": "Not designed for depression"
+        },
+        "anxiety": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Perspective-taking may reduce anxiety through reframing. Not primary purpose.",
+          "concerns": "Not designed for anxiety"
+        },
+        "trauma": {
+          "score": 2,
+          "confidence": "low",
+          "justification": "Cognitive development practice not appropriate for trauma processing.",
+          "concerns": "Not trauma-informed"
+        },
+        "focus": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Deliberate practice requires sustained attention. Journaling component.",
+          "concerns": "Speculative"
+        },
+        "metacognition": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Core skill - observing own meaning-making. Awareness of developmental assumptions.",
+          "keyCitations": ["Kegan (1982)", "Cook-Greuter (2000)"]
+        },
+        "insight": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Primary purpose - understanding own developmental position and limitations.",
+          "keyCitations": ["Kegan (1982)"]
+        },
+        "compassion": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Later stages associated with universal compassion. May develop through practice.",
+          "concerns": "Correlational not causal"
+        },
+        "communication": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Perspective-taking improves communication. Understanding others' developmental positions.",
+          "keyCitations": ["Kegan & Lahey (2009)"]
+        },
+        "empathy": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Multiple perspective-taking is empathy skill. Core developmental capacity.",
+          "keyCitations": ["Kegan (1982)"]
+        },
+        "bodyAwareness": {
+          "score": 2,
+          "confidence": "medium",
+          "justification": "Primarily cognitive practice. Body not emphasized in most IDP approaches.",
+          "keyCitations": ["Descriptions of IDP"]
+        },
+        "emotionalRegulation": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Later stages associated with better regulation. May develop through practice.",
+          "concerns": "Correlational not causal"
+        }
+      }
+    },
+    "tm": {
+      "overallConfidence": "high",
+      "researchBasis": "Extensive research (some methodological concerns); large dataset; physiological markers well-documented",
+      "scores": {
+        "adhd": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Some studies show ADHD benefits. Travis research. Mantra provides structure.",
+          "keyCitations": ["Travis (2011)"]
+        },
+        "depression": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Meta-analyses show moderate effects. Less studied than MBSR for depression specifically.",
+          "keyCitations": ["Orme-Johnson & Barnes (2014)"]
+        },
+        "anxiety": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Strong evidence for anxiety reduction. Multiple meta-analyses.",
+          "keyCitations": ["Orme-Johnson & Barnes (2014)"]
+        },
+        "trauma": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Some veteran studies. Not specifically trauma-focused. May help general regulation.",
+          "concerns": "Not trauma-specific"
+        },
+        "focus": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Effortless attention trained. Some attention research. Different from focused attention practices.",
+          "keyCitations": ["Travis & Arenander (2006)"]
+        },
+        "metacognition": {
+          "score": 3,
+          "confidence": "medium",
+          "justification": "Awareness of transcending but less metacognitive than insight practices.",
+          "concerns": "Different type than mindfulness metacognition"
+        },
+        "insight": {
+          "score": 3,
+          "confidence": "medium",
+          "justification": "Transcendent experiences but not systematic insight development.",
+          "concerns": "State experience vs. insight development"
+        },
+        "compassion": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "May develop through reduced stress. Not explicitly trained.",
+          "concerns": "Indirect effect"
+        },
+        "communication": {
+          "score": 2,
+          "confidence": "low",
+          "justification": "Solitary practice. May help through reduced reactivity.",
+          "concerns": "Not relevant"
+        },
+        "empathy": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Some research on social connection improvements. Indirect.",
+          "concerns": "Not directly trained"
+        },
+        "bodyAwareness": {
+          "score": 2,
+          "confidence": "medium",
+          "justification": "Transcends body focus. Physical rest documented but not body awareness.",
+          "concerns": "Not primary focus"
+        },
+        "emotionalRegulation": {
+          "score": 4,
+          "confidence": "high",
+          "justification": "Well-documented stress reduction. Physiological regulation improvements.",
+          "keyCitations": ["Orme-Johnson & Barnes (2014)"]
+        }
+      }
+    },
+    "mbct": {
+      "overallConfidence": "high",
+      "researchBasis": "Multiple RCTs; NICE recommended; well-established for depression relapse prevention",
+      "scores": {
+        "adhd": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Not designed for ADHD. Some attention training component.",
+          "concerns": "Not appropriate primary intervention"
+        },
+        "depression": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Primary indication. Equivalent to maintenance antidepressants. Piet & Hougaard (2011) meta-analysis.",
+          "keyCitations": ["Segal et al. (2002)", "Piet & Hougaard (2011)"]
+        },
+        "anxiety": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Strong evidence. Decentering from anxious thoughts. Multiple RCTs.",
+          "keyCitations": ["Segal et al. (2002)"]
+        },
+        "trauma": {
+          "score": 3,
+          "confidence": "medium",
+          "justification": "Not designed for trauma. May help with depression/anxiety secondary to trauma.",
+          "concerns": "Not trauma-specific"
+        },
+        "focus": {
+          "score": 4,
+          "confidence": "high",
+          "justification": "Mindfulness component trains attention. Body scan, breath focus.",
+          "keyCitations": ["Segal et al. (2002)"]
+        },
+        "metacognition": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Core mechanism is metacognitive awareness. Thoughts as thoughts not facts.",
+          "keyCitations": ["Teasdale et al. (2002)"]
+        },
+        "insight": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Understanding depressive patterns. Cognitive insights combined with experiential learning.",
+          "keyCitations": ["Segal et al. (2002)"]
+        },
+        "compassion": {
+          "score": 3,
+          "confidence": "medium",
+          "justification": "Some self-compassion development. Less explicit than compassion-focused approaches.",
+          "concerns": "Not primary focus"
+        },
+        "communication": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Not a communication intervention. May help through reduced reactivity.",
+          "concerns": "Not relevant"
+        },
+        "empathy": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Increased emotional awareness may help. Not directly trained.",
+          "concerns": "Not primary focus"
+        },
+        "bodyAwareness": {
+          "score": 4,
+          "confidence": "high",
+          "justification": "Body scan included from MBSR. Early warning sign detection through body.",
+          "keyCitations": ["Segal et al. (2002)"]
+        },
+        "emotionalRegulation": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Core outcome. Preventing depressive relapse through early intervention.",
+          "keyCitations": ["Piet & Hougaard (2011)"]
+        }
+      }
+    },
+    "tonglen": {
+      "overallConfidence": "low",
+      "researchBasis": "Traditional Tibetan practice; limited empirical research; some compassion meditation overlap",
+      "scores": {
+        "adhd": {
+          "score": 2,
+          "confidence": "low",
+          "justification": "Visualization practice. Some concentration required but not attention-focused.",
+          "concerns": "Not relevant"
+        },
+        "depression": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Counters self-focus through other-orientation. Connection practice. No direct research on tonglen specifically.",
+          "concerns": "Extrapolated from compassion meditation research"
+        },
+        "anxiety": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "May increase anxiety initially through suffering focus. Advanced practice.",
+          "concerns": "May be challenging; counterintuitive"
+        },
+        "trauma": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Taking in suffering may be activating. Need stable foundation. Can be healing when ready.",
+          "concerns": "Risk of overwhelm"
+        },
+        "focus": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Visualization requires some concentration. Not systematic attention training.",
+          "concerns": "Not primary purpose"
+        },
+        "metacognition": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Awareness of compassion process. Observing resistance to practice.",
+          "concerns": "Speculative"
+        },
+        "insight": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Insight into interconnection. Understanding nature of suffering.",
+          "concerns": "Traditional view; limited research"
+        },
+        "compassion": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Primary purpose. Directly trains compassion through imaginative exchange.",
+          "keyCitations": ["Traditional texts", "Jinpa (2015)"]
+        },
+        "communication": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Increased compassion may improve communication warmth.",
+          "concerns": "Indirect effect"
+        },
+        "empathy": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Direct training in feeling others' experience. Core mechanism.",
+          "keyCitations": ["Traditional texts"]
+        },
+        "bodyAwareness": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Breath-based practice includes some body awareness.",
+          "concerns": "Secondary to compassion focus"
+        },
+        "emotionalRegulation": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Learning to be with difficult emotions. Equanimity development.",
+          "concerns": "May increase distress initially"
+        }
+      }
+    },
+    "zen": {
+      "overallConfidence": "medium",
+      "researchBasis": "Some neuroimaging and attention research; less RCT evidence than MBSR; cultural translation challenges",
+      "scores": {
+        "adhd": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Breath counting requires sustained attention. Structured practice format.",
+          "keyCitations": ["Chiesa & Malinowski (2011)"]
+        },
+        "depression": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Some research shows benefits. Less studied than MBSR for depression.",
+          "keyCitations": ["Chiesa & Malinowski (2011)"]
+        },
+        "anxiety": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Present-moment focus reduces worry. Some research support.",
+          "keyCitations": ["Chiesa & Malinowski (2011)"]
+        },
+        "trauma": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Not trauma-specific. May help through regulation. Can be intense.",
+          "concerns": "Not designed for trauma"
+        },
+        "focus": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Breath counting and shikantaza both train attention. EEG studies show attention changes.",
+          "keyCitations": ["Murata et al. (2004)"]
+        },
+        "metacognition": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Koan practice highly metacognitive. Observing mind's functioning.",
+          "keyCitations": ["Traditional texts"]
+        },
+        "insight": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Kensho/satori experiences. Direct realization of nature of mind.",
+          "keyCitations": ["Traditional texts"]
+        },
+        "compassion": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Bodhisattva vows frame practice. Less explicit than metta.",
+          "concerns": "Varies by school"
+        },
+        "communication": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Dokusan (teacher interviews) trains communication. Primarily solitary.",
+          "concerns": "Limited direct benefit"
+        },
+        "empathy": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Non-separation understanding. May develop through practice.",
+          "concerns": "Indirect effect"
+        },
+        "bodyAwareness": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Posture emphasis. Full body awareness in shikantaza. Kinhin (walking).",
+          "keyCitations": ["Traditional texts"]
+        },
+        "emotionalRegulation": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Equanimity development. Less reactivity through sustained practice.",
+          "keyCitations": ["Chiesa & Malinowski (2011)"]
+        }
+      }
+    },
+    "shamatha": {
+      "overallConfidence": "medium",
+      "researchBasis": "Some retreat research (MacLean); overlaps with other concentration research",
+      "scores": {
+        "adhd": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Systematic attention training. Shamatha Project showed sustained attention improvements.",
+          "keyCitations": ["MacLean et al. (2010)", "Wallace (2006)"]
+        },
+        "depression": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Calm states may help. Less directly addressing depression than insight practices.",
+          "keyCitations": ["MacLean et al. (2010)"]
+        },
+        "anxiety": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Deep calm states reduce anxiety. May not address root patterns.",
+          "concerns": "State-dependent benefits"
+        },
+        "trauma": {
+          "score": 2,
+          "confidence": "medium",
+          "justification": "Concentration can suppress material. Not designed for trauma work.",
+          "concerns": "May avoid rather than process"
+        },
+        "focus": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Primary purpose. Shamatha Project documented significant attention improvements.",
+          "keyCitations": ["MacLean et al. (2010)"]
+        },
+        "metacognition": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "High awareness of attention and its qualities. Monitoring mind state.",
+          "keyCitations": ["Wallace (2006)"]
+        },
+        "insight": {
+          "score": 3,
+          "confidence": "medium",
+          "justification": "Provides platform for insight but not insight practice itself.",
+          "concerns": "Concentration ≠ wisdom"
+        },
+        "compassion": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Can use metta as object. Not primary purpose.",
+          "concerns": "Indirect effect"
+        },
+        "communication": {
+          "score": 2,
+          "confidence": "low",
+          "justification": "Solitary practice. May help through reduced reactivity.",
+          "concerns": "Not relevant"
+        },
+        "empathy": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Equanimity may support empathy. Not directly trained.",
+          "concerns": "Indirect effect"
+        },
+        "bodyAwareness": {
+          "score": 3,
+          "confidence": "medium",
+          "justification": "Breath focus includes some body awareness. Less emphasis than vipassana.",
+          "concerns": "Object of attention varies"
+        },
+        "emotionalRegulation": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Calm abiding provides regulation. Access to settled states.",
+          "keyCitations": ["MacLean et al. (2010)"]
+        }
+      }
+    },
+    "mdma-therapy": {
+      "overallConfidence": "high",
+      "researchBasis": "Phase 3 RCTs completed; FDA breakthrough therapy designation; rigorous methodology",
+      "scores": {
+        "adhd": {
+          "score": 1,
+          "confidence": "medium",
+          "justification": "Not appropriate for ADHD. Single-session protocol not designed for attention.",
+          "concerns": "Not indicated"
+        },
+        "depression": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Often improves with trauma resolution. Not primary indication but benefits documented.",
+          "keyCitations": ["Mitchell et al. (2021)"]
+        },
+        "anxiety": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Reduces avoidance. Benefits for trauma-related anxiety well-documented.",
+          "keyCitations": ["Mithoefer et al. (2018)"]
+        },
+        "trauma": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Primary indication. Phase 3 trials show 67% no longer met PTSD criteria.",
+          "keyCitations": ["Mitchell et al. (2021)", "Mithoefer et al. (2018)"]
+        },
+        "focus": {
+          "score": 2,
+          "confidence": "medium",
+          "justification": "Altered state during session. Not attention-focused intervention.",
+          "concerns": "Not designed for attention"
+        },
+        "metacognition": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Increased perspective on traumatic memories. Observing rather than reliving.",
+          "keyCitations": ["Mithoefer et al. (2018)"]
+        },
+        "insight": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Profound insights into trauma patterns. Integration work captures insights.",
+          "keyCitations": ["Mithoefer et al. (2018)"]
+        },
+        "compassion": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Self-compassion dramatically increases. Core mechanism for trauma healing.",
+          "keyCitations": ["Mithoefer et al. (2018)"]
+        },
+        "communication": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Increased openness and trust. Therapeutic relationship deepens. Relationship benefits reported.",
+          "keyCitations": ["Mithoefer et al. (2018)"]
+        },
+        "empathy": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Empathogenic substance. Increased emotional connection core effect.",
+          "keyCitations": ["Pharmacological research"]
+        },
+        "bodyAwareness": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Somatic processing enabled. Reduced fear allows body awareness.",
+          "keyCitations": ["Mithoefer et al. (2018)"]
+        },
+        "emotionalRegulation": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Trauma resolution primary outcome. Less emotional hijacking.",
+          "keyCitations": ["Mitchell et al. (2021)"]
+        }
+      }
+    },
+    "ayahuasca": {
+      "overallConfidence": "medium",
+      "researchBasis": "Growing research; RCTs emerging; legal/access limitations affect research",
+      "scores": {
+        "adhd": {
+          "score": 2,
+          "confidence": "low",
+          "justification": "Not appropriate for ADHD. Ceremony format not designed for attention.",
+          "concerns": "Not indicated"
+        },
+        "depression": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Palhano-Fontes RCT showed rapid antidepressant effects. Traditional use for depression.",
+          "keyCitations": ["Palhano-Fontes et al. (2019)"]
+        },
+        "anxiety": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "May increase during ceremony. Long-term reductions documented.",
+          "concerns": "Acute anxiety common"
+        },
+        "trauma": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Traditional use for trauma. May facilitate processing. Needs skilled facilitation.",
+          "concerns": "Risk of retraumatization"
+        },
+        "focus": {
+          "score": 2,
+          "confidence": "low",
+          "justification": "Altered state disrupts normal attention. Not attention intervention.",
+          "concerns": "Not designed for attention"
+        },
+        "metacognition": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Profound self-reflection common. Witnessing own patterns from distance.",
+          "keyCitations": ["Frecska et al. (2016)"]
+        },
+        "insight": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Core traditional use - 'teaching plant'. Deep insights reliably reported.",
+          "keyCitations": ["Frecska et al. (2016)"]
+        },
+        "compassion": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Self-compassion and connection commonly reported. Community ceremony format.",
+          "keyCitations": ["Phenomenological reports"]
+        },
+        "communication": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Group ceremony may help. Primarily internal experience.",
+          "concerns": "Indirect effect"
+        },
+        "empathy": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Nature connection. Feeling interconnection with all life commonly reported.",
+          "keyCitations": ["Phenomenological reports"]
+        },
+        "bodyAwareness": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Strong somatic experience. Purging involves body. Integration may increase awareness.",
+          "keyCitations": ["Phenomenological reports"]
+        },
+        "emotionalRegulation": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Processing difficult emotions. Long-term regulation may improve.",
+          "keyCitations": ["Palhano-Fontes et al. (2019)"]
+        }
+      }
+    },
+    "ketamine-therapy": {
+      "overallConfidence": "high",
+      "researchBasis": "Extensive research; FDA approved (esketamine); well-documented mechanisms",
+      "scores": {
+        "adhd": {
+          "score": 2,
+          "confidence": "low",
+          "justification": "Not appropriate for ADHD. Dissociative mechanism not relevant.",
+          "concerns": "Not indicated"
+        },
+        "depression": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Strong evidence for treatment-resistant depression. Rapid onset. FDA approved.",
+          "keyCitations": ["Zarate et al. (2006)", "Daly et al. (2018)"]
+        },
+        "anxiety": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Benefits for anxiety often co-occurring with depression. Some specific research.",
+          "keyCitations": ["Daly et al. (2018)"]
+        },
+        "trauma": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Emerging research on PTSD. May facilitate reconsolidation. Less evidence than MDMA.",
+          "keyCitations": ["Feder et al. (2014)"]
+        },
+        "focus": {
+          "score": 2,
+          "confidence": "medium",
+          "justification": "Dissociative effects during session. Not attention-focused.",
+          "concerns": "Not designed for attention"
+        },
+        "metacognition": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Perspective shift on problems. Observing self from distance.",
+          "keyCitations": ["Phenomenological reports"]
+        },
+        "insight": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Insights common during sessions. Less reliably profound than psilocybin.",
+          "keyCitations": ["Phenomenological reports"]
+        },
+        "compassion": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "May improve through depression relief. Not direct mechanism.",
+          "concerns": "Indirect effect"
+        },
+        "communication": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "May improve with mood. Not direct benefit.",
+          "concerns": "Indirect effect"
+        },
+        "empathy": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Some reports of increased connection. Variable.",
+          "concerns": "Less consistent than MDMA"
+        },
+        "bodyAwareness": {
+          "score": 3,
+          "confidence": "medium",
+          "justification": "Dissociation may reduce body awareness during. Variable long-term.",
+          "concerns": "May decrease acutely"
+        },
+        "emotionalRegulation": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Depression relief improves regulation. BDNF/neuroplasticity mechanism.",
+          "keyCitations": ["Zarate et al. (2006)"]
+        }
+      }
+    },
+    "tre": {
+      "overallConfidence": "low",
+      "researchBasis": "Limited RCT evidence; some pilot studies; strong physiological rationale",
+      "scores": {
+        "adhd": {
+          "score": 2,
+          "confidence": "low",
+          "justification": "Not designed for ADHD. Some regulation benefits may help.",
+          "concerns": "Not indicated"
+        },
+        "depression": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Nervous system regulation may help. Limited research on depression specifically.",
+          "concerns": "Extrapolated from theory"
+        },
+        "anxiety": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Direct nervous system discharge. Pilot studies show anxiety reduction.",
+          "keyCitations": ["Berceli et al. (2005)"]
+        },
+        "trauma": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Designed for trauma. Completing defensive responses. Some pilot research.",
+          "keyCitations": ["Berceli et al. (2005)"]
+        },
+        "focus": {
+          "score": 2,
+          "confidence": "low",
+          "justification": "Not attention-focused. Physical practice.",
+          "concerns": "Not relevant"
+        },
+        "metacognition": {
+          "score": 2,
+          "confidence": "medium",
+          "justification": "Primarily physical process. Not cognitive practice.",
+          "concerns": "Not designed for metacognition"
+        },
+        "insight": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Some understanding may emerge through body. Not primary purpose.",
+          "concerns": "Indirect effect"
+        },
+        "compassion": {
+          "score": 2,
+          "confidence": "low",
+          "justification": "Self-care implicit. Not compassion training.",
+          "concerns": "Not relevant"
+        },
+        "communication": {
+          "score": 2,
+          "confidence": "low",
+          "justification": "Physical practice. May help through reduced reactivity.",
+          "concerns": "Not relevant"
+        },
+        "empathy": {
+          "score": 2,
+          "confidence": "low",
+          "justification": "Not empathy training. May free up capacity through regulation.",
+          "concerns": "Not relevant"
+        },
+        "bodyAwareness": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Core of practice - attending to tremoring and sensations.",
+          "keyCitations": ["Berceli et al. (2005)"]
+        },
+        "emotionalRegulation": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Primary mechanism - discharging held activation. Some research support.",
+          "keyCitations": ["Berceli et al. (2005)"]
+        }
+      }
+    },
+    "qigong": {
+      "overallConfidence": "medium",
+      "researchBasis": "Multiple systematic reviews; heterogeneous practices make research difficult; well-documented physiological effects",
+      "scores": {
+        "adhd": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Moving meditation may help. Limited ADHD-specific research.",
+          "concerns": "Speculative"
+        },
+        "depression": {
+          "score": 4,
+          "confidence": "high",
+          "justification": "Systematic reviews show benefits. Wang et al. (2014) review.",
+          "keyCitations": ["Wang et al. (2014)"]
+        },
+        "anxiety": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Strong evidence for anxiety reduction. Multiple reviews.",
+          "keyCitations": ["Wang et al. (2014)", "Oh et al. (2018)"]
+        },
+        "trauma": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Gentle somatic practice may help. Not trauma-specific.",
+          "concerns": "Not designed for trauma"
+        },
+        "focus": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Movement coordination requires attention. Some research support.",
+          "keyCitations": ["Oh et al. (2018)"]
+        },
+        "metacognition": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Some awareness of energy states. Less metacognitive than meditation.",
+          "concerns": "Different framework"
+        },
+        "insight": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Traditional view includes insight through practice. Not primary Western research focus.",
+          "concerns": "Cultural translation"
+        },
+        "compassion": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Some forms include compassion cultivation. Variable.",
+          "concerns": "Depends on style"
+        },
+        "communication": {
+          "score": 2,
+          "confidence": "low",
+          "justification": "Primarily solitary physical practice.",
+          "concerns": "Not relevant"
+        },
+        "empathy": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Energy sensitivity may include sensing others. Not primary focus.",
+          "concerns": "Speculative"
+        },
+        "bodyAwareness": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Core of practice - sensing qi and body state. Well-documented.",
+          "keyCitations": ["Wang et al. (2014)"]
+        },
+        "emotionalRegulation": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Strong evidence for physiological regulation. HRV improvements.",
+          "keyCitations": ["Oh et al. (2018)"]
+        }
+      }
+    },
+    "tai-chi": {
+      "overallConfidence": "high",
+      "researchBasis": "Extensive research; multiple Cochrane reviews; well-established benefits",
+      "scores": {
+        "adhd": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Form learning requires attention. Limited ADHD research.",
+          "concerns": "Speculative"
+        },
+        "depression": {
+          "score": 4,
+          "confidence": "high",
+          "justification": "Multiple systematic reviews show benefits. Wang et al. (2010).",
+          "keyCitations": ["Wang et al. (2010)"]
+        },
+        "anxiety": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Strong evidence base. Multiple reviews and RCTs.",
+          "keyCitations": ["Wang et al. (2010)", "Wayne & Kaptchuk (2008)"]
+        },
+        "trauma": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Gentle somatic practice. May help with regulation. Not trauma-specific.",
+          "concerns": "Not designed for trauma"
+        },
+        "focus": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Learning complex forms requires sustained attention. Some research.",
+          "keyCitations": ["Wayne & Kaptchuk (2008)"]
+        },
+        "metacognition": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Awareness of movement quality. Less metacognitive than meditation.",
+          "concerns": "Different type of awareness"
+        },
+        "insight": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Traditional view includes wisdom. Not primary research focus.",
+          "concerns": "Cultural translation"
+        },
+        "compassion": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Philosophy includes compassion. Not primary training.",
+          "concerns": "Indirect effect"
+        },
+        "communication": {
+          "score": 2,
+          "confidence": "low",
+          "justification": "Push hands involves partner sensitivity. Most practice is solo.",
+          "concerns": "Limited application"
+        },
+        "empathy": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Push hands trains sensing others. Class setting may help.",
+          "concerns": "Depends on practice style"
+        },
+        "bodyAwareness": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Core of practice. Slow movements require body attention. Well-documented.",
+          "keyCitations": ["Wayne & Kaptchuk (2008)"]
+        },
+        "emotionalRegulation": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Strong evidence. Physiological regulation. Stress reduction.",
+          "keyCitations": ["Wang et al. (2010)"]
+        }
+      }
+    },
+    "holotropic-breathwork": {
+      "overallConfidence": "low",
+      "researchBasis": "Limited empirical research; primarily phenomenological; developed from LSD therapy research",
+      "scores": {
+        "adhd": {
+          "score": 2,
+          "confidence": "low",
+          "justification": "Not appropriate for ADHD. Altered state experience.",
+          "concerns": "Not indicated"
+        },
+        "depression": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Cathartic release may help. Some clinical reports. No RCTs.",
+          "concerns": "Limited research"
+        },
+        "anxiety": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "May increase during session. Variable long-term effects.",
+          "concerns": "Can be activating"
+        },
+        "trauma": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Designed to access and process unconscious material. Similar to psychedelic therapy rationale.",
+          "keyCitations": ["Grof (2010)"]
+        },
+        "focus": {
+          "score": 2,
+          "confidence": "low",
+          "justification": "Altered state disrupts normal attention.",
+          "concerns": "Not attention-focused"
+        },
+        "metacognition": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Witnessing experience from expanded perspective.",
+          "concerns": "During altered state"
+        },
+        "insight": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Primary purpose - accessing unconscious wisdom. Consistent reports.",
+          "keyCitations": ["Grof (2010)"]
+        },
+        "compassion": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Self-compassion may emerge through release. Group container supportive.",
+          "concerns": "Variable"
+        },
+        "communication": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Group sharing after session. Primarily internal experience.",
+          "concerns": "Limited direct training"
+        },
+        "empathy": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Sitter role trains empathic holding. May increase through experience.",
+          "concerns": "Depends on integration"
+        },
+        "bodyAwareness": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Intense somatic experience. Bodywork component. Core to process.",
+          "keyCitations": ["Grof (2010)"]
+        },
+        "emotionalRegulation": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Cathartic release may improve regulation. Some research.",
+          "keyCitations": ["Holmes et al. (1996)"]
+        }
+      }
+    },
+    "wim-hof": {
+      "overallConfidence": "medium",
+      "researchBasis": "Some RCT evidence; physiological effects well-documented; limited psychological research",
+      "scores": {
+        "adhd": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Cold exposure may help arousal regulation. Breathing requires focus. Limited research.",
+          "concerns": "Speculative"
+        },
+        "depression": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Cold exposure shows mood benefits. Autonomic activation. Some research.",
+          "keyCitations": ["Buijze et al. (2016)"]
+        },
+        "anxiety": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Learning to tolerate stress. Cold exposure trains distress tolerance.",
+          "keyCitations": ["Kox et al. (2014)"]
+        },
+        "trauma": {
+          "score": 2,
+          "confidence": "low",
+          "justification": "May be activating for trauma survivors. Not trauma-appropriate.",
+          "concerns": "Could be retraumatizing"
+        },
+        "focus": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Breathing protocol requires concentration. Cold exposure demands attention.",
+          "keyCitations": ["Kox et al. (2014)"]
+        },
+        "metacognition": {
+          "score": 2,
+          "confidence": "low",
+          "justification": "Physical practice. Limited metacognitive component.",
+          "concerns": "Not relevant"
+        },
+        "insight": {
+          "score": 2,
+          "confidence": "low",
+          "justification": "May have insight during practice. Not primary purpose.",
+          "concerns": "Not designed for insight"
+        },
+        "compassion": {
+          "score": 2,
+          "confidence": "low",
+          "justification": "Self-discipline implicit. Not compassion training.",
+          "concerns": "Not relevant"
+        },
+        "communication": {
+          "score": 2,
+          "confidence": "low",
+          "justification": "Solitary practice primarily.",
+          "concerns": "Not relevant"
+        },
+        "empathy": {
+          "score": 2,
+          "confidence": "low",
+          "justification": "Not empathy training.",
+          "concerns": "Not relevant"
+        },
+        "bodyAwareness": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Core of practice - breath and cold sensation awareness.",
+          "keyCitations": ["Kox et al. (2014)"]
+        },
+        "emotionalRegulation": {
+          "score": 5,
+          "confidence": "high",
+          "justification": "Autonomic regulation well-documented. Stress resilience training.",
+          "keyCitations": ["Kox et al. (2014)", "Buijze et al. (2016)"]
+        }
+      }
+    },
+    "authentic-relating": {
+      "overallConfidence": "low",
+      "researchBasis": "Minimal formal research; phenomenological reports; emerging practice",
+      "scores": {
+        "adhd": {
+          "score": 2,
+          "confidence": "low",
+          "justification": "Group format may be challenging. Some attention training through contact.",
+          "concerns": "May be difficult for ADHD"
+        },
+        "depression": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Connection counters isolation. Being seen may help. No direct research.",
+          "concerns": "Speculative"
+        },
+        "anxiety": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Exposure to vulnerability. May increase before helping. Social anxiety specific.",
+          "concerns": "May be anxiety-provoking"
+        },
+        "trauma": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Relational healing potential. May activate attachment wounds.",
+          "concerns": "Not trauma-informed"
+        },
+        "focus": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Present-moment attention required. Different type of focus.",
+          "concerns": "Relational vs. individual focus"
+        },
+        "metacognition": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Noticing and naming internal experience is core skill.",
+          "keyCitations": ["Phenomenological reports"]
+        },
+        "insight": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Self-understanding through relational mirrors. Others reflect patterns.",
+          "keyCitations": ["Phenomenological reports"]
+        },
+        "compassion": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Holding space for others' experience. Non-judgment practice.",
+          "keyCitations": ["Phenomenological reports"]
+        },
+        "communication": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Primary purpose - explicit communication training through games.",
+          "keyCitations": ["Phenomenological reports"]
+        },
+        "empathy": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Core skill - sensing others' experience. Explicit practice.",
+          "keyCitations": ["Phenomenological reports"]
+        },
+        "bodyAwareness": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Somatic awareness included. Secondary to relational focus.",
+          "concerns": "Not primary emphasis"
+        },
+        "emotionalRegulation": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Co-regulation through group. Staying present with emotions.",
+          "concerns": "Group-dependent"
+        }
+      }
+    },
+    "sufism": {
+      "overallConfidence": "low",
+      "researchBasis": "Traditional wisdom; limited empirical research; some phenomenological studies",
+      "scores": {
+        "adhd": {
+          "score": 2,
+          "confidence": "low",
+          "justification": "Dhikr requires repetition which may help. Not ADHD-specific.",
+          "concerns": "Speculative"
+        },
+        "depression": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Love and connection central. Community support. No direct research.",
+          "concerns": "Speculative"
+        },
+        "anxiety": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Trust in divine may reduce anxiety. Surrender practice.",
+          "concerns": "No direct research"
+        },
+        "trauma": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Community and spiritual support. Not trauma-specific.",
+          "concerns": "Not designed for trauma"
+        },
+        "focus": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Dhikr concentration practice. Heart focus.",
+          "concerns": "Limited research"
+        },
+        "metacognition": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Self-observation in muraqaba. Watching states.",
+          "concerns": "Traditional practice"
+        },
+        "insight": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Core purpose - gnosis (ma'rifa). Direct knowledge of divine.",
+          "keyCitations": ["Traditional texts", "Chittick (2007)"]
+        },
+        "compassion": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Divine love central. Compassion as expression of love.",
+          "keyCitations": ["Traditional texts"]
+        },
+        "communication": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Poetry and teaching traditions. Community sharing.",
+          "concerns": "Cultural context"
+        },
+        "empathy": {
+          "score": 5,
+          "confidence": "low",
+          "justification": "Love of creation. Seeing divine in others.",
+          "concerns": "Theoretical"
+        },
+        "bodyAwareness": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Whirling and movement practices. Heart awareness.",
+          "concerns": "Variable by order"
+        },
+        "emotionalRegulation": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Surrender and acceptance practices. Equanimity development.",
+          "concerns": "No direct research"
+        }
+      }
+    },
+    "vedanta": {
+      "overallConfidence": "low",
+      "researchBasis": "Ancient philosophical tradition; limited empirical research; primarily textual/experiential",
+      "scores": {
+        "adhd": {
+          "score": 2,
+          "confidence": "low",
+          "justification": "Primarily intellectual inquiry. May be challenging for ADHD.",
+          "concerns": "Abstract practice"
+        },
+        "depression": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Reframing identity may help existential depression. Limited direct benefit for clinical depression.",
+          "concerns": "May intellectualize"
+        },
+        "anxiety": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Recognizing unchanging self reduces identity-based anxiety.",
+          "concerns": "Abstract approach"
+        },
+        "trauma": {
+          "score": 2,
+          "confidence": "low",
+          "justification": "Intellectual practice not appropriate for trauma processing.",
+          "concerns": "May dissociate"
+        },
+        "focus": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Self-inquiry requires sustained attention.",
+          "concerns": "Different type than mindfulness"
+        },
+        "metacognition": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Core practice - discriminating observer from observed. Highly metacognitive.",
+          "keyCitations": ["Traditional texts"]
+        },
+        "insight": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Primary purpose - insight into nature of self. Jnana yoga.",
+          "keyCitations": ["Traditional texts"]
+        },
+        "compassion": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Non-dual realization implies compassion. Unity consciousness.",
+          "concerns": "Indirect effect"
+        },
+        "communication": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Satsang (truth speaking) tradition. Less reactivity.",
+          "concerns": "Not primary focus"
+        },
+        "empathy": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Seeing self in all beings. Non-separation.",
+          "concerns": "Theoretical"
+        },
+        "bodyAwareness": {
+          "score": 2,
+          "confidence": "medium",
+          "justification": "Primarily intellectual/spiritual inquiry. Body transcended.",
+          "keyCitations": ["Traditional texts"]
+        },
+        "emotionalRegulation": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Witness consciousness reduces reactivity.",
+          "concerns": "May dissociate rather than regulate"
+        }
+      }
+    },
+    "christian-contemplation": {
+      "overallConfidence": "medium",
+      "researchBasis": "Some research on centering prayer; rich contemplative tradition; clinical applications emerging",
+      "scores": {
+        "adhd": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Sacred word provides focus point. Some attention training.",
+          "concerns": "Limited research"
+        },
+        "depression": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Connection to transcendent. Self-compassion through divine love.",
+          "concerns": "Limited research"
+        },
+        "anxiety": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Surrender and trust practices. Some centering prayer research shows benefits.",
+          "keyCitations": ["Keating (2006)"]
+        },
+        "trauma": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Divine support may help. Not trauma-specific.",
+          "concerns": "May bypass processing"
+        },
+        "focus": {
+          "score": 4,
+          "confidence": "medium",
+          "justification": "Centering prayer trains attention through sacred word.",
+          "keyCitations": ["Keating (2006)"]
+        },
+        "metacognition": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Observing thoughts and returning to center. Similar to mindfulness.",
+          "keyCitations": ["Keating (2006)"]
+        },
+        "insight": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Contemplative insight tradition. Lectio divina.",
+          "keyCitations": ["Traditional texts"]
+        },
+        "compassion": {
+          "score": 5,
+          "confidence": "medium",
+          "justification": "Divine love central. Extending love to others.",
+          "keyCitations": ["Traditional texts"]
+        },
+        "communication": {
+          "score": 3,
+          "confidence": "low",
+          "justification": "Community context. Prayer partnerships.",
+          "concerns": "Not primary focus"
+        },
+        "empathy": {
+          "score": 5,
+          "confidence": "low",
+          "justification": "Love of neighbor. Seeing Christ in others.",
+          "concerns": "Theological framework"
+        },
+        "bodyAwareness": {
+          "score": 2,
+          "confidence": "medium",
+          "justification": "Primarily interior/spiritual focus. Body less emphasized.",
+          "keyCitations": ["Traditional texts"]
+        },
+        "emotionalRegulation": {
+          "score": 4,
+          "confidence": "low",
+          "justification": "Surrender and acceptance. Equanimity through faith.",
+          "concerns": "Limited research"
+        }
+      }
+    }
+  },
+  "overallAssessment": {
+    "highConfidenceScores": [
+      "MBSR, MBCT, DBT, ACT for depression/anxiety",
+      "EMDR, SE, MDMA-therapy for trauma",
+      "Vipassana, shamatha for attention/metacognition",
+      "Yoga, Tai Chi, Qigong for body awareness and emotion regulation",
+      "Metta for compassion"
+    ],
+    "lowConfidenceScores": [
+      "Newer relational practices (Circling, AR) - need empirical research",
+      "Traditional practices (Mussar, Sufism, Vedanta) - limited modern research",
+      "Specific ADHD ratings - limited research for most practices",
+      "Communication/empathy ratings for non-relational practices - often extrapolated"
+    ],
+    "generalCaveats": [
+      "Scores represent estimates based on available evidence and theoretical plausibility",
+      "Individual variation is substantial - what works for one person may not work for another",
+      "Implementation quality matters - same practice poorly taught may show different results",
+      "Combination/sequencing effects not captured - practices may work better in combination",
+      "Cultural context and meaning affect outcomes - transferring practices across cultures may change effectiveness",
+      "Research often done on modified/secularized versions - traditional forms may differ"
+    ],
+    "recommendedImprovements": [
+      "Commission systematic reviews for under-researched practices",
+      "Develop standardized outcome measures across traditions",
+      "Study practice combinations and sequencing",
+      "Examine moderators (who benefits most from which practice)",
+      "Include practitioner expertise/lineage as variable"
+    ]
+  }
+}

@@ -823,6 +823,24 @@ function renderComparisonTable() {
             renderComparisonTable();
         });
     });
+
+    // Position popovers on hover
+    document.querySelectorAll('.tradition-name-wrapper').forEach(wrapper => {
+        const popover = wrapper.querySelector('.tradition-popover');
+        wrapper.addEventListener('mouseenter', (e) => {
+            const rect = wrapper.getBoundingClientRect();
+            popover.style.left = `${rect.right + 10}px`;
+            popover.style.top = `${rect.top}px`;
+            // Ensure popover doesn't go off screen
+            const popoverRect = popover.getBoundingClientRect();
+            if (popoverRect.right > window.innerWidth) {
+                popover.style.left = `${rect.left - popoverRect.width - 10}px`;
+            }
+            if (popoverRect.bottom > window.innerHeight) {
+                popover.style.top = `${window.innerHeight - popoverRect.height - 10}px`;
+            }
+        });
+    });
 }
 
 function formatMetricName(metric) {

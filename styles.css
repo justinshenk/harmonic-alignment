@@ -255,10 +255,8 @@ tr.selected-row:hover {
 
 .tradition-popover {
     display: none;
-    position: absolute;
-    left: 0;
-    top: 100%;
-    z-index: 200;
+    position: fixed;
+    z-index: 1000;
     background: white;
     border: 1px solid var(--border);
     border-radius: 8px;
@@ -266,6 +264,7 @@ tr.selected-row:hover {
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     min-width: 300px;
     max-width: 400px;
+    pointer-events: none;
 }
 
 .tradition-name-wrapper:hover .tradition-popover {
