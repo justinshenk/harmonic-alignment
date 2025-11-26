@@ -2,7 +2,8 @@
   "rewrites": [
     { "source": "/quiz", "destination": "/index.html" },
     { "source": "/compare", "destination": "/index.html" },
-    { "source": "/research", "destination": "/index.html" },
+    { "source": "/explore", "destination": "/index.html" },
+    { "source": "/ratings", "destination": "/index.html" },
     { "source": "/about", "destination": "/index.html" }
   ]
 }

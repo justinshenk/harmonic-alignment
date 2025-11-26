@@ -163,6 +163,30 @@ function switchFinderTab(tab) {
     document.getElementById('finderChat').style.display = tab === 'chat' ? 'block' : 'none';
 }
 
+// Switch between explore sub-tabs (Evolution, Complexity, Attention)
+function switchExploreTab(tab) {
+    // Update tab buttons
+    document.getElementById('tabEvolution').classList.toggle('active', tab === 'evolution');
+    document.getElementById('tabComplexity').classList.toggle('active', tab === 'complexity');
+    document.getElementById('tabAttention').classList.toggle('active', tab === 'attention');
+
+    // Update content visibility
+    document.getElementById('exploreEvolution').classList.toggle('active', tab === 'evolution');
+    document.getElementById('exploreComplexity').classList.toggle('active', tab === 'complexity');
+    document.getElementById('exploreAttention').classList.toggle('active', tab === 'attention');
+
+    // Initialize visualizations for the selected tab
+    if (tab === 'complexity') {
+        initializeComplexityView();
+    } else if (tab === 'attention') {
+        renderAttentionClassification();
+    } else if (tab === 'evolution') {
+        if (typeof renderEvolutionTree === 'function') {
+            renderEvolutionTree();
+        }
+    }
+}
+
 // Initialize finder with chat as default
 function initializeFinder() {
     switchFinderTab('chat');
@@ -537,10 +561,8 @@ function initializeNavigation() {
     const buttons = {
         quizView: 'quiz-section',
         compareView: 'compare-section',
-        researchView: 'research-section',
-        complexityView: 'complexity-section',
-        attentionView: 'attention-section',
-        treeView: 'tree-section',
+        exploreView: 'explore-section',
+        ratingsView: 'ratings-section',
         aboutView: 'about-section'
     };
 
@@ -549,14 +571,16 @@ function initializeNavigation() {
         '/': 'quizView',
         '/quiz': 'quizView',
         '/compare': 'compareView',
-        '/research': 'researchView',
+        '/explore': 'exploreView',
+        '/ratings': 'ratingsView',
         '/about': 'aboutView'
     };
 
     const viewToPath = {
         'quizView': '/quiz',
         'compareView': '/compare',
-        'researchView': '/research',
+        'exploreView': '/explore',
+        'ratingsView': '/ratings',
         'aboutView': '/about'
     };
 
@@ -581,14 +605,13 @@ function initializeNavigation() {
             history.pushState({ section: buttonId }, '', path);
         }
 
-        // Initialize complexity visualizations when switching to that view
-        if (buttonId === 'complexityView') {
+        // Initialize explore section visualizations
+        if (buttonId === 'exploreView') {
             initializeComplexityView();
-        }
-
-        // Initialize attention mapping when switching to that view
-        if (buttonId === 'attentionView') {
             renderAttentionClassification();
+            if (typeof renderEvolutionTree === 'function') {
+                renderEvolutionTree();
+            }
         }
     }
 

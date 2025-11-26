@@ -1373,3 +1373,57 @@ details.dimension-legend[open] summary span {
         grid-column: 1 / -1;
     }
 }
+
+/* Explore section tabs */
+.explore-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    padding: 0 1rem;
+}
+
+.explore-tab {
+    padding: 0.75rem 1.5rem;
+    border: 2px solid #e0e0e0;
+    background: white;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #666;
+    transition: all 0.2s;
+    border-radius: 8px;
+}
+
+.explore-tab:hover {
+    border-color: var(--secondary);
+    color: var(--secondary);
+}
+
+.explore-tab.active {
+    background: var(--secondary);
+    border-color: var(--secondary);
+    color: white;
+}
+
+.explore-content {
+    display: none;
+}
+
+.explore-content.active {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .explore-tabs {
+        flex-wrap: wrap;
+    }
+
+    .explore-tab {
+        flex: 1;
+        min-width: 100px;
+        text-align: center;
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+    }
+}

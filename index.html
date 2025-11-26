@@ -30,10 +30,8 @@
         <nav id="mainNav">
             <button id="quizView" class="active">Find Your Practice</button>
             <button id="compareView">Compare</button>
-            <button id="complexityView">Complexity</button>
-            <button id="attentionView">Attention Mapping</button>
-            <button id="treeView">Evolution</button>
-            <button id="researchView">Research</button>
+            <button id="exploreView">Explore</button>
+            <button id="ratingsView">Ratings</button>
             <button id="aboutView">About</button>
         </nav>
     </header>
@@ -78,7 +76,7 @@
 
                     <div class="finder-links">
                         <a href="/compare" onclick="document.getElementById('compareView').click(); return false;">Browse all practices</a>
-                        <a href="#" onclick="document.getElementById('complexityView').click(); return false;">Complexity mapping</a>
+                        <a href="/explore" onclick="document.getElementById('exploreView').click(); setTimeout(() => switchExploreTab('complexity'), 100); return false;">Complexity mapping</a>
                         <a href="/about" onclick="document.getElementById('aboutView').click(); return false;">About</a>
                     </div>
                 </div>
@@ -126,7 +124,18 @@
             <div id="comparison-table"></div>
         </div>
 
-        <div id="complexity-section" class="section">
+        <div id="explore-section" class="section">
+            <div class="explore-tabs">
+                <button id="tabEvolution" class="explore-tab active" onclick="switchExploreTab('evolution')">Evolution</button>
+                <button id="tabComplexity" class="explore-tab" onclick="switchExploreTab('complexity')">Complexity</button>
+                <button id="tabAttention" class="explore-tab" onclick="switchExploreTab('attention')">Attention</button>
+            </div>
+
+            <div id="exploreEvolution" class="explore-content active">
+                <div id="evolution-tree"></div>
+            </div>
+
+            <div id="exploreComplexity" class="explore-content">
             <h2>Complexity Mapping</h2>
             <p style="margin-bottom: 2rem; max-width: 800px;">Each practice introduces complexity at different levels of agency—from somatic awareness to transpersonal realization. This visualization maps where each tradition focuses its intervention.</p>
 
@@ -221,7 +230,7 @@
             </div>
         </div>
 
-        <div id="attention-section" class="section">
+            <div id="exploreAttention" class="explore-content">
             <h2>Attention Mechanism Mapping</h2>
             <p style="max-width: 900px; margin-bottom: 2rem;">Contemplative practices can be understood through their attention mechanisms and how these mechanisms produce psychological outcomes. This framework maps practices to attention types and shows pathways to specific benefits.</p>
 
@@ -310,13 +319,10 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
 
-        <div id="tree-section" class="section">
-            <div id="evolution-tree"></div>
-        </div>
-
-        <div id="research-section" class="section">
+        <div id="ratings-section" class="section">
             <div class="content" style="max-width: 1200px;">
                 <h2>Research Justifications</h2>
                 <p style="margin-bottom: 1rem;">This page documents the evidence basis for effectiveness scores. Each score includes a confidence level and research justification.</p>
