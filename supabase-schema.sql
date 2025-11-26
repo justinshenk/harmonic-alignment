@@ -91,6 +91,13 @@ create trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.handle_new_user();
 
+-- Policies for shared profiles (anyone can view)
+create policy "Anyone can view profiles" on public.profiles
+  for select using (true);
+
+create policy "Anyone can view practices by user id" on public.user_practices
+  for select using (true);
+
 -- Indexes for performance
 create index idx_user_practices_user_id on public.user_practices(user_id);
 create index idx_practice_logs_user_id on public.practice_logs(user_id);
