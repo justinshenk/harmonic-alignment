@@ -297,11 +297,6 @@ function renderUserPractices(practices) {
                         <button class="icon-button" onclick="editUserPractice('${practice.practice_id}')" title="Edit">✏️</button>
                     </div>
                     <p class="practice-origin">${tradition?.origin || ''}</p>
-                    ${practice.effectiveness_overall ? `
-                        <div class="effectiveness-badge">
-                            Overall: ${practice.effectiveness_overall}/5
-                        </div>
-                    ` : ''}
                     ${practice.notes ? `<p class="practice-notes">${practice.notes}</p>` : ''}
                 </div>
             `;
@@ -331,10 +326,6 @@ function editUserPractice(practiceId) {
             document.getElementById('practiceModalTitle').textContent = tradition.name;
             document.getElementById('practiceModalId').value = practiceId;
             document.getElementById('practiceStatus').value = data?.status || 'interested';
-            document.getElementById('practiceEffectivenessOverall').value = data?.effectiveness_overall || '';
-            document.getElementById('practiceEffectivenessAnxiety').value = data?.effectiveness_anxiety || '';
-            document.getElementById('practiceEffectivenessFocus').value = data?.effectiveness_focus || '';
-            document.getElementById('practiceEffectivenessMood').value = data?.effectiveness_mood || '';
             document.getElementById('practiceNotes').value = data?.notes || '';
 
             modal.style.display = 'flex';
@@ -354,16 +345,120 @@ async function handlePracticeSubmit(e) {
     const practiceData = {
         practice_id: form.practiceId.value,
         status: form.status.value,
-        effectiveness_overall: form.effectivenessOverall.value || null,
-        effectiveness_anxiety: form.effectivenessAnxiety.value || null,
-        effectiveness_focus: form.effectivenessFocus.value || null,
-        effectiveness_mood: form.effectivenessMood.value || null,
         notes: form.notes.value || null
     };
 
     await saveUserPractice(practiceData);
     closePracticeModal();
     loadUserPractices();
+}
+
+// ============ Share Profile ============
+
+// Share profile - copy link to clipboard
+function shareProfile() {
+    if (!currentUser) return;
+
+    const shareUrl = `${window.location.origin}/profile?user=${currentUser.id}`;
+
+    navigator.clipboard.writeText(shareUrl).then(() => {
+        showNotification('Profile link copied to clipboard!', 'success');
+    }).catch(() => {
+        // Fallback for older browsers
+        prompt('Copy this link to share your profile:', shareUrl);
+    });
+}
+
+// Load shared profile (when viewing someone else's profile)
+async function loadSharedProfile(userId) {
+    const { data: practices, error } = await supabase
+        .from('user_practices')
+        .select('*')
+        .eq('user_id', userId)
+        .order('updated_at', { ascending: false });
+
+    if (error || !practices?.length) {
+        document.getElementById('sharedProfileView').innerHTML = `
+            <div class="empty-state">
+                <p>This profile is empty or doesn't exist.</p>
+                <a href="/profile" onclick="document.getElementById('profileView').click(); return false;">Create your own profile</a>
+            </div>
+        `;
+        return;
+    }
+
+    // Get display name from profile
+    const { data: profile } = await supabase
+        .from('profiles')
+        .select('display_name')
+        .eq('id', userId)
+        .single();
+
+    document.getElementById('sharedProfileName').textContent =
+        profile?.display_name || 'Anonymous User';
+
+    renderSharedPractices(practices);
+}
+
+// Render shared practices (read-only view)
+function renderSharedPractices(practices) {
+    const container = document.getElementById('sharedPracticesList');
+    if (!container) return;
+
+    const grouped = {
+        experienced: practices.filter(p => p.status === 'experienced'),
+        practicing: practices.filter(p => p.status === 'practicing'),
+        learning: practices.filter(p => p.status === 'learning'),
+        interested: practices.filter(p => p.status === 'interested')
+    };
+
+    let html = '';
+    const statusLabels = {
+        experienced: 'Experienced',
+        practicing: 'Currently Practicing',
+        learning: 'Learning',
+        interested: 'Interested'
+    };
+
+    for (const [status, items] of Object.entries(grouped)) {
+        if (items.length === 0) continue;
+
+        html += `<div class="practice-group">
+            <h3>${statusLabels[status]} (${items.length})</h3>
+            <div class="practice-cards">`;
+
+        for (const practice of items) {
+            const tradition = traditionsData?.traditions?.find(t => t.id === practice.practice_id);
+            html += `
+                <div class="practice-card">
+                    <h4>${tradition?.name || practice.practice_id}</h4>
+                    <p class="practice-origin">${tradition?.origin || ''}</p>
+                    ${practice.notes ? `<p class="practice-notes">${practice.notes}</p>` : ''}
+                </div>
+            `;
+        }
+
+        html += '</div></div>';
+    }
+
+    container.innerHTML = html;
+}
+
+// Check for shared profile on page load
+function checkForSharedProfile() {
+    const params = new URLSearchParams(window.location.search);
+    const sharedUserId = params.get('user');
+
+    if (sharedUserId && window.location.pathname === '/profile') {
+        // Hide other sections, show shared view
+        document.getElementById('profileLoggedOut').style.display = 'none';
+        document.getElementById('profileLoggedIn').style.display = 'none';
+        document.getElementById('sharedProfileView').style.display = 'block';
+
+        loadSharedProfile(sharedUserId);
+        return true;
+    }
+    return false;
 }
 
 // Add practice from compare view
@@ -377,40 +472,153 @@ function addToMyPractices(practiceId) {
 
 // ============ Add Practice Helpers ============
 
+// Track bulk edits
+let bulkPracticeEdits = {};
+
 // Show add practice modal with table
-function showAddPracticeSelect() {
+async function showAddPracticeSelect() {
     const modal = document.getElementById('addPracticeModal');
     const tbody = document.getElementById('practiceListBody');
     const searchInput = document.getElementById('practiceSearchInput');
 
     if (!modal || !tbody || !traditionsData?.traditions) return;
 
-    // Clear search
+    // Clear search and reset edits
     if (searchInput) searchInput.value = '';
+    bulkPracticeEdits = {};
+
+    // Load existing user practices to pre-fill
+    let existingPractices = {};
+    if (currentUser) {
+        const { data } = await supabase
+            .from('user_practices')
+            .select('practice_id, status, notes')
+            .eq('user_id', currentUser.id);
+
+        if (data) {
+            existingPractices = data.reduce((acc, p) => {
+                acc[p.practice_id] = p;
+                return acc;
+            }, {});
+        }
+    }
 
     // Populate table
-    renderPracticeList(traditionsData.traditions);
+    renderPracticeList(traditionsData.traditions, existingPractices);
+    updateSelectedCount();
 
     modal.style.display = 'flex';
 }
 
-// Render practice list table
-function renderPracticeList(practices) {
+// Render practice list table with inline editing
+function renderPracticeList(practices, existingPractices = {}) {
     const tbody = document.getElementById('practiceListBody');
     if (!tbody) return;
 
-    tbody.innerHTML = practices.map(t => `
-        <tr style="border-bottom: 1px solid var(--border);">
-            <td style="padding: 0.75rem;">
-                <strong>${t.name}</strong>
-                ${t.description ? `<br><span style="font-size: 0.85rem; color: #666;">${t.description.slice(0, 60)}${t.description.length > 60 ? '...' : ''}</span>` : ''}
+    tbody.innerHTML = practices.map(t => {
+        const existing = existingPractices[t.id] || bulkPracticeEdits[t.id] || {};
+        const status = existing.status || '';
+        const notes = existing.notes || '';
+
+        return `
+        <tr style="border-bottom: 1px solid var(--border);" data-practice-id="${t.id}">
+            <td style="padding: 0.5rem; vertical-align: top;">
+                <strong style="font-size: 0.9rem;">${t.name}</strong>
+                <br><span style="font-size: 0.75rem; color: #888;">${t.origin || ''}</span>
             </td>
-            <td style="padding: 0.75rem; color: #666;">${t.origin || ''}</td>
-            <td style="padding: 0.75rem;">
-                <button class="secondary-button" style="padding: 0.4rem 0.75rem; font-size: 0.85rem;" onclick="selectPracticeFromList('${t.id}')">Add</button>
+            <td style="padding: 0.5rem; vertical-align: top;">
+                <select class="practice-status-select" data-practice="${t.id}" onchange="updateBulkEdit('${t.id}')" style="padding: 0.4rem; font-size: 0.85rem; width: 100%;">
+                    <option value="">-- Select --</option>
+                    <option value="interested" ${status === 'interested' ? 'selected' : ''}>Interested</option>
+                    <option value="learning" ${status === 'learning' ? 'selected' : ''}>Learning</option>
+                    <option value="practicing" ${status === 'practicing' ? 'selected' : ''}>Practicing</option>
+                    <option value="experienced" ${status === 'experienced' ? 'selected' : ''}>Experienced</option>
+                </select>
+            </td>
+            <td style="padding: 0.5rem; vertical-align: top;">
+                <textarea class="practice-notes-input" data-practice="${t.id}" onchange="updateBulkEdit('${t.id}')" placeholder="Add notes..." rows="2" style="width: 100%; font-size: 0.85rem; padding: 0.4rem; resize: vertical; min-height: 40px;">${notes}</textarea>
             </td>
         </tr>
-    `).join('');
+    `;
+    }).join('');
+}
+
+// Update bulk edit tracking
+function updateBulkEdit(practiceId) {
+    const row = document.querySelector(`tr[data-practice-id="${practiceId}"]`);
+    if (!row) return;
+
+    const statusSelect = row.querySelector('.practice-status-select');
+    const notesInput = row.querySelector('.practice-notes-input');
+
+    const status = statusSelect?.value || '';
+    const notes = notesInput?.value || '';
+
+    if (status) {
+        bulkPracticeEdits[practiceId] = { status, notes };
+    } else {
+        delete bulkPracticeEdits[practiceId];
+    }
+
+    updateSelectedCount();
+}
+
+// Update selected count display
+function updateSelectedCount() {
+    const countEl = document.getElementById('practicesSelectedCount');
+    if (countEl) {
+        const count = Object.keys(bulkPracticeEdits).length;
+        countEl.textContent = `${count} practice${count !== 1 ? 's' : ''} selected`;
+    }
+}
+
+// Save all bulk edited practices
+async function saveBulkPractices() {
+    const practiceIds = Object.keys(bulkPracticeEdits);
+
+    if (practiceIds.length === 0) {
+        showNotification('Select at least one practice to save', 'error');
+        return;
+    }
+
+    if (!currentUser) {
+        showAuthModal();
+        return;
+    }
+
+    const saveBtn = document.querySelector('#addPracticeModal .primary-button');
+    if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.textContent = 'Saving...';
+    }
+
+    try {
+        // Prepare all records
+        const records = practiceIds.map(practiceId => ({
+            user_id: currentUser.id,
+            practice_id: practiceId,
+            status: bulkPracticeEdits[practiceId].status,
+            notes: bulkPracticeEdits[practiceId].notes || null,
+            updated_at: new Date().toISOString()
+        }));
+
+        const { error } = await supabase
+            .from('user_practices')
+            .upsert(records, { onConflict: 'user_id,practice_id' });
+
+        if (error) throw error;
+
+        showNotification(`Saved ${practiceIds.length} practice${practiceIds.length !== 1 ? 's' : ''}!`, 'success');
+        closeAddPracticeModal();
+        loadUserPractices();
+    } catch (error) {
+        showNotification('Error saving: ' + error.message, 'error');
+    } finally {
+        if (saveBtn) {
+            saveBtn.disabled = false;
+            saveBtn.textContent = 'Save Selected';
+        }
+    }
 }
 
 // Filter practice list by search
@@ -426,18 +634,14 @@ function filterPracticeList() {
         (t.description && t.description.toLowerCase().includes(query))
     );
 
-    renderPracticeList(filtered);
-}
-
-// Select practice from list
-function selectPracticeFromList(practiceId) {
-    closeAddPracticeModal();
-    editUserPractice(practiceId);
+    // Get existing practices from current bulk edits
+    renderPracticeList(filtered, bulkPracticeEdits);
 }
 
 // Close add practice modal
 function closeAddPracticeModal() {
     document.getElementById('addPracticeModal').style.display = 'none';
+    bulkPracticeEdits = {};
 }
 
 // ============ Auth UI Helpers ============

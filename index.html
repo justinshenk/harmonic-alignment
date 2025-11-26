@@ -436,12 +436,26 @@
                     <button class="primary-button" onclick="showAuthModal()">Sign In</button>
                 </div>
 
+                <div id="sharedProfileView" style="display: none;">
+                    <div style="margin-bottom: 1.5rem;">
+                        <h3 id="sharedProfileName" style="margin: 0;"></h3>
+                        <p style="color: #666; margin: 0.25rem 0 0 0;">Shared practice profile</p>
+                    </div>
+                    <div id="sharedPracticesList"></div>
+                    <div style="margin-top: 2rem; text-align: center;">
+                        <a href="/profile" onclick="document.getElementById('profileView').click(); return false;" class="secondary-button">Create your own profile</a>
+                    </div>
+                </div>
+
                 <div id="profileLoggedIn" style="display: none;">
                     <div class="profile-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
                         <div>
                             <span id="userDisplayName" style="font-weight: 600;"></span>
                         </div>
-                        <button class="secondary-button" onclick="showAddPracticeSelect()">+ Add Practice</button>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="secondary-button" onclick="shareProfile()" title="Share your profile">Share</button>
+                            <button class="secondary-button" onclick="showAddPracticeSelect()">+ Add Practice</button>
+                        </div>
                     </div>
 
                     <div id="userPracticesList"></div>
@@ -516,30 +530,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Effectiveness Ratings (1-5, leave blank if unsure)</label>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.5rem;">
-                        <div>
-                            <label for="practiceEffectivenessOverall" style="font-size: 0.9rem;">Overall</label>
-                            <input type="number" id="practiceEffectivenessOverall" name="effectivenessOverall" min="1" max="5">
-                        </div>
-                        <div>
-                            <label for="practiceEffectivenessAnxiety" style="font-size: 0.9rem;">For Anxiety</label>
-                            <input type="number" id="practiceEffectivenessAnxiety" name="effectivenessAnxiety" min="1" max="5">
-                        </div>
-                        <div>
-                            <label for="practiceEffectivenessFocus" style="font-size: 0.9rem;">For Focus</label>
-                            <input type="number" id="practiceEffectivenessFocus" name="effectivenessFocus" min="1" max="5">
-                        </div>
-                        <div>
-                            <label for="practiceEffectivenessMood" style="font-size: 0.9rem;">For Mood</label>
-                            <input type="number" id="practiceEffectivenessMood" name="effectivenessMood" min="1" max="5">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
                     <label for="practiceNotes">Notes</label>
-                    <textarea id="practiceNotes" name="notes" rows="3" placeholder="When does this practice work best for you?"></textarea>
+                    <textarea id="practiceNotes" name="notes" rows="4" placeholder="How has this practice helped you? When do you use it?"></textarea>
                 </div>
 
                 <div style="display: flex; gap: 1rem;">
@@ -552,22 +544,29 @@
 
     <!-- Add Practice Modal -->
     <div id="addPracticeModal" class="modal" style="display: none;">
-        <div class="modal-content" style="max-width: 600px;">
+        <div class="modal-content" style="max-width: 800px; max-height: 90vh; display: flex; flex-direction: column;">
             <button class="modal-close" onclick="closeAddPracticeModal()">&times;</button>
-            <h2 style="margin-bottom: 0.5rem;">Add a Practice</h2>
-            <p style="margin-bottom: 1rem; color: #666;">Select a practice to track:</p>
+            <h2 style="margin-bottom: 0.5rem;">Add Your Practices</h2>
+            <p style="margin-bottom: 1rem; color: #666;">Go through the list and set your experience level for practices you know. Click Save when done.</p>
             <input type="text" id="practiceSearchInput" placeholder="Search practices..." style="width: 100%; padding: 0.75rem; margin-bottom: 1rem; border: 1px solid var(--border); border-radius: 6px;" oninput="filterPracticeList()">
-            <div id="practiceListContainer" style="max-height: 400px; overflow-y: auto;">
+            <div id="practiceListContainer" style="flex: 1; overflow-y: auto; min-height: 300px;">
                 <table id="practiceListTable" style="width: 100%; border-collapse: collapse;">
                     <thead>
-                        <tr style="background: var(--bg); position: sticky; top: 0;">
-                            <th style="padding: 0.75rem; text-align: left;">Practice</th>
-                            <th style="padding: 0.75rem; text-align: left;">Origin</th>
-                            <th style="padding: 0.75rem; width: 80px;"></th>
+                        <tr style="background: var(--bg); position: sticky; top: 0; z-index: 1;">
+                            <th style="padding: 0.5rem; text-align: left; width: 25%;">Practice</th>
+                            <th style="padding: 0.5rem; text-align: left; width: 25%;">Experience</th>
+                            <th style="padding: 0.5rem; text-align: left;">Notes</th>
                         </tr>
                     </thead>
                     <tbody id="practiceListBody"></tbody>
                 </table>
+            </div>
+            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+                <span id="practicesSelectedCount" style="color: #666;">0 practices selected</span>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button type="button" class="secondary-button" onclick="closeAddPracticeModal()">Cancel</button>
+                    <button type="button" class="primary-button" onclick="saveBulkPractices()">Save Selected</button>
+                </div>
             </div>
         </div>
     </div>
