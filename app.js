@@ -115,15 +115,166 @@ let quizState = {
 };
 
 
+// API endpoint for practice chat (use local dev or production)
+const PRACTICE_CHAT_API = window.location.hostname === 'localhost'
+    ? 'http://localhost:3001/api/practice-chat'
+    : 'https://justinshenk.com/api/practice-chat';
+
 // Initialize
 document.addEventListener('DOMContentLoaded', async () => {
     await loadData();
     initializeNavigation();
     initializeQuiz();
+    initializePracticeChat();
     renderComparisonTable();
     renderEvolutionTree();
     initializeResearchSection();
 });
+
+// Tab switching for finder
+function switchFinderTab(tab) {
+    document.getElementById('tabQuiz').classList.toggle('active', tab === 'quiz');
+    document.getElementById('tabChat').classList.toggle('active', tab === 'chat');
+    document.getElementById('finderQuiz').classList.toggle('active', tab === 'quiz');
+    document.getElementById('finderChat').classList.toggle('active', tab === 'chat');
+    document.getElementById('finderQuiz').style.display = tab === 'quiz' ? 'block' : 'none';
+    document.getElementById('finderChat').style.display = tab === 'chat' ? 'block' : 'none';
+}
+
+// Initialize finder with chat as default
+function initializeFinder() {
+    switchFinderTab('chat');
+}
+
+// Render chat recommendations with links to traditions
+function renderChatRecommendations(data) {
+    if (!data.recommendations || !data.recommendations.length) {
+        return '<p>No recommendations found. Try describing your situation differently.</p>';
+    }
+
+    let html = '<div class="chat-recommendations">';
+    data.recommendations.forEach(rec => {
+        const escaped = {
+            practice: (rec.practice || '').replace(/</g, '&lt;').replace(/>/g, '&gt;'),
+            traditionName: (rec.traditionName || '').replace(/</g, '&lt;').replace(/>/g, '&gt;'),
+            why: (rec.why || '').replace(/</g, '&lt;').replace(/>/g, '&gt;'),
+            tryNow: (rec.tryNow || '').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        };
+        const traditionLink = rec.traditionId
+            ? `<a href="#" onclick="viewTraditionInCompare('${rec.traditionId}'); return false;" class="tradition-link">${escaped.traditionName}</a>`
+            : escaped.traditionName;
+
+        html += `<div class="recommendation-item">
+            <div class="rec-header">
+                <strong>${escaped.practice}</strong>
+                <span class="rec-tradition">${traditionLink}</span>
+            </div>
+            <p class="rec-why">${escaped.why}</p>
+            <div class="rec-try">
+                <span class="try-label">Try now:</span> ${escaped.tryNow}
+            </div>
+            <div class="rec-actions">
+                <a href="#" onclick="viewTraditionInCompare('${rec.traditionId || ''}'); return false;" class="action-link">Learn more about this tradition</a>
+            </div>
+        </div>`;
+    });
+    html += '</div>';
+
+    // Add invitation to explore deeper
+    html += `<div class="deeper-exploration">
+        <p class="explore-note">These suggestions are starting points. Many practices reveal their depth over weeks and months of consistent engagement.</p>
+        <div class="explore-actions">
+            <button onclick="document.getElementById('startQuiz').click();" class="secondary-button small">Take the full quiz</button>
+            <button onclick="document.getElementById('compareView').click();" class="secondary-button small">Browse all traditions</button>
+        </div>
+    </div>`;
+
+    if (data.note) {
+        const escapedNote = data.note.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        html += `<p class="chat-note">${escapedNote}</p>`;
+    }
+
+    return html;
+}
+
+// Navigate to tradition in compare table
+function viewTraditionInCompare(traditionId) {
+    document.getElementById('compareView').click();
+    setTimeout(() => {
+        const row = document.querySelector(`tr[data-tradition-id="${traditionId}"]`);
+        if (row) {
+            row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            row.style.background = '#fff3cd';
+            setTimeout(() => row.style.background = '', 2000);
+        }
+    }, 100);
+}
+
+// Practice chat functionality
+function initializePracticeChat() {
+    const form = document.getElementById('practiceChat');
+    if (!form) return;
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const input = document.getElementById('chatInput');
+        const submitBtn = document.getElementById('chatSubmit');
+        const responseDiv = document.getElementById('chatResponse');
+        const message = input.value.trim();
+
+        if (!message) return;
+
+        // Show loading state
+        submitBtn.disabled = true;
+        submitBtn.textContent = '...';
+        responseDiv.style.display = 'block';
+        responseDiv.innerHTML = '<span style="color: #888;">Finding practices for you...</span>';
+
+        try {
+            // Build tradition list from loaded data
+            const traditions = traditionsData?.traditions?.map(t => ({
+                id: t.id,
+                name: t.name,
+                practices: t.practices
+            })) || [];
+
+            const response = await fetch(PRACTICE_CHAT_API, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message, traditions })
+            });
+
+            const data = await response.json();
+
+            if (data.error) {
+                responseDiv.textContent = 'Sorry, something went wrong. Please try the quiz instead.';
+            } else {
+                // Try to parse as JSON, fallback to text
+                try {
+                    const parsed = JSON.parse(data.response);
+                    responseDiv.innerHTML = renderChatRecommendations(parsed);
+                } catch {
+                    // Fallback: render as text with basic formatting
+                    const escaped = data.response
+                        .replace(/&/g, '&amp;')
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;');
+                    responseDiv.innerHTML = escaped
+                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                        .replace(/\n\n/g, '<br><br>')
+                        .replace(/\n/g, '<br>');
+                }
+            }
+        } catch (error) {
+            console.error('Practice chat error:', error);
+            responseDiv.textContent = 'Could not connect to the recommendation service. Please try the quiz instead.';
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Ask';
+        }
+    });
+}
 
 async function loadData() {
     // Try CSV first
@@ -914,7 +1065,7 @@ function renderComparisonTable() {
     html += '</tr></thead><tbody>';
 
     sortedTraditions.forEach(tradition => {
-        html += '<tr>';
+        html += `<tr data-tradition-id="${tradition.id}">`;
         html += `<td>
             <div class="tradition-name-wrapper">
                 <div class="tradition-name">${tradition.name}</div>
