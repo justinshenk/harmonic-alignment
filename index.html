@@ -61,28 +61,28 @@
                     </div>
 
                     <div class="finder-tabs">
-                        <button id="tabChat" class="tab-button active" onclick="switchFinderTab('chat')">
+                        <button id="tabChat" class="tab-button" onclick="switchFinderTab('chat')">
                             <span class="tab-icon">💬</span>
                             Quick Suggestion
                         </button>
-                        <button id="tabQuiz" class="tab-button" onclick="switchFinderTab('quiz')">
+                        <button id="tabQuiz" class="tab-button active" onclick="switchFinderTab('quiz')">
                             <span class="tab-icon">📋</span>
                             Guided Quiz
                         </button>
                     </div>
 
                     <div class="finder-card">
-                        <div id="finderChat" class="finder-content active">
-                            <p class="finder-description">What's going on? Describe your situation and I'll suggest practices to explore.</p>
+                        <div id="finderChat" class="finder-content">
+                            <p class="finder-description">What's going on? Describe your situation to get practice suggestions.</p>
                             <form id="practiceChat" class="chat-form">
                                 <input type="text" id="chatInput" placeholder="e.g., I want to feel more present">
                                 <button type="submit" class="primary-button" id="chatSubmit">Find Practices</button>
                             </form>
                             <div id="chatResponse" class="chat-response"></div>
-                            <p class="finder-disclaimer">For exploration only, not medical advice. Deep practices develop over time.</p>
+                            <p class="finder-disclaimer">For exploration only, not medical advice.</p>
                         </div>
 
-                        <div id="finderQuiz" class="finder-content">
+                        <div id="finderQuiz" class="finder-content active">
                             <p class="finder-description">Answer a few questions to find practices tailored to your goals and circumstances.</p>
                             <label class="filter-checkbox">
                                 <input type="checkbox" id="excludeSubstances" checked>
@@ -416,9 +416,9 @@
                         <textarea id="contact-message" name="message" rows="4" placeholder="Your feedback, questions, or suggestions..."></textarea>
                     </div>
                     <div class="form-group">
-                        <label style="display: flex; align-items: center; cursor: pointer;">
-                            <input type="checkbox" id="contact-subscribe" name="subscribe" checked style="margin-right: 0.5rem;">
-                            Keep me updated on new research and features
+                        <label style="display: flex; align-items: flex-start; cursor: pointer; gap: 0.5rem;">
+                            <input type="checkbox" id="contact-subscribe" name="subscribe" checked style="margin-top: 0.25rem; flex-shrink: 0;">
+                            <span>Keep me updated on new research and features</span>
                         </label>
                     </div>
                     <div class="form-group">

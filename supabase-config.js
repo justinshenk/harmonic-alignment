@@ -99,13 +99,16 @@ function updateAuthUI(isLoggedIn) {
         }
     }
 
-    // Profile page logged in/out states
-    if (profileLoggedOut) {
-        profileLoggedOut.style.display = isLoggedIn ? 'none' : 'block';
-    }
+    // Profile page logged in/out states (skip if viewing shared profile)
+    const isViewingSharedProfile = new URLSearchParams(window.location.search).has('user');
+    if (!isViewingSharedProfile) {
+        if (profileLoggedOut) {
+            profileLoggedOut.style.display = isLoggedIn ? 'none' : 'block';
+        }
 
-    if (profileLoggedIn) {
-        profileLoggedIn.style.display = isLoggedIn ? 'block' : 'none';
+        if (profileLoggedIn) {
+            profileLoggedIn.style.display = isLoggedIn ? 'block' : 'none';
+        }
     }
 
     if (userDisplayName && currentUser) {
@@ -847,9 +850,11 @@ function closeAddPracticeModal() {
 document.addEventListener('DOMContentLoaded', () => {
     // Wait a bit for supabase to be available
     setTimeout(() => {
+        // Check for shared profile first (before auth redirects)
+        const isSharedProfile = checkForSharedProfile();
+
         if (typeof initAuth === 'function') {
             initAuth();
         }
-        initStarRating();
     }, 100);
 });
