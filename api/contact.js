@@ -23,7 +23,7 @@ export default async function handler(req, res) {
         console.error('[Contact] Missing AIRTABLE_BASE_ID or AIRTABLE_API_KEY');
         return res.status(200).json({
             success: true,
-            message: 'Thank you for your message! (Note: logging not configured)'
+            message: 'Thank you for your message!'
         });
     }
 
