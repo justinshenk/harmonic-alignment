@@ -41,6 +41,47 @@ header p {
     margin-bottom: 1.5rem;
 }
 
+/* Hamburger menu button - hidden on desktop */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 28px;
+    height: 20px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    position: absolute;
+    right: 1.5rem;
+    top: 1.5rem;
+}
+
+.hamburger span {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background: white;
+    border-radius: 2px;
+    transition: all 0.3s;
+}
+
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+}
+
+header {
+    position: relative;
+}
+
 nav {
     display: flex;
     gap: 1rem;
@@ -1039,34 +1080,79 @@ details.dimension-legend[open] summary span {
 
 @media (max-width: 768px) {
     header h1 {
-        font-size: 1.8rem;
+        font-size: 1.5rem;
+        padding-right: 3rem;
     }
 
     header p {
-        font-size: 0.9rem;
-        margin-bottom: 1rem;
+        font-size: 0.85rem;
+        margin-bottom: 0.5rem;
+        padding-right: 3rem;
     }
 
-    /* Mobile nav - grid layout */
+    /* Show hamburger on mobile */
+    .hamburger {
+        display: flex;
+    }
+
+    /* Mobile nav - vertical dropdown */
     nav {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        display: none;
+        flex-direction: column;
         gap: 0.5rem;
-        padding: 0.5rem;
+        padding: 1rem 0 0 0;
+        margin-top: 1rem;
+        border-top: 1px solid rgba(255,255,255,0.2);
+    }
+
+    nav.open {
+        display: flex;
     }
 
     nav button {
-        padding: 0.5rem 0.25rem;
-        font-size: 0.75rem;
-        white-space: nowrap;
-        text-align: center;
+        width: 100%;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        text-align: left;
+        border-radius: 8px;
     }
 
-    /* Make "Find Your Practice" span full width on top */
-    nav button:first-child {
-        grid-column: 1 / -1;
+    /* Finder card full width on mobile */
+    .finder-card {
+        max-width: 100%;
+        margin: 0;
+        border-radius: 12px;
+        padding: 1.25rem;
+    }
+
+    .finder-hero h2 {
+        font-size: 1.6rem;
+    }
+
+    .finder-hero p {
+        font-size: 1rem;
+    }
+
+    .finder-tabs {
+        gap: 0.5rem;
+    }
+
+    .tab-button {
+        padding: 0.6rem 1rem;
         font-size: 0.9rem;
-        padding: 0.6rem;
+        flex: 1;
+    }
+
+    .chat-form {
+        flex-direction: column;
+    }
+
+    .chat-form input {
+        width: 100%;
+    }
+
+    .chat-form button {
+        width: 100%;
     }
 
     /* Quiz landing page mobile */

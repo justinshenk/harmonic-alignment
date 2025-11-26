@@ -124,12 +124,34 @@ const PRACTICE_CHAT_API = window.location.hostname === 'localhost'
 document.addEventListener('DOMContentLoaded', async () => {
     await loadData();
     initializeNavigation();
+    initializeHamburgerMenu();
     initializeQuiz();
     initializePracticeChat();
     renderComparisonTable();
     renderEvolutionTree();
     initializeResearchSection();
 });
+
+// Hamburger menu toggle
+function initializeHamburgerMenu() {
+    const hamburger = document.getElementById('hamburgerBtn');
+    const nav = document.getElementById('mainNav');
+
+    if (!hamburger || !nav) return;
+
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        nav.classList.toggle('open');
+    });
+
+    // Close menu when a nav button is clicked
+    nav.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', () => {
+            hamburger.classList.remove('active');
+            nav.classList.remove('open');
+        });
+    });
+}
 
 // Tab switching for finder
 function switchFinderTab(tab) {
