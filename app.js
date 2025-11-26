@@ -887,12 +887,23 @@ function getOriginCategory(origin) {
     return 'unknown';
 }
 
+// Substance-related practice IDs
+const substancePractices = ['psilocybin-therapy', 'mdma-therapy', 'ayahuasca', 'ketamine-therapy'];
+
 function calculateRecommendations() {
     if (!traditionsData) return [];
+
+    // Check if we should exclude substance practices
+    const excludeSubstances = document.getElementById('excludeSubstances')?.checked ?? true;
 
     // Build weights from answers
     const weights = {};
     const filters = [];
+
+    // Add substance filter if checkbox is checked
+    if (excludeSubstances) {
+        filters.push(t => !substancePractices.includes(t.id));
+    }
 
     quizState.questions.forEach(question => {
         const answer = quizState.answers[question.id];

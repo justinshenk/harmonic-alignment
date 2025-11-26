@@ -603,6 +603,24 @@ details.dimension-legend[open] summary span {
     margin-top: 1rem;
 }
 
+/* Filter checkbox */
+.filter-checkbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    color: #666;
+    cursor: pointer;
+}
+
+.filter-checkbox input {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
 .finder-disclaimer {
     text-align: center;
     font-size: 0.8rem;
