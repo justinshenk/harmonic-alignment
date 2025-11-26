@@ -507,6 +507,32 @@ details.dimension-legend[open] summary span {
     transform: none;
 }
 
+.primary-button.loading {
+    pointer-events: none;
+}
+
+.primary-button.loading .dot {
+    display: inline-block;
+    animation: jump 1.4s ease-in-out infinite;
+}
+
+.primary-button.loading .dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.primary-button.loading .dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes jump {
+    0%, 60%, 100% {
+        transform: translateY(0);
+    }
+    30% {
+        transform: translateY(-4px);
+    }
+}
+
 /* Finder hero */
 .finder-hero {
     text-align: center;

@@ -285,7 +285,8 @@ function initializePracticeChat() {
 
         // Show loading state
         submitBtn.disabled = true;
-        submitBtn.textContent = '...';
+        submitBtn.classList.add('loading');
+        submitBtn.innerHTML = '<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>';
         responseDiv.style.display = 'block';
         responseDiv.innerHTML = '<span style="color: #888;">Finding practices for you...</span>';
 
@@ -329,6 +330,7 @@ function initializePracticeChat() {
             responseDiv.textContent = 'Could not connect to the recommendation service. Please try the quiz instead.';
         } finally {
             submitBtn.disabled = false;
+            submitBtn.classList.remove('loading');
             submitBtn.textContent = 'Ask';
         }
     });
