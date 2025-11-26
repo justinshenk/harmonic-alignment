@@ -1079,20 +1079,28 @@ details.dimension-legend[open] summary span {
 }
 
 @media (max-width: 768px) {
+    /* Reduce header padding */
+    header {
+        padding: 1rem;
+    }
+
     header h1 {
-        font-size: 1.5rem;
-        padding-right: 3rem;
+        font-size: 1.4rem;
+        padding-right: 2.5rem;
+        margin-bottom: 0.25rem;
     }
 
     header p {
-        font-size: 0.85rem;
-        margin-bottom: 0.5rem;
-        padding-right: 3rem;
+        font-size: 0.8rem;
+        margin-bottom: 0;
+        padding-right: 2.5rem;
     }
 
     /* Show hamburger on mobile */
     .hamburger {
         display: flex;
+        top: 1rem;
+        right: 1rem;
     }
 
     /* Mobile nav - vertical dropdown */
@@ -1100,8 +1108,8 @@ details.dimension-legend[open] summary span {
         display: none;
         flex-direction: column;
         gap: 0.5rem;
-        padding: 1rem 0 0 0;
-        margin-top: 1rem;
+        padding: 0.75rem 0 0 0;
+        margin-top: 0.75rem;
         border-top: 1px solid rgba(255,255,255,0.2);
     }
 
@@ -1111,48 +1119,73 @@ details.dimension-legend[open] summary span {
 
     nav button {
         width: 100%;
-        padding: 0.75rem 1rem;
-        font-size: 1rem;
+        padding: 0.6rem 1rem;
+        font-size: 0.95rem;
         text-align: left;
         border-radius: 8px;
     }
 
-    /* Finder card full width on mobile */
-    .finder-card {
-        max-width: 100%;
-        margin: 0;
-        border-radius: 12px;
-        padding: 1.25rem;
+    /* Reduce main padding */
+    main {
+        margin: 1rem auto;
+        padding: 0 0.75rem;
+    }
+
+    .section {
+        padding: 1rem;
+        border-radius: 8px;
+    }
+
+    /* Finder section tighter */
+    .finder-hero {
+        margin-bottom: 1rem;
     }
 
     .finder-hero h2 {
-        font-size: 1.6rem;
+        font-size: 1.5rem;
+        margin-bottom: 0.25rem;
     }
 
     .finder-hero p {
-        font-size: 1rem;
+        font-size: 0.9rem;
     }
 
     .finder-tabs {
         gap: 0.5rem;
+        margin-bottom: 1rem;
     }
 
     .tab-button {
-        padding: 0.6rem 1rem;
-        font-size: 0.9rem;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.85rem;
         flex: 1;
+    }
+
+    .finder-card {
+        max-width: 100%;
+        margin: 0;
+        border-radius: 10px;
+        padding: 1rem;
+    }
+
+    .finder-description {
+        font-size: 0.95rem;
+        margin-bottom: 1rem;
     }
 
     .chat-form {
         flex-direction: column;
+        gap: 0.5rem;
     }
 
     .chat-form input {
         width: 100%;
+        padding: 0.75rem;
     }
 
     .chat-form button {
         width: 100%;
+        padding: 0.75rem;
     }
 
     /* Quiz landing page mobile */
