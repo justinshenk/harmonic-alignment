@@ -1047,29 +1047,26 @@ details.dimension-legend[open] summary span {
         margin-bottom: 1rem;
     }
 
-    /* Mobile nav - horizontal scroll */
+    /* Mobile nav - grid layout */
     nav {
-        display: flex;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
         gap: 0.5rem;
-        padding: 0.5rem 0;
-        margin: 0 -1rem;
-        padding-left: 1rem;
-        padding-right: 1rem;
-        scrollbar-width: none;
-    }
-
-    nav::-webkit-scrollbar {
-        display: none;
+        padding: 0.5rem;
     }
 
     nav button {
-        flex-shrink: 0;
-        padding: 0.4rem 0.8rem;
-        font-size: 0.85rem;
+        padding: 0.5rem 0.25rem;
+        font-size: 0.75rem;
         white-space: nowrap;
+        text-align: center;
+    }
+
+    /* Make "Find Your Practice" span full width on top */
+    nav button:first-child {
+        grid-column: 1 / -1;
+        font-size: 0.9rem;
+        padding: 0.6rem;
     }
 
     /* Quiz landing page mobile */
