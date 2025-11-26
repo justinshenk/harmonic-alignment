@@ -520,7 +520,7 @@
                 <input type="hidden" id="practiceModalId" name="practiceId">
 
                 <div class="form-group">
-                    <label for="practiceStatus">Status</label>
+                    <label for="practiceStatus">Experience Level</label>
                     <select id="practiceStatus" name="status">
                         <option value="interested">Interested</option>
                         <option value="learning">Learning</option>
@@ -530,8 +530,25 @@
                 </div>
 
                 <div class="form-group">
+                    <label>Your Rating</label>
+                    <div class="star-rating" id="practiceRating">
+                        <button type="button" data-rating="1" class="star">★</button>
+                        <button type="button" data-rating="2" class="star">★</button>
+                        <button type="button" data-rating="3" class="star">★</button>
+                        <button type="button" data-rating="4" class="star">★</button>
+                        <button type="button" data-rating="5" class="star">★</button>
+                    </div>
+                    <input type="hidden" id="practiceRatingValue" name="rating" value="">
+                </div>
+
+                <div class="form-group">
                     <label for="practiceNotes">Notes</label>
-                    <textarea id="practiceNotes" name="notes" rows="4" placeholder="How has this practice helped you? When do you use it?"></textarea>
+                    <textarea id="practiceNotes" name="notes" rows="3" placeholder="How has this practice helped you? When do you use it?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="practiceResource">Favorite Resource</label>
+                    <input type="url" id="practiceResource" name="favorite_resource" placeholder="https://... (guided meditation, teacher, app)">
                 </div>
 
                 <div style="display: flex; gap: 1rem;">

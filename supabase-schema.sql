@@ -15,14 +15,9 @@ create table public.user_practices (
   user_id uuid references auth.users on delete cascade not null,
   practice_id text not null,  -- matches tradition id from traditions.json
   status text check (status in ('interested', 'learning', 'practicing', 'experienced')) default 'interested',
-  -- Effectiveness ratings (1-5) for different situations
-  effectiveness_anxiety integer check (effectiveness_anxiety between 1 and 5),
-  effectiveness_focus integer check (effectiveness_focus between 1 and 5),
-  effectiveness_mood integer check (effectiveness_mood between 1 and 5),
-  effectiveness_sleep integer check (effectiveness_sleep between 1 and 5),
-  effectiveness_relationships integer check (effectiveness_relationships between 1 and 5),
-  effectiveness_overall integer check (effectiveness_overall between 1 and 5),
+  rating integer check (rating between 1 and 5),  -- personal effectiveness rating 1-5
   notes text,
+  favorite_resource text,  -- URL to favorite guided meditation, teacher, app, etc.
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
   updated_at timestamp with time zone default timezone('utc'::text, now()) not null,
   unique(user_id, practice_id)

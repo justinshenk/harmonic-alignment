@@ -290,6 +290,12 @@ function renderUserPractices(practices) {
 
         for (const practice of items) {
             const tradition = traditionsData?.traditions?.find(t => t.id === practice.practice_id);
+            const ratingStars = practice.rating
+                ? `<div class="practice-rating">${'★'.repeat(practice.rating)}${'☆'.repeat(5 - practice.rating)}</div>`
+                : '';
+            const resourceLink = practice.favorite_resource
+                ? `<a href="${practice.favorite_resource}" target="_blank" rel="noopener" class="practice-resource">Favorite resource →</a>`
+                : '';
             html += `
                 <div class="practice-card" data-practice-id="${practice.practice_id}">
                     <div class="practice-card-header">
@@ -297,7 +303,9 @@ function renderUserPractices(practices) {
                         <button class="icon-button" onclick="editUserPractice('${practice.practice_id}')" title="Edit">✏️</button>
                     </div>
                     <p class="practice-origin">${tradition?.origin || ''}</p>
+                    ${ratingStars}
                     ${practice.notes ? `<p class="practice-notes">${practice.notes}</p>` : ''}
+                    ${resourceLink}
                 </div>
             `;
         }
@@ -327,9 +335,36 @@ function editUserPractice(practiceId) {
             document.getElementById('practiceModalId').value = practiceId;
             document.getElementById('practiceStatus').value = data?.status || 'interested';
             document.getElementById('practiceNotes').value = data?.notes || '';
+            document.getElementById('practiceResource').value = data?.favorite_resource || '';
+            setStarRating(data?.rating || 0);
 
             modal.style.display = 'flex';
         });
+}
+
+// Set star rating display
+function setStarRating(rating) {
+    const ratingInput = document.getElementById('practiceRatingValue');
+    const stars = document.querySelectorAll('#practiceRating .star');
+
+    ratingInput.value = rating || '';
+
+    stars.forEach((star, index) => {
+        star.classList.toggle('active', index < rating);
+    });
+}
+
+// Initialize star rating clicks
+function initStarRating() {
+    const container = document.getElementById('practiceRating');
+    if (!container) return;
+
+    container.addEventListener('click', (e) => {
+        if (e.target.classList.contains('star')) {
+            const rating = parseInt(e.target.dataset.rating);
+            setStarRating(rating);
+        }
+    });
 }
 
 // Close practice modal
@@ -345,7 +380,9 @@ async function handlePracticeSubmit(e) {
     const practiceData = {
         practice_id: form.practiceId.value,
         status: form.status.value,
-        notes: form.notes.value || null
+        rating: form.rating.value ? parseInt(form.rating.value) : null,
+        notes: form.notes.value || null,
+        favorite_resource: form.favorite_resource.value || null
     };
 
     await saveUserPractice(practiceData);
@@ -429,11 +466,19 @@ function renderSharedPractices(practices) {
 
         for (const practice of items) {
             const tradition = traditionsData?.traditions?.find(t => t.id === practice.practice_id);
+            const ratingStars = practice.rating
+                ? `<div class="practice-rating">${'★'.repeat(practice.rating)}${'☆'.repeat(5 - practice.rating)}</div>`
+                : '';
+            const resourceLink = practice.favorite_resource
+                ? `<a href="${practice.favorite_resource}" target="_blank" rel="noopener" class="practice-resource">Favorite resource →</a>`
+                : '';
             html += `
                 <div class="practice-card">
                     <h4>${tradition?.name || practice.practice_id}</h4>
                     <p class="practice-origin">${tradition?.origin || ''}</p>
+                    ${ratingStars}
                     ${practice.notes ? `<p class="practice-notes">${practice.notes}</p>` : ''}
+                    ${resourceLink}
                 </div>
             `;
         }
@@ -688,5 +733,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (typeof initAuth === 'function') {
             initAuth();
         }
+        initStarRating();
     }, 100);
 });
