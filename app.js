@@ -154,14 +154,17 @@ function renderChatRecommendations(data) {
 
     let html = '<div class="chat-recommendations">';
     data.recommendations.forEach(rec => {
+        // Escape all user-controlled data to prevent XSS
+        const escapeHtml = (str) => (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
         const escaped = {
-            practice: (rec.practice || '').replace(/</g, '&lt;').replace(/>/g, '&gt;'),
-            traditionName: (rec.traditionName || '').replace(/</g, '&lt;').replace(/>/g, '&gt;'),
-            why: (rec.why || '').replace(/</g, '&lt;').replace(/>/g, '&gt;'),
-            tryNow: (rec.tryNow || '').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            practice: escapeHtml(rec.practice),
+            traditionName: escapeHtml(rec.traditionName),
+            why: escapeHtml(rec.why),
+            tryNow: escapeHtml(rec.tryNow),
+            traditionId: escapeHtml(rec.traditionId)
         };
-        const traditionLink = rec.traditionId
-            ? `<a href="#" onclick="viewTraditionInCompare('${rec.traditionId}'); return false;" class="tradition-link">${escaped.traditionName}</a>`
+        const traditionLink = escaped.traditionId
+            ? `<a href="#" onclick="viewTraditionInCompare('${escaped.traditionId}'); return false;" class="tradition-link">${escaped.traditionName}</a>`
             : escaped.traditionName;
 
         html += `<div class="recommendation-item">
@@ -174,7 +177,7 @@ function renderChatRecommendations(data) {
                 <span class="try-label">Try now:</span> ${escaped.tryNow}
             </div>
             <div class="rec-actions">
-                <a href="#" onclick="viewTraditionInCompare('${rec.traditionId || ''}'); return false;" class="action-link">Learn more about this tradition</a>
+                <a href="#" onclick="viewTraditionInCompare('${escaped.traditionId}'); return false;" class="action-link">Learn more about this tradition</a>
             </div>
         </div>`;
     });
