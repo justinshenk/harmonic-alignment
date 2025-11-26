@@ -549,50 +549,66 @@ function initializeNavigation() {
         aboutView: 'about-section'
     };
 
-    // Restore saved section from localStorage
-    const savedSection = localStorage.getItem('activeSection');
-    if (savedSection && buttons[savedSection]) {
-        // Remove default active states
+    // Function to switch to a section
+    function switchToSection(buttonId, pushState = true) {
+        if (!buttons[buttonId]) return;
+
+        // Update active button
         document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(buttonId).classList.add('active');
+
+        // Update active section
         document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+        document.getElementById(buttons[buttonId]).classList.add('active');
 
-        // Activate saved section
-        document.getElementById(savedSection).classList.add('active');
-        document.getElementById(buttons[savedSection]).classList.add('active');
+        // Save to localStorage
+        localStorage.setItem('activeSection', buttonId);
 
-        // Initialize complexity view if needed
-        if (savedSection === 'complexityView') {
+        // Push to browser history (unless we're responding to popstate)
+        if (pushState) {
+            history.pushState({ section: buttonId }, '', `#${buttonId}`);
+        }
+
+        // Initialize complexity visualizations when switching to that view
+        if (buttonId === 'complexityView') {
             initializeComplexityView();
         }
 
-        // Initialize attention view if needed
-        if (savedSection === 'attentionView') {
+        // Initialize attention mapping when switching to that view
+        if (buttonId === 'attentionView') {
             renderAttentionClassification();
+        }
+    }
+
+    // Handle browser back/forward buttons
+    window.addEventListener('popstate', (event) => {
+        if (event.state && event.state.section) {
+            switchToSection(event.state.section, false);
+        } else {
+            // Default to quiz view if no state
+            switchToSection('quizView', false);
+        }
+    });
+
+    // Check URL hash on load
+    const hash = window.location.hash.slice(1);
+    if (hash && buttons[hash]) {
+        switchToSection(hash, false);
+        history.replaceState({ section: hash }, '', `#${hash}`);
+    } else {
+        // Restore saved section from localStorage
+        const savedSection = localStorage.getItem('activeSection');
+        if (savedSection && buttons[savedSection]) {
+            switchToSection(savedSection, false);
+            history.replaceState({ section: savedSection }, '', `#${savedSection}`);
+        } else {
+            history.replaceState({ section: 'quizView' }, '', '#quizView');
         }
     }
 
     Object.keys(buttons).forEach(buttonId => {
         document.getElementById(buttonId).addEventListener('click', () => {
-            // Update active button
-            document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(buttonId).classList.add('active');
-
-            // Update active section
-            document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
-            document.getElementById(buttons[buttonId]).classList.add('active');
-
-            // Save to localStorage
-            localStorage.setItem('activeSection', buttonId);
-
-            // Initialize complexity visualizations when switching to that view
-            if (buttonId === 'complexityView') {
-                initializeComplexityView();
-            }
-
-            // Initialize attention mapping when switching to that view
-            if (buttonId === 'attentionView') {
-                renderAttentionClassification();
-            }
+            switchToSection(buttonId, true);
         });
     });
 
