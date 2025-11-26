@@ -7,6 +7,7 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // Auth state
 let currentUser = null;
+let isViewingSharedProfile = false;
 
 // Initialize auth state
 async function initAuth() {
@@ -33,7 +34,6 @@ async function initAuth() {
             closeAuthModal();
             showNotification('Signed in successfully!');
             // Navigate to My Practices (unless viewing a shared profile)
-            const isViewingSharedProfile = new URLSearchParams(window.location.search).has('user');
             if (!isViewingSharedProfile) {
                 document.getElementById('profileView')?.click();
             }
@@ -111,7 +111,6 @@ function updateAuthUI(isLoggedIn) {
     }
 
     // Profile page logged in/out states (skip if viewing shared profile)
-    const isViewingSharedProfile = new URLSearchParams(window.location.search).has('user');
     if (!isViewingSharedProfile) {
         if (profileLoggedOut) {
             profileLoggedOut.style.display = isLoggedIn ? 'none' : 'block';
@@ -660,13 +659,19 @@ function checkForSharedProfile() {
     const sharedUserId = params.get('user');
 
     if (sharedUserId) {
-        // Navigate to profile section first
-        document.getElementById('profileView')?.click();
+        // Set global flag before any navigation
+        isViewingSharedProfile = true;
 
         // Hide other sections, show shared view
         document.getElementById('profileLoggedOut').style.display = 'none';
         document.getElementById('profileLoggedIn').style.display = 'none';
         document.getElementById('sharedProfileView').style.display = 'block';
+
+        // Show profile section
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById('profile-section')?.classList.add('active');
+        document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+        document.getElementById('profileView')?.classList.add('active');
 
         loadSharedProfile(sharedUserId);
         return true;
