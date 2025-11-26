@@ -30,6 +30,41 @@ let quizState = {
             ]
         },
         {
+            id: 'tradition',
+            question: 'What\'s your relationship to spiritual/religious traditions?',
+            type: 'single',
+            options: [
+                { value: 'secular', label: 'Prefer secular, evidence-based practices' },
+                { value: 'open', label: 'Open to practices from any tradition' },
+                { value: 'spiritual', label: 'Open to spiritual but not religious practices' },
+                { value: 'religious', label: 'I have a religious background' }
+            ]
+        },
+        {
+            id: 'religiousBackground',
+            question: 'Which tradition(s)?',
+            type: 'multiple',
+            showIf: (answers) => answers.tradition === 'religious',
+            options: [
+                { value: 'buddhism', label: 'Buddhism' },
+                { value: 'christianity', label: 'Christianity' },
+                { value: 'judaism', label: 'Judaism' },
+                { value: 'islam', label: 'Islam' },
+                { value: 'hinduism', label: 'Hinduism' },
+                { value: 'other', label: 'Other' }
+            ]
+        },
+        {
+            id: 'traditionPreference',
+            question: 'Do you prefer practices from your tradition(s)?',
+            type: 'single',
+            showIf: (answers) => answers.tradition === 'religious',
+            options: [
+                { value: 'prefer', label: 'Yes, prioritize practices from my tradition(s)' },
+                { value: 'open', label: 'No, I\'m open to all traditions' }
+            ]
+        },
+        {
             id: 'timeCommitment',
             question: 'How much time can you commit?',
             type: 'single',
@@ -419,6 +454,37 @@ function startQuiz() {
     renderQuestion();
 }
 
+// Check if a question should be shown based on showIf condition
+function shouldShowQuestion(question) {
+    if (!question.showIf) return true;
+    return question.showIf(quizState.answers);
+}
+
+// Get list of currently visible questions based on answers
+function getVisibleQuestions() {
+    return quizState.questions.filter(q => shouldShowQuestion(q));
+}
+
+// Find next visible question index
+function findNextVisibleQuestion(fromIndex) {
+    for (let i = fromIndex + 1; i < quizState.questions.length; i++) {
+        if (shouldShowQuestion(quizState.questions[i])) {
+            return i;
+        }
+    }
+    return -1; // No more questions
+}
+
+// Find previous visible question index
+function findPrevVisibleQuestion(fromIndex) {
+    for (let i = fromIndex - 1; i >= 0; i--) {
+        if (shouldShowQuestion(quizState.questions[i])) {
+            return i;
+        }
+    }
+    return -1; // No previous questions
+}
+
 function restartQuiz() {
     document.getElementById('quiz-results').classList.remove('active');
     document.getElementById('quiz-intro').classList.add('active');
@@ -426,14 +492,16 @@ function restartQuiz() {
 
 function renderQuestion() {
     const question = quizState.questions[quizState.currentQuestion];
-    const totalQuestions = quizState.questions.length;
+    const visibleQuestions = getVisibleQuestions();
+    const currentVisibleIndex = visibleQuestions.findIndex(q => q.id === question.id);
+    const totalVisible = visibleQuestions.length;
 
-    document.getElementById('questionNumber').textContent = `Question ${quizState.currentQuestion + 1} of ${totalQuestions}`;
+    document.getElementById('questionNumber').textContent = `Question ${currentVisibleIndex + 1} of ${totalVisible}`;
 
     // Update progress bar
     const progressBar = document.getElementById('progressBar');
     if (progressBar) {
-        const progress = ((quizState.currentQuestion + 1) / totalQuestions) * 100;
+        const progress = ((currentVisibleIndex + 1) / totalVisible) * 100;
         progressBar.style.width = `${progress}%`;
     }
 
@@ -469,8 +537,10 @@ function renderQuestion() {
     document.getElementById('questionContainer').innerHTML = html;
 
     // Update navigation buttons
-    document.getElementById('prevQuestion').style.display = quizState.currentQuestion > 0 ? 'inline-block' : 'none';
-    document.getElementById('nextQuestion').textContent = quizState.currentQuestion === totalQuestions - 1 ? 'See Results' : 'Next';
+    const hasPrev = findPrevVisibleQuestion(quizState.currentQuestion) >= 0;
+    const isLastVisible = currentVisibleIndex === totalVisible - 1;
+    document.getElementById('prevQuestion').style.display = hasPrev ? 'inline-block' : 'none';
+    document.getElementById('nextQuestion').textContent = isLastVisible ? 'See Results' : 'Next';
 
     // Add change listeners to save answers
     const inputs = document.querySelectorAll(`input[name="${question.id}"]`);
@@ -496,8 +566,9 @@ function saveAnswer(question) {
 }
 
 function prevQuestion() {
-    if (quizState.currentQuestion > 0) {
-        quizState.currentQuestion--;
+    const prevIndex = findPrevVisibleQuestion(quizState.currentQuestion);
+    if (prevIndex >= 0) {
+        quizState.currentQuestion = prevIndex;
         renderQuestion();
     }
 }
@@ -516,8 +587,9 @@ function nextQuestion() {
         return;
     }
 
-    if (quizState.currentQuestion < quizState.questions.length - 1) {
-        quizState.currentQuestion++;
+    const nextIndex = findNextVisibleQuestion(quizState.currentQuestion);
+    if (nextIndex >= 0) {
+        quizState.currentQuestion = nextIndex;
         renderQuestion();
     } else {
         showResults();
@@ -530,6 +602,39 @@ function showResults() {
 
     const recommendations = calculateRecommendations();
     renderResults(recommendations);
+}
+
+// Categorize tradition origins
+const originCategories = {
+    secular: [
+        'Western Phenomenology', 'Developmental Psychology', 'Humanistic Psychology',
+        'Trauma Therapy', 'Clinical Mindfulness', 'Clinical Psychology', 'Psychotherapy',
+        'Psychedelic Medicine', 'Somatic Therapy', 'Modern Breathwork', 'Conflict Resolution',
+        'Relational Practice', 'Transpersonal Psychology', 'Secular Ethics', 'Ancient Greek Philosophy'
+    ],
+    spiritual: [
+        'Buddhist', 'Buddhist (Theravada)', 'Tibetan Buddhism', 'Tibetan Buddhism / Dzogchen',
+        'Japanese Buddhism', 'Vedic Tradition', 'Indian', 'Chinese', 'Chinese Martial Arts'
+    ],
+    religious: [
+        'Jewish', 'Christian Mysticism', 'Islamic Mysticism', 'Hindu Philosophy', 'Amazonian Shamanism'
+    ]
+};
+
+// Map user's religious background to tradition origins
+const religiousBackgroundToOrigins = {
+    buddhism: ['Buddhist', 'Buddhist (Theravada)', 'Tibetan Buddhism', 'Tibetan Buddhism / Dzogchen', 'Japanese Buddhism'],
+    christianity: ['Christian Mysticism'],
+    judaism: ['Jewish'],
+    islam: ['Islamic Mysticism'],
+    hinduism: ['Hindu Philosophy', 'Vedic Tradition', 'Indian']
+};
+
+function getOriginCategory(origin) {
+    if (originCategories.secular.includes(origin)) return 'secular';
+    if (originCategories.spiritual.includes(origin)) return 'spiritual';
+    if (originCategories.religious.includes(origin)) return 'religious';
+    return 'unknown';
 }
 
 function calculateRecommendations() {
@@ -569,6 +674,11 @@ function calculateRecommendations() {
         }
     });
 
+    // Get tradition preferences
+    const traditionPref = quizState.answers.tradition || 'open';
+    const religiousBackgrounds = quizState.answers.religiousBackground || [];
+    const preferOwnTradition = quizState.answers.traditionPreference === 'prefer';
+
     // Score each tradition
     const scored = traditionsData.traditions.map(tradition => {
         // Apply filters
@@ -581,6 +691,29 @@ function calculateRecommendations() {
             const effectiveness = tradition.effectiveness[metric] || 0;
             score += effectiveness * weight;
         });
+
+        // Apply tradition preference adjustments
+        const category = getOriginCategory(tradition.origin);
+
+        if (traditionPref === 'secular') {
+            // Deprioritize religious and spiritual traditions
+            if (category === 'religious') {
+                score *= 0.3; // Significant penalty
+            } else if (category === 'spiritual') {
+                score *= 0.6; // Moderate penalty
+            }
+        } else if (traditionPref === 'spiritual') {
+            // Deprioritize strictly religious traditions
+            if (category === 'religious') {
+                score *= 0.5;
+            }
+        } else if (traditionPref === 'religious' && preferOwnTradition) {
+            // Boost matching traditions
+            const matchingOrigins = religiousBackgrounds.flatMap(bg => religiousBackgroundToOrigins[bg] || []);
+            if (matchingOrigins.includes(tradition.origin)) {
+                score *= 1.5; // Boost matching tradition
+            }
+        }
 
         // Calculate match reasons
         const matchedAreas = Object.entries(weights)

@@ -1592,6 +1592,52 @@
         "systemic": 2,
         "transpersonal": 5
       }
+    },
+    {
+      "id": "secular-character-dev",
+      "name": "Secular Character Development",
+      "origin": "Secular Ethics",
+      "yearOrigin": -500,
+      "parentTraditions": [
+        "stoicism"
+      ],
+      "description": "Systematic virtue cultivation through daily tracking, self-examination, and intentional habit formation. Draws from Stoic, Pythagorean, and Enlightenment traditions. Benjamin Franklin's 13 virtues is a well-known example.",
+      "practices": [
+        "Daily virtue tracking",
+        "Evening self-examination",
+        "Weekly virtue focus",
+        "Journaling and reflection"
+      ],
+      "timeCommitment": "10-15 min daily",
+      "guidanceNeeded": "Low",
+      "accessibility": "Very High",
+      "effectiveness": {
+        "adhd": 3,
+        "depression": 3,
+        "anxiety": 3,
+        "trauma": 2,
+        "focus": 4,
+        "metacognition": 5,
+        "insight": 4,
+        "compassion": 3,
+        "communication": 3,
+        "empathy": 3,
+        "bodyAwareness": 2,
+        "emotionalRegulation": 4
+      },
+      "researchSupport": "Low",
+      "citations": [
+        "Franklin, B. (1791). Autobiography",
+        "Hadot, P. (1995). Philosophy as a Way of Life"
+      ],
+      "complexityProfile": {
+        "somatic": 1,
+        "intrapsychic": 4,
+        "relational": 3,
+        "collective": 2,
+        "systemic": 2,
+        "transpersonal": 1
+      }
     }
   ],
   "dimensions": {
