@@ -28,11 +28,11 @@ export default async function handler(req, res) {
     }
 
     try {
-        const { email, name, message } = req.body;
+        const { email, name, message, subscribe, source } = req.body;
 
         // Validate required fields
-        if (!email || !message) {
-            return res.status(400).json({ error: 'Email and message are required' });
+        if (!email) {
+            return res.status(400).json({ error: 'Email is required' });
         }
 
         // Prepare Airtable record
@@ -40,7 +40,9 @@ export default async function handler(req, res) {
             fields: {
                 'Email': email,
                 'Name': name || '',
-                'Message': message,
+                'Message': message || '',
+                'Subscribe': subscribe === true || subscribe === 'true',
+                'Source': source || '',
                 'Timestamp': new Date().toISOString(),
                 'Type': 'Contact'
             }
