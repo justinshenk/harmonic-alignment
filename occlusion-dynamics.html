@@ -1,0 +1,2369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Occlusion Dynamics - Harmonic Alignment</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        .theory-content {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .od-section {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+            display: block !important;
+        }
+        .od-section:last-child {
+            border-bottom: none;
+        }
+        h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        h3 {
+            color: var(--secondary);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .axiom-box {
+            background: #1a1a2e;
+            color: #eee;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+        .axiom-box .label {
+            color: #4ecdc4;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        .definition-box {
+            background: #f8f9fa;
+            padding: 1.25rem;
+            border-left: 4px solid var(--secondary);
+            margin: 1rem 0;
+        }
+        .prediction-box {
+            background: #fff8e6;
+            padding: 1.25rem;
+            border-left: 4px solid #f39c12;
+            margin: 1rem 0;
+        }
+        .example-box {
+            background: #f0f8f0;
+            padding: 1.25rem;
+            border-left: 4px solid var(--success);
+            margin: 1rem 0;
+        }
+        .quote-box {
+            background: #f5f5f5;
+            padding: 1.25rem;
+            border-left: 4px solid #666;
+            margin: 1rem 0;
+            font-style: italic;
+        }
+        .quote-box .attribution {
+            font-style: normal;
+            color: #666;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.95rem;
+        }
+        th, td {
+            border: 1px solid var(--border);
+            padding: 0.6rem;
+            text-align: left;
+        }
+        th {
+            background: var(--primary);
+            color: white;
+        }
+        .state-display {
+            font-family: 'IBM Plex Mono', monospace;
+            background: #f5f5f5;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.85rem;
+        }
+        .T { color: #27ae60; font-weight: bold; }
+        .O { color: #e67e22; font-weight: bold; }
+        .B { color: #95a5a6; font-weight: bold; }
+        .toc {
+            background: var(--bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        .toc h3 {
+            margin-top: 0;
+            color: var(--primary);
+        }
+        .toc ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+        .toc li {
+            margin: 0.4rem 0;
+        }
+        .toc a {
+            color: var(--secondary);
+            text-decoration: none;
+        }
+        .toc a:hover {
+            text-decoration: underline;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            color: var(--secondary);
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        #landscape-container {
+            width: 100%;
+            height: 500px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: #fafafa;
+            margin: 1rem 0;
+        }
+        #practice-table-container {
+            overflow-x: auto;
+        }
+        .practice-row:hover {
+            background: #f5f5f5;
+        }
+        .region-header {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            font-size: 0.75rem;
+        }
+        .formula {
+            font-family: 'IBM Plex Mono', monospace;
+            background: #f5f5f5;
+            padding: 0.75rem 1rem;
+            border-radius: 4px;
+            display: block;
+            margin: 0.5rem 0;
+            overflow-x: auto;
+        }
+        .inline-formula {
+            font-family: 'IBM Plex Mono', monospace;
+            background: #f5f5f5;
+            padding: 0.1rem 0.3rem;
+            border-radius: 2px;
+        }
+        /* List styling */
+        .od-section ul, .od-section ol {
+            padding-left: 1.5rem;
+            margin: 0.75rem 0;
+        }
+        .od-section li {
+            margin: 0.4rem 0;
+        }
+        .example-box ol {
+            padding-left: 1.25rem;
+            margin: 0.5rem 0;
+        }
+        .example-box li {
+            margin: 0.3rem 0;
+        }
+        /* Sortable headers */
+        th.sortable {
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+            padding-right: 1.2rem;
+        }
+        th.sortable:hover {
+            background: var(--secondary);
+        }
+        th.sortable::after {
+            content: '⇅';
+            position: absolute;
+            right: 0.3rem;
+            opacity: 0.5;
+            font-size: 0.8rem;
+        }
+        th.sortable.asc::after {
+            content: '↑';
+            opacity: 1;
+        }
+        th.sortable.desc::after {
+            content: '↓';
+            opacity: 1;
+        }
+        /* Lens Stack Visualization */
+        #lens-visualization {
+            background: linear-gradient(180deg, #0a0a1a 0%, #1a1a3a 100%);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        #lens-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            height: 320px;
+            position: relative;
+        }
+        .light-source {
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, #fff 0%, #ffd700 50%, transparent 70%);
+            border-radius: 50%;
+            box-shadow: 0 0 40px #ffd700, 0 0 80px #ffa500;
+            animation: pulse-light 2s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+        @keyframes pulse-light {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.9; }
+        }
+        .light-beam {
+            position: absolute;
+            left: 80px;
+            top: 50%;
+            height: 4px;
+            background: linear-gradient(90deg, rgba(255,215,0,0.8), rgba(255,215,0,0.1));
+            transform: translateY(-50%);
+            transition: width 0.5s ease;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .lens-stack {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+        .lens {
+            width: 50px;
+            height: 140px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            border: 2px solid transparent;
+        }
+        .lens:hover {
+            transform: scale(1.05);
+        }
+        .lens.T {
+            background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            border-color: rgba(39, 174, 96, 0.5);
+            box-shadow: 0 0 20px rgba(39, 174, 96, 0.2);
+        }
+        .lens.O {
+            background: linear-gradient(180deg, rgba(230, 126, 34, 0.4) 0%, rgba(230, 126, 34, 0.2) 100%);
+            border-color: rgba(230, 126, 34, 0.8);
+            box-shadow: 0 0 20px rgba(230, 126, 34, 0.4), inset 0 0 30px rgba(255,255,255,0.1);
+        }
+        .lens.B {
+            background: linear-gradient(180deg, #2c2c2c 0%, #1a1a1a 100%);
+            border-color: rgba(149, 165, 166, 0.5);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+        }
+        .lens-label {
+            font-size: 0.65rem;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%) rotate(180deg);
+        }
+        .lens-state {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 0 10px currentColor;
+        }
+        .lens.T .lens-state { color: #27ae60; }
+        .lens.O .lens-state { color: #e67e22; }
+        .lens.B .lens-state { color: #7f8c8d; }
+        .eye-icon {
+            width: 80px;
+            height: 80px;
+            flex-shrink: 0;
+            position: relative;
+        }
+        .eye-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+        #lens-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+            justify-content: center;
+        }
+        .preset-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+        }
+        .preset-btn:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.4);
+        }
+        .preset-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+        #lens-info {
+            text-align: center;
+            margin-top: 1rem;
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+        #lens-info .state-notation {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 1.1rem;
+            margin: 0.5rem 0;
+            letter-spacing: 2px;
+        }
+        #energy-meter {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            color: #999;
+            font-size: 0.85rem;
+        }
+        #energy-bar {
+            width: 150px;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        #energy-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #27ae60, #f39c12, #e74c3c);
+            transition: width 0.3s ease;
+        }
+        /* Guided meditation styles */
+        .guided-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            border-color: #667eea !important;
+        }
+        .guided-btn:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%) !important;
+        }
+        #guided-meditation {
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+        #guided-instruction {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #eee;
+            margin-bottom: 1rem;
+            min-height: 80px;
+        }
+        #guided-instruction .prompt {
+            font-size: 1.2rem;
+            color: #a8b2ff;
+            font-style: italic;
+            margin-top: 0.75rem;
+            display: block;
+        }
+        #guided-progress {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 1rem 0;
+        }
+        .progress-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+        }
+        .progress-dot.active {
+            background: #667eea;
+            transform: scale(1.3);
+        }
+        .progress-dot.complete {
+            background: #27ae60;
+        }
+        #guided-controls {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        #guided-controls button {
+            padding: 0.5rem 1.25rem;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+        #guided-controls button:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        #guided-controls button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        #guided-exit {
+            background: rgba(231, 76, 60, 0.2) !important;
+            border-color: rgba(231, 76, 60, 0.4) !important;
+        }
+        .lens.highlighted {
+            animation: pulse-lens 1.5s ease-in-out infinite;
+            z-index: 10;
+        }
+        @keyframes pulse-lens {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(102, 126, 234, 0.5); }
+            50% { transform: scale(1.08); box-shadow: 0 0 30px rgba(102, 126, 234, 0.8); }
+        }
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .theory-content {
+                padding: 1rem;
+                margin: 1rem;
+            }
+            #lens-visualization {
+                padding: 1rem;
+            }
+            #lens-container {
+                flex-direction: column;
+                height: auto;
+                gap: 1rem;
+            }
+            .light-source {
+                width: 40px;
+                height: 40px;
+            }
+            .light-beam {
+                display: none;
+            }
+            .lens-stack {
+                flex-wrap: wrap;
+                justify-content: center;
+                margin: 0;
+                gap: 6px;
+            }
+            .lens {
+                width: 38px;
+                height: 80px;
+            }
+            .lens-state {
+                font-size: 1rem;
+            }
+            .lens-label {
+                font-size: 0.5rem;
+                bottom: -20px;
+            }
+            .eye-icon {
+                width: 50px;
+                height: 50px;
+            }
+            #lens-controls {
+                gap: 0.4rem;
+            }
+            .preset-btn {
+                padding: 0.4rem 0.7rem;
+                font-size: 0.75rem;
+            }
+            #guided-instruction {
+                font-size: 0.95rem;
+                min-height: 100px;
+            }
+            #guided-controls {
+                flex-wrap: wrap;
+            }
+            #guided-controls button {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
+            table {
+                font-size: 0.8rem;
+            }
+            th, td {
+                padding: 0.4rem;
+            }
+            .region-header {
+                font-size: 0.6rem;
+            }
+            #practice-table-container {
+                margin: 0 -1rem;
+            }
+        }
+        @media (max-width: 480px) {
+            .lens {
+                width: 32px;
+                height: 65px;
+            }
+            .lens-state {
+                font-size: 0.85rem;
+            }
+            .lens-label {
+                display: none;
+            }
+            .preset-btn {
+                padding: 0.3rem 0.5rem;
+                font-size: 0.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Occlusion Dynamics</h1>
+        <p>A formal theory of contemplative practice</p>
+    </header>
+
+    <div class="theory-content">
+        <a href="index.html" class="back-link">&larr; Back to main site</a>
+
+        <div class="toc">
+            <h3>Contents</h3>
+            <ul>
+                <li><a href="#core-thesis">1. Core Thesis</a></li>
+                <li><a href="#formal-framework">2. Formal Framework</a></li>
+                <li><a href="#constraints">3. Energetic Constraints</a></li>
+                <li><a href="#practice-mappings">4. Practice Mappings</a></li>
+                <li><a href="#landscape">5. The Potential Landscape</a></li>
+                <li><a href="#development">6. Development as Occlusion</a></li>
+                <li><a href="#common-paths">7. Common Paths Across Traditions</a></li>
+                <li><a href="#interpersonal">8. Interpersonal Dynamics</a></li>
+                <li><a href="#ethics">9. Ethics of Occlusion</a></li>
+                <li><a href="#predictions">10. Predictions</a></li>
+                <li><a href="#lineage">11. Historical Lineage</a></li>
+            </ul>
+        </div>
+
+        <!-- Section 1: Core Thesis -->
+        <div class="od-section" id="core-thesis">
+            <h2>1. Core Thesis</h2>
+
+            <div class="axiom-box">
+                <div class="label">CENTRAL CLAIM</div>
+                Consciousness is shaped by what it occludes.<br>
+                Skill is choosing what to be blind to.
+            </div>
+
+            <p>Every moment of experience involves a partition: some contents are <strong>transparent</strong> (seen through, taken as reality), some are <strong>opaque</strong> (seen as appearance, noticed as constructed), and some are <strong>blind</strong> (excluded entirely, not in experience).</p>
+
+            <p>The default assumption is that consciousness expands by <em>adding</em> — more awareness, more content, more clarity. Occlusion Dynamics inverts this:</p>
+
+            <div class="definition-box">
+                <strong>Contemplative skill is the trained capacity to select and maintain specific occlusion patterns.</strong>
+            </div>
+
+            <p>Different practices produce different partitions. What makes an expert meditator is not that they see more, but that they can <em>choose</em> what to occlude — and sustain that choice against the natural dynamics that would collapse it.</p>
+
+            <h3>Three Modes of Relation</h3>
+
+            <table>
+                <tr>
+                    <th>Mode</th>
+                    <th>Symbol</th>
+                    <th>Phenomenology</th>
+                    <th>Example</th>
+                </tr>
+                <tr>
+                    <td><strong>Transparent</strong></td>
+                    <td class="T">T</td>
+                    <td>Seen <em>through</em>. Experienced as reality itself. Construction invisible.</td>
+                    <td>You don't see "visual processing" — you see the room</td>
+                </tr>
+                <tr>
+                    <td><strong>Opaque</strong></td>
+                    <td class="O">O</td>
+                    <td>Seen <em>as</em>. Experienced as appearance. Noticed as constructed.</td>
+                    <td>"Oh, that's just a thought" — you see the thought as thought</td>
+                </tr>
+                <tr>
+                    <td><strong>Blind</strong></td>
+                    <td class="B">B</td>
+                    <td>Neither seen nor seen through. Not in experience at all.</td>
+                    <td>The hum of the refrigerator you stopped hearing hours ago</td>
+                </tr>
+            </table>
+
+            <h3>Interactive Lens Model</h3>
+            <p>Light (experience) passes through 8 lenses. Click any lens to cycle its state. <strong>T</strong> = clear (seen through), <strong>O</strong> = frosted (seen as), <strong>B</strong> = capped (blocked).</p>
+
+            <div id="lens-visualization">
+                <div id="lens-container">
+                    <div class="light-source" title="Raw experience"></div>
+                    <div class="light-beam" id="light-beam"></div>
+                    <div class="lens-stack" id="lens-stack">
+                        <!-- Lenses generated by JS -->
+                    </div>
+                    <div class="eye-icon">
+                        <svg viewBox="0 0 100 100" id="eye-svg">
+                            <ellipse cx="50" cy="50" rx="45" ry="30" fill="none" stroke="#fff" stroke-width="2"/>
+                            <circle cx="50" cy="50" r="20" fill="#3498db" id="iris"/>
+                            <circle cx="50" cy="50" r="8" fill="#1a1a2e" id="pupil"/>
+                            <circle cx="45" cy="45" r="4" fill="rgba(255,255,255,0.5)"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <div id="lens-controls">
+                    <button class="preset-btn active" data-preset="ordinary">Ordinary</button>
+                    <button class="preset-btn" data-preset="shamatha">Shamatha</button>
+                    <button class="preset-btn" data-preset="vipassana">Vipassana</button>
+                    <button class="preset-btn" data-preset="jhana">Jhāna</button>
+                    <button class="preset-btn" data-preset="nondual">Nondual</button>
+                    <button class="preset-btn" data-preset="focusing">Focusing</button>
+                    <button class="preset-btn guided-btn" id="guided-btn">▶ Guided Tour</button>
+                </div>
+
+                <div id="guided-meditation" style="display: none;">
+                    <div id="guided-instruction"></div>
+                    <div id="guided-progress"></div>
+                    <div id="guided-controls">
+                        <button id="guided-prev">← Previous</button>
+                        <button id="guided-next">Next →</button>
+                        <button id="guided-exit">Exit Guide</button>
+                    </div>
+                </div>
+
+                <div id="lens-info">
+                    <div class="state-notation" id="state-notation"></div>
+                    <div id="state-description"></div>
+                </div>
+
+                <div id="energy-meter">
+                    <span>Energy cost:</span>
+                    <div id="energy-bar"><div id="energy-fill"></div></div>
+                    <span id="energy-value"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Formal Framework -->
+        <div class="od-section" id="formal-framework">
+            <h2>2. Formal Framework</h2>
+
+            <h3>2.1 Phenomenal Regions</h3>
+
+            <p>We partition the phenomenal domain into eight regions:</p>
+
+            <table>
+                <tr>
+                    <th>Symbol</th>
+                    <th>Region</th>
+                    <th>Content</th>
+                </tr>
+                <tr><td><strong>w</strong></td><td>World</td><td>External sensory content (sights, sounds, etc.)</td></tr>
+                <tr><td><strong>b</strong></td><td>Body</td><td>Somatic/interoceptive sensations</td></tr>
+                <tr><td><strong>e</strong></td><td>Emotion</td><td>Affective states, feelings</td></tr>
+                <tr><td><strong>t</strong></td><td>Thought</td><td>Cognitive content, concepts, narrative</td></tr>
+                <tr><td><strong>s</strong></td><td>Self</td><td>Sense of being a subject, the "I"</td></tr>
+                <tr><td><strong>a</strong></td><td>Attention</td><td>The process of attending itself</td></tr>
+                <tr><td><strong>m</strong></td><td>Model</td><td>The predictive construction process</td></tr>
+                <tr><td><strong>∅</strong></td><td>Ground</td><td>Emptiness, space, absence, the background</td></tr>
+            </table>
+
+            <h3>2.2 State Notation</h3>
+
+            <p>A <strong>consciousness state</strong> is a function σ: Regions → {T, O, B}</p>
+
+            <p>We write states as 8-tuples:</p>
+
+            <div class="formula">σ = (w, b, e, t, s, a, m, ∅)</div>
+
+            <div class="example-box">
+                <strong>Example: Ordinary Waking Consciousness</strong><br><br>
+                <span class="state-display">σ<sub>ordinary</sub> = (<span class="T">T</span>, <span class="T">T</span>, <span class="T">T</span>, <span class="T">T</span>, <span class="T">T</span>, <span class="B">B</span>, <span class="B">B</span>, <span class="B">B</span>)</span>
+                <br><br>
+                World, body, emotion, thought, self all <span class="T">transparent</span> (taken as real).<br>
+                Attention, model, ground all <span class="B">blind</span> (not noticed).
+            </div>
+
+            <div class="example-box">
+                <strong>Example: Deep Vipassana</strong><br><br>
+                <span class="state-display">σ<sub>vipassana</sub> = (<span class="O">O</span>, <span class="O">O</span>, <span class="O">O</span>, <span class="O">O</span>, <span class="O">O</span>, <span class="O">O</span>, <span class="O">O</span>, <span class="B">B</span>)</span>
+                <br><br>
+                Everything <span class="O">opaque</span> — seen as arising, constructed, not-self.<br>
+                Only ground remains <span class="B">blind</span>.
+            </div>
+
+            <div class="example-box">
+                <strong>Example: Nondual / Dzogchen</strong><br><br>
+                <span class="state-display">σ<sub>nondual</sub> = (<span class="T">T</span>, <span class="T">T</span>, <span class="T">T</span>, <span class="T">T</span>, <span class="B">B</span>, <span class="T">T</span>, <span class="O">O</span>, <span class="T">T</span>)</span>
+                <br><br>
+                Experience flows <span class="T">transparently</span>, self is <span class="B">blind</span> (no observer).<br>
+                Ground/emptiness becomes <span class="T">transparent</span> — the space in which all appears.
+            </div>
+
+            <h3>2.3 Transformations (Practices)</h3>
+
+            <p>A <strong>practice</strong> is a function π: State → State</p>
+
+            <p>We write transformations as:</p>
+            <div class="formula">π: region₁→mode₁, region₂→mode₂, ...</div>
+
+            <div class="example-box">
+                <strong>Example: Noting Practice</strong><br><br>
+                <span class="formula">π<sub>noting</sub>: w→O, b→O, e→O, t→O, a→O</span>
+                <br>
+                "Make everything opaque by labeling it as it arises"
+            </div>
+
+            <p><strong>Composition:</strong> Practices compose: (π₁ ∘ π₂)(σ) = π₁(π₂(σ))</p>
+
+            <p>Order matters. Shamatha then Vipassana ≠ Vipassana then Shamatha.</p>
+
+            <h3>2.4 Derived Quantities</h3>
+
+            <table>
+                <tr>
+                    <th>Quantity</th>
+                    <th>Definition</th>
+                    <th>Interpretation</th>
+                </tr>
+                <tr>
+                    <td><strong>Transparency Load</strong></td>
+                    <td>|T| = count of T regions</td>
+                    <td>How much is "taken as real"</td>
+                </tr>
+                <tr>
+                    <td><strong>Opacity Load</strong></td>
+                    <td>|O| = count of O regions</td>
+                    <td>How much is "seen as constructed"</td>
+                </tr>
+                <tr>
+                    <td><strong>Blindness Load</strong></td>
+                    <td>|B| = count of B regions</td>
+                    <td>How much is excluded</td>
+                </tr>
+                <tr>
+                    <td><strong>Insight Index</strong></td>
+                    <td>|O| / (|T| + |O|)</td>
+                    <td>Proportion seen as construction</td>
+                </tr>
+                <tr>
+                    <td><strong>Compression</strong></td>
+                    <td>|B| / 8</td>
+                    <td>How narrow the aperture</td>
+                </tr>
+                <tr>
+                    <td><strong>Groundedness</strong></td>
+                    <td>1 if ∅∈{T,O}, else 0</td>
+                    <td>Whether emptiness is present</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Section 3: Constraints -->
+        <div class="od-section" id="constraints">
+            <h2>3. Energetic Constraints</h2>
+
+            <p>Without constraints, this is taxonomy. With constraints, it becomes physics. The following constraints generate predictions about what's possible, what's stable, and what requires effort.</p>
+
+            <h3>3.1 Conservation of Phenomenal Bandwidth</h3>
+
+            <div class="axiom-box">
+                <div class="label">CONSTRAINT 1: Conservation</div>
+                |T| + α|O| + β|B| = C (constant)<br><br>
+                where α > 1 (opacity costs more than transparency)<br>
+                and β < 1 (blindness is cheap)
+            </div>
+
+            <p><strong>Interpretation:</strong> There's finite phenomenal bandwidth. Opacity (metacognition) is expensive. You can't have everything in O at once.</p>
+
+            <div class="prediction-box">
+                <strong>Prediction:</strong> Increasing |O| (more metacognition) forces either |T|↓ (less absorbed in world) or |B|↑ (narrower scope). Vipassana practitioners should show reduced sensory richness or narrowed attention.
+            </div>
+
+            <h3>3.2 Opacity Cost</h3>
+
+            <div class="axiom-box">
+                <div class="label">CONSTRAINT 2: Energy Ordering</div>
+                E(O) > E(T) > E(B)<br><br>
+                Maintaining opacity costs more than transparency costs more than blindness.
+            </div>
+
+            <p><strong>Why:</strong> Opacity requires maintaining content <em>plus</em> meta-representation of it as appearance. Double the work.</p>
+
+            <div class="prediction-box">
+                <strong>Prediction:</strong> High-O states are unstable and tiring. System naturally drifts toward T (absorption) or B (exclusion). Sustained vipassana is more metabolically demanding than jhana.
+            </div>
+
+            <h3>3.3 Adjacency Constraint</h3>
+
+            <div class="axiom-box">
+                <div class="label">CONSTRAINT 3: Adjacency</div>
+                Direct transitions: T ↔ O ↔ B<br>
+                Forbidden: T → B (must pass through O)
+            </div>
+
+            <p><strong>Interpretation:</strong> To blind something, you first have to see it. You can't unsee what you never saw.</p>
+
+            <div class="prediction-box">
+                <strong>Prediction:</strong> "Suppression" (T→B directly) is unstable, content rebounds. "Letting go" (T→O→B) is stable. Trauma therapy must include T→O (feeling it) before B→(release) — can't skip.
+            </div>
+
+            <h3>3.4 Blindness Momentum</h3>
+
+            <div class="axiom-box">
+                <div class="label">CONSTRAINT 4: Hysteresis</div>
+                Energy(B→O) ∝ time_in_B<br><br>
+                The longer something is blind, the more energy to retrieve it.
+            </div>
+
+            <p><strong>Interpretation:</strong> Blindness accumulates inertia. Long-occluded content becomes hard to access.</p>
+
+            <div class="prediction-box">
+                <strong>Prediction:</strong> Repression duration predicts therapeutic difficulty. Jhana depth predicts exit jarring-ness. "Dark night" phenomena occur when long-B content is forced to O.
+            </div>
+
+            <h3>3.5 Forbidden Configurations</h3>
+
+            <div class="axiom-box">
+                <div class="label">CONSTRAINT 5: Partition Rules</div>
+                Forbidden: s=T ∧ a=O (can't have self transparent while watching attention)<br>
+                Forbidden: ∅=T ∧ |B|=0 (emptiness requires something to be empty of)<br>
+                Forbidden: m=T (model can never be fully transparent — it IS the transparency)
+            </div>
+
+            <div class="prediction-box">
+                <strong>Prediction:</strong> Some practice goals are impossible to combine simultaneously. The "witness" (s=T, a=O) must eventually collapse.
+            </div>
+
+            <h3>3.6 Free Energy Gradient</h3>
+
+            <div class="axiom-box">
+                <div class="label">CONSTRAINT 6: Attractor Dynamics</div>
+                System minimizes: F = Σᵢ E(σᵢ) + λ · prediction_error<br><br>
+                O has high F (prediction error flagged).<br>
+                T and B have low F (error absorbed or ignored).
+            </div>
+
+            <p><strong>Interpretation:</strong> O is inherently unstable. The system "wants" to resolve opacity — either by absorbing (→T) or excluding (→B).</p>
+
+            <div class="prediction-box">
+                <strong>Prediction:</strong> Without active effort, O decays. Insight fades. Practice maintains O against the gradient. "Integration" is controlled O→T transition.
+            </div>
+
+            <h3>3.7 Shevirat ha-Kelim (Shattering)</h3>
+
+            <div class="axiom-box">
+                <div class="label">CONSTRAINT 7: Rate Limit</div>
+                d|O|/dt &lt; k (maximum rate of opacity increase)<br><br>
+                Too fast B→O overwhelms the system.
+            </div>
+
+            <p><strong>Interpretation:</strong> From Lurianic Kabbalah — too much light too fast shatters the vessels. The system has limited capacity to process sudden revelation.</p>
+
+            <div class="prediction-box">
+                <strong>Prediction:</strong> Rapid B→O (psychedelic breakthrough, forced memory recovery, premature insight) causes destabilization. "Spiritual emergency" = rate limit exceeded. Integration time is non-negotiable.
+            </div>
+        </div>
+
+        <!-- Section 4: Practice Mappings -->
+        <div class="od-section" id="practice-mappings">
+            <h2>4. Practice Mappings</h2>
+
+            <p>Each practice in the Harmonic Alignment database mapped to Occlusion Dynamics notation.</p>
+
+            <div id="practice-table-container">
+                <table id="practice-table">
+                    <thead>
+                        <tr>
+                            <th class="sortable asc" data-sort="name" onclick="sortTable('name')">Practice</th>
+                            <th><span class="region-header">World</span></th>
+                            <th><span class="region-header">Body</span></th>
+                            <th><span class="region-header">Emotion</span></th>
+                            <th><span class="region-header">Thought</span></th>
+                            <th><span class="region-header">Self</span></th>
+                            <th><span class="region-header">Attention</span></th>
+                            <th><span class="region-header">Model</span></th>
+                            <th><span class="region-header">Ground</span></th>
+                            <th class="sortable" data-sort="T" onclick="sortTable('T')">|T|</th>
+                            <th class="sortable" data-sort="O" onclick="sortTable('O')">|O|</th>
+                            <th class="sortable" data-sort="B" onclick="sortTable('B')">|B|</th>
+                            <th class="sortable" data-sort="insight" onclick="sortTable('insight')">Insight</th>
+                            <th>Primary Move</th>
+                        </tr>
+                    </thead>
+                    <tbody id="practice-tbody">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Concrete Examples</h3>
+
+            <div class="example-box">
+                <strong>Breath Counting (Shamatha)</strong><br><br>
+                <em>Instructions:</em> Count breaths 1-10, return when distracted.<br><br>
+                <em>What happens:</em>
+                <ol>
+                    <li>World becomes <span class="B">B</span> — sounds fade out</li>
+                    <li>Thoughts become <span class="B">B</span> — no longer engaging</li>
+                    <li>Body (breath) becomes <span class="O">O</span> — watching it</li>
+                    <li>Attention becomes <span class="O">O</span> — you notice when you're focused</li>
+                    <li>Deep: breath becomes <span class="T">T</span> — you ARE breathing, not watching</li>
+                </ol>
+                <em>Progression:</em><br>
+                <span class="state-display">(<span class="T">T</span><span class="T">T</span><span class="T">T</span><span class="T">T</span><span class="T">T</span><span class="B">B</span><span class="B">B</span><span class="B">B</span>) → (<span class="B">B</span><span class="O">O</span><span class="B">B</span><span class="B">B</span><span class="T">T</span><span class="O">O</span><span class="B">B</span><span class="B">B</span>) → (<span class="B">B</span><span class="T">T</span><span class="B">B</span><span class="B">B</span><span class="B">B</span><span class="B">B</span><span class="B">B</span><span class="B">B</span>)</span><br><br>
+                <em>Skill trained:</em> Moving regions to <span class="B">B</span>. Choosing what to exclude.
+            </div>
+
+            <div class="example-box">
+                <strong>Noting (Vipassana)</strong><br><br>
+                <em>Instructions:</em> Label each experience — "thinking", "hearing", "wanting"...<br><br>
+                <em>What happens:</em>
+                <ol>
+                    <li>Sound arises → note "hearing" → sound becomes <span class="O">O</span></li>
+                    <li>Thought arises → note "thinking" → thought becomes <span class="O">O</span></li>
+                    <li>Self notices → note "selfing" → self becomes <span class="O">O</span></li>
+                    <li>Deep: even the noting is noted → model glimpsed → <span class="O">O</span></li>
+                </ol>
+                <em>Progression:</em><br>
+                <span class="state-display">(<span class="T">T</span><span class="T">T</span><span class="T">T</span><span class="T">T</span><span class="T">T</span><span class="B">B</span><span class="B">B</span><span class="B">B</span>) → (<span class="O">O</span><span class="O">O</span><span class="O">O</span><span class="O">O</span><span class="T">T</span><span class="O">O</span><span class="B">B</span><span class="B">B</span>) → (<span class="O">O</span><span class="O">O</span><span class="O">O</span><span class="O">O</span><span class="O">O</span><span class="O">O</span><span class="O">O</span><span class="B">B</span>)</span><br><br>
+                <em>Skill trained:</em> Moving regions to <span class="O">O</span>. Seeing construction.
+            </div>
+
+            <div class="example-box">
+                <strong>Self-Inquiry ("Who am I?")</strong><br><br>
+                <em>Instructions:</em> Ask "Who am I?" and look for the asker.<br><br>
+                <em>What happens:</em>
+                <ol>
+                    <li>Look for "I" in body → not there → body becomes <span class="O">O</span></li>
+                    <li>Look for "I" in thoughts → they pass → thought becomes <span class="O">O</span></li>
+                    <li>Look for the looker → can't find → self becomes... <span class="B">B</span>?</li>
+                    <li>What remains: just seeing. Ground becomes <span class="T">T</span>.</li>
+                </ol>
+                <em>Progression:</em><br>
+                <span class="state-display">(<span class="T">T</span><span class="T">T</span><span class="T">T</span><span class="T">T</span><span class="T">T</span><span class="B">B</span><span class="B">B</span><span class="B">B</span>) → (<span class="O">O</span><span class="O">O</span><span class="O">O</span><span class="O">O</span><span class="O">O</span><span class="O">O</span><span class="B">B</span><span class="B">B</span>) → (<span class="T">T</span><span class="T">T</span><span class="T">T</span><span class="T">T</span><span class="B">B</span><span class="T">T</span><span class="O">O</span><span class="T">T</span>)</span><br><br>
+                <em>Skill trained:</em> s→<span class="O">O</span>→<span class="B">B</span>. Dissolving the self-construct.
+            </div>
+        </div>
+
+        <!-- Section 5: Landscape -->
+        <div class="od-section" id="landscape">
+            <h2>5. The Potential Landscape</h2>
+
+            <p>If the constraints define an energy function, practices trace paths through a potential landscape. Some configurations are valleys (stable attractors), some are peaks (unstable), some are forbidden (impossible).</p>
+
+            <div id="landscape-container">
+                <svg id="landscape-svg" width="100%" height="100%"></svg>
+            </div>
+
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
+                <div>
+                    <label><strong>X-axis:</strong></label>
+                    <select id="x-axis" onchange="updateLandscape()">
+                        <option value="compression">Compression (|B|/8)</option>
+                        <option value="insight">Insight Index</option>
+                        <option value="T">Transparency |T|</option>
+                    </select>
+                </div>
+                <div>
+                    <label><strong>Y-axis:</strong></label>
+                    <select id="y-axis" onchange="updateLandscape()">
+                        <option value="insight">Insight Index</option>
+                        <option value="compression">Compression (|B|/8)</option>
+                        <option value="O">Opacity |O|</option>
+                    </select>
+                </div>
+                <div>
+                    <label><strong>Color:</strong></label>
+                    <select id="color-axis" onchange="updateLandscape()">
+                        <option value="energy">Energy (estimated)</option>
+                        <option value="groundedness">Groundedness</option>
+                        <option value="none">None</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="landscape-info" style="margin-top: 1rem; padding: 1rem; background: #f5f5f5; border-radius: 8px; display: none;">
+                <h4 id="landscape-info-title"></h4>
+                <div id="landscape-info-content"></div>
+            </div>
+
+            <h3>Key Regions</h3>
+
+            <table>
+                <tr>
+                    <th>Region</th>
+                    <th>Characteristics</th>
+                    <th>Practices</th>
+                </tr>
+                <tr>
+                    <td><strong>Ordinary Basin</strong></td>
+                    <td>High |T|, low |O|, low |B|. Default attractor.</td>
+                    <td>None needed — you fall here naturally</td>
+                </tr>
+                <tr>
+                    <td><strong>Concentration Ridge</strong></td>
+                    <td>High |B|, moderate |T|, low |O|. Narrow but stable.</td>
+                    <td>Shamatha, Jhana, TM</td>
+                </tr>
+                <tr>
+                    <td><strong>Insight Peak</strong></td>
+                    <td>High |O|. Unstable, high energy, transformative.</td>
+                    <td>Vipassana, noting, inquiry</td>
+                </tr>
+                <tr>
+                    <td><strong>Nondual Valley</strong></td>
+                    <td>High |T|, s=B, ∅=T. Stable once reached.</td>
+                    <td>Dzogchen, Advaita, Zen</td>
+                </tr>
+                <tr>
+                    <td><strong>Relational Plateau</strong></td>
+                    <td>Moderate |O| on s, shared attention.</td>
+                    <td>Circling, NVC, Metta</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Section 6: Development -->
+        <div class="od-section" id="development">
+            <h2>6. Development as Occlusion</h2>
+
+            <p>Occlusion Dynamics connects to developmental psychology, particularly Robert Kegan's Subject-Object theory.</p>
+
+            <div class="definition-box">
+                <strong>Kegan's Core Insight:</strong> Development is the progressive movement of psychological content from <em>subject</em> (what you ARE, can't see) to <em>object</em> (what you HAVE, can examine).
+            </div>
+
+            <p>In OD terms:</p>
+            <ul>
+                <li><strong>Subject</strong> = T (transparent, identified with)</li>
+                <li><strong>Object</strong> = O (opaque, can examine)</li>
+                <li><strong>Development</strong> = T→O for increasingly fundamental structures</li>
+            </ul>
+
+            <table>
+                <tr>
+                    <th>Kegan Stage</th>
+                    <th>What becomes O (object)</th>
+                    <th>What remains T (subject)</th>
+                </tr>
+                <tr>
+                    <td>2 → 3</td>
+                    <td>Impulses, desires</td>
+                    <td>Relationships, mutuality</td>
+                </tr>
+                <tr>
+                    <td>3 → 4</td>
+                    <td>Others' expectations, relationships</td>
+                    <td>Self-authorship, identity</td>
+                </tr>
+                <tr>
+                    <td>4 → 5</td>
+                    <td>Self-system, ideology</td>
+                    <td>Inter-being, paradox</td>
+                </tr>
+                <tr>
+                    <td>5 → ?</td>
+                    <td>Subject-object structure itself</td>
+                    <td>??? (nondual territory)</td>
+                </tr>
+            </table>
+
+            <h3>The OD Addition to Kegan</h3>
+
+            <p>Kegan's framework has Subject and Object. OD adds <strong>Blind</strong>.</p>
+
+            <p>Development isn't just T→O. It also involves:</p>
+            <ul>
+                <li><strong>Healthy B</strong>: Appropriate exclusion (not everything needs to be conscious)</li>
+                <li><strong>Pathological B</strong>: Repression, dissociation (trapped content)</li>
+                <li><strong>The B→O transition</strong>: Therapy, shadow work, retrieving occluded content</li>
+            </ul>
+
+            <div class="quote-box">
+                Development is the progressive capacity to choose your occlusions rather than be chosen by them.
+            </div>
+
+            <div class="prediction-box">
+                <strong>Integration:</strong> Development, contemplative training, and therapy all involve the same dynamics — learning to manage the T/O/B partition skillfully.
+            </div>
+        </div>
+
+        <!-- Section 7: Common Paths -->
+        <div class="od-section" id="common-paths">
+            <h2>7. Common Paths Across Traditions</h2>
+
+            <p>Despite surface differences, contemplative traditions converge on similar sequences. OD reveals the underlying structure.</p>
+
+            <h3>7.1 The Concentration Path</h3>
+            <p><strong>Pattern:</strong> Increase |B|, stabilize remaining T</p>
+            <div class="formula">Ordinary → Narrow focus → Deep absorption → Exit</div>
+            <table>
+                <tr><th>Tradition</th><th>Name</th><th>OD Signature</th></tr>
+                <tr><td>Buddhist</td><td>Jhāna</td><td>w→B, t→B, e→O→T</td></tr>
+                <tr><td>Hindu</td><td>Samādhi (savikalpa)</td><td>w→B, t→B, s→T</td></tr>
+                <tr><td>Christian</td><td>Recollection</td><td>w→B, t→B, ∅→T</td></tr>
+                <tr><td>Islamic</td><td>Muraqaba</td><td>w→B, a→O, s→O</td></tr>
+                <tr><td>Jewish</td><td>Hitbonenut</td><td>w→B, t→O, ∅→T</td></tr>
+            </table>
+            <p><em>Convergence:</em> All narrow phenomenal bandwidth (increase |B|) to stabilize and deepen remaining experience.</p>
+
+            <h3>7.2 The Insight Path</h3>
+            <p><strong>Pattern:</strong> Increase |O| systematically, see construction</p>
+            <div class="formula">Ordinary → Notice arising → See construction → Model glimpsed</div>
+            <table>
+                <tr><th>Tradition</th><th>Name</th><th>OD Signature</th></tr>
+                <tr><td>Buddhist</td><td>Vipassanā</td><td>*→O (everything noted)</td></tr>
+                <tr><td>Hindu</td><td>Viveka (discrimination)</td><td>s→O, t→O</td></tr>
+                <tr><td>Stoic</td><td>Prosoche</td><td>t→O, e→O</td></tr>
+                <tr><td>Phenomenology</td><td>Epoché</td><td>w→O, m→O</td></tr>
+            </table>
+            <p><em>Convergence:</em> All cultivate metacognition (T→O) to see through habitual identification.</p>
+
+            <h3>7.3 The Surrender Path</h3>
+            <p><strong>Pattern:</strong> s→B, ∅→T (self dissolves, ground appears)</p>
+            <div class="formula">Ordinary → Self questioned → Self released → Groundless ground</div>
+            <table>
+                <tr><th>Tradition</th><th>Name</th><th>OD Signature</th></tr>
+                <tr><td>Buddhist</td><td>Anattā</td><td>s→O→B</td></tr>
+                <tr><td>Hindu</td><td>Neti neti</td><td>s→O→B, ∅→T</td></tr>
+                <tr><td>Christian</td><td>Kenosis</td><td>s→B, ∅→T</td></tr>
+                <tr><td>Islamic</td><td>Fanā</td><td>s→B, ∅→T</td></tr>
+                <tr><td>Jewish</td><td>Bittul</td><td>s→B</td></tr>
+            </table>
+            <p><em>Convergence:</em> All move the self-construct from transparent to blind, revealing what was always beneath.</p>
+
+            <h3>7.4 The Dark Night</h3>
+            <p><strong>Pattern:</strong> Rapid B→O overwhelms capacity (Constraint 7 violated)</p>
+            <div class="formula">Practice → Familiar collapses → Everything opaque → Integration or crisis</div>
+            <table>
+                <tr><th>Tradition</th><th>Name</th><th>What Happens</th></tr>
+                <tr><td>Christian</td><td>Dark Night of the Soul</td><td>God-image (s,∅) collapses from T to O to seeming-B</td></tr>
+                <tr><td>Buddhist</td><td>Dukkha ñanas</td><td>Pleasant aspects blind, only suffering opaque</td></tr>
+                <tr><td>Zen</td><td>Great Doubt</td><td>Certainty (t,s) forced to O, nothing holds</td></tr>
+                <tr><td>Sufi</td><td>Hal of contraction</td><td>Previous expansion becomes inaccessible (T→B)</td></tr>
+            </table>
+            <div class="prediction-box">
+                <strong>OD Explanation:</strong> The dark night occurs when the rate of B→O exceeds processing capacity. Content that was safely blind becomes suddenly opaque — and there's too much to integrate. The way through is slowing down (reduce d|O|/dt) or increasing capacity through support.
+            </div>
+        </div>
+
+        <!-- Section 8: Interpersonal Dynamics -->
+        <div class="od-section" id="interpersonal">
+            <h2>8. Interpersonal Occlusion Dynamics</h2>
+
+            <p>OD extends beyond individual practice to relationships. What happens when two occlusion patterns meet?</p>
+
+            <h3>8.1 Complementary Blindness</h3>
+
+            <div class="definition-box">
+                <strong>Claim:</strong> Relationships stabilize through complementary occlusion patterns. What you're blind to, I see. What I'm blind to, you see.
+            </div>
+
+            <p>In healthy relationships, partners cover each other's blind spots:</p>
+            <ul>
+                <li>One partner is body-aware (b=O), the other is emotionally attuned (e=O)</li>
+                <li>One tracks external threats (w=O), the other tracks internal states</li>
+                <li>Blind spots don't collide — they interlock</li>
+            </ul>
+
+            <div class="prediction-box">
+                <strong>Prediction:</strong> Relationship conflict often occurs when both partners are blind to the same thing (shared B) or both trying to make the same thing opaque (competing for O).
+            </div>
+
+            <h3>8.2 Love as Occlusion Pattern</h3>
+
+            <p>What is love in OD terms?</p>
+
+            <div class="example-box">
+                <strong>Romantic Love (Early):</strong><br>
+                The beloved becomes hyper-transparent (T) — you see the world <em>through</em> them. Your own self-boundaries become partially blind (s→B). Merge state.<br><br>
+                <span class="state-display">Your s: <span class="T">T</span>→<span class="B">B</span>, Their presence: <span class="B">B</span>→<span class="T">T</span></span>
+            </div>
+
+            <div class="example-box">
+                <strong>Mature Love:</strong><br>
+                The other becomes opaque (O) — you see them <em>as</em> a separate being with their own interiority. You hold your own self (s=O) while holding theirs.<br><br>
+                <span class="state-display">Your s: <span class="O">O</span>, Their s: <span class="O">O</span> (both seen as constructed, both honored)</span>
+            </div>
+
+            <div class="example-box">
+                <strong>Compassion (Mettā/Karuna):</strong><br>
+                The other's suffering becomes opaque to you (their e=O in your field). Your self becomes less opaque (s→T or s→B). You feel with them without losing yourself OR losing yourself deliberately.<br><br>
+                <span class="state-display">Self-other boundary: flexible, permeable</span>
+            </div>
+
+            <h3>8.3 Intersubjective Practices</h3>
+
+            <table>
+                <tr><th>Practice</th><th>What Happens</th><th>OD Signature</th></tr>
+                <tr>
+                    <td><strong>Circling</strong></td>
+                    <td>Make the relational field opaque — notice the "us" as it arises</td>
+                    <td>Shared s→O, attention on the between</td>
+                </tr>
+                <tr>
+                    <td><strong>NVC</strong></td>
+                    <td>Make own feelings/needs opaque, make other's opaque too</td>
+                    <td>e→O, t→O (both parties)</td>
+                </tr>
+                <tr>
+                    <td><strong>Eye Gazing</strong></td>
+                    <td>World blinds, other's face transparent, self oscillates T↔O↔B</td>
+                    <td>w→B, other→T, s→unstable</td>
+                </tr>
+                <tr>
+                    <td><strong>Co-Meditation</strong></td>
+                    <td>Synchronize occlusion patterns — shared B, shared O</td>
+                    <td>State alignment between practitioners</td>
+                </tr>
+            </table>
+
+            <h3>8.4 Synchronization and Alternation</h3>
+
+            <p>Healthy relationships alternate between:</p>
+            <ul>
+                <li><strong>Synchronization:</strong> Same regions opaque/blind at once (shared attention, shared blindness)</li>
+                <li><strong>Alternation:</strong> Taking turns — one holds awareness while other processes</li>
+            </ul>
+
+            <div class="quote-box">
+                Love is the willingness to be blind together, and the courage to make each other opaque.
+            </div>
+
+            <div class="prediction-box">
+                <strong>Testable:</strong> Measure couples' attention patterns during conflict vs. harmony. Synchronization of eye tracking, physiological measures should correlate with relationship satisfaction and repair success.
+            </div>
+        </div>
+
+        <!-- Section 9: Ethics -->
+        <div class="od-section" id="ethics">
+            <h2>9. Ethics of Occlusion</h2>
+
+            <p>If consciousness is shaped by what it occludes, ethics becomes: <strong>What should be occluded?</strong></p>
+
+            <h3>9.1 Moral Blindness</h3>
+
+            <div class="definition-box">
+                <strong>Claim:</strong> Much of what we call "evil" involves strategic blindness — choosing not to see what would demand response.
+            </div>
+
+            <table>
+                <tr><th>Phenomenon</th><th>OD Structure</th><th>What's Blinded</th></tr>
+                <tr>
+                    <td>Dehumanization</td>
+                    <td>Other's s=B, e=B</td>
+                    <td>Their interiority, suffering, selfhood</td>
+                </tr>
+                <tr>
+                    <td>Bystander effect</td>
+                    <td>Other's e=B, own s=T</td>
+                    <td>Their need; self-protection transparent</td>
+                </tr>
+                <tr>
+                    <td>Systemic oppression</td>
+                    <td>Collective B on certain groups</td>
+                    <td>Suffering rendered invisible by design</td>
+                </tr>
+                <tr>
+                    <td>Willful ignorance</td>
+                    <td>Chosen B on inconvenient truth</td>
+                    <td>"I'd rather not know"</td>
+                </tr>
+            </table>
+
+            <div class="prediction-box">
+                <strong>Moral progress</strong> = expanding what we make opaque (O) rather than blind (B). Seeing suffering AS suffering, rather than not seeing it at all.
+            </div>
+
+            <h3>9.2 Virtue as Occlusion Pattern</h3>
+
+            <p>Classical virtues can be reframed as skilled occlusion:</p>
+
+            <table>
+                <tr><th>Virtue</th><th>OD Pattern</th><th>The Skill</th></tr>
+                <tr>
+                    <td><strong>Courage</strong></td>
+                    <td>e(fear)→O, not e→T</td>
+                    <td>See fear as fear, act anyway. Don't be possessed by it.</td>
+                </tr>
+                <tr>
+                    <td><strong>Temperance</strong></td>
+                    <td>e(desire)→O or →B</td>
+                    <td>See impulse as impulse. Choose appropriate B on craving.</td>
+                </tr>
+                <tr>
+                    <td><strong>Justice</strong></td>
+                    <td>Other's e,s→O</td>
+                    <td>Make the other's needs and selfhood opaque — visible, real.</td>
+                </tr>
+                <tr>
+                    <td><strong>Wisdom</strong></td>
+                    <td>m→O (rare)</td>
+                    <td>See the construction process. Know when to T, O, or B.</td>
+                </tr>
+                <tr>
+                    <td><strong>Humility</strong></td>
+                    <td>s→O</td>
+                    <td>See the self as constructed, not as ultimate truth.</td>
+                </tr>
+                <tr>
+                    <td><strong>Compassion</strong></td>
+                    <td>Other's e→O, own s→B</td>
+                    <td>Their suffering visible, your self-protection dimmed.</td>
+                </tr>
+            </table>
+
+            <h3>9.3 The Ethics of Attention</h3>
+
+            <p>Attention is not morally neutral. Where you look matters.</p>
+
+            <ul>
+                <li><strong>Making something O is an ethical act</strong> — you're granting it reality, acknowledging its existence</li>
+                <li><strong>Choosing B can be protection or avoidance</strong> — healthy boundaries vs. moral cowardice</li>
+                <li><strong>Collective attention shapes collective reality</strong> — what a society blinds itself to reveals its values</li>
+            </ul>
+
+            <div class="example-box">
+                <strong>Example: Privilege as Afforded Blindness</strong><br><br>
+                Privilege often means you CAN blind yourself to things others cannot. The wealthy can blind themselves to poverty. The majority can blind themselves to discrimination. The healthy can blind themselves to illness.<br><br>
+                <em>Ethical use of privilege:</em> Choose O where you could choose B. See what you're allowed to not see.
+            </div>
+
+            <h3>9.4 Responsibility for Blind Spots</h3>
+
+            <div class="axiom-box">
+                <div class="label">ETHICAL PRINCIPLE</div>
+                You are responsible for what you choose to blind yourself to.<br>
+                "I didn't know" doesn't excuse chosen ignorance.
+            </div>
+
+            <p>Three categories of B:</p>
+            <ul>
+                <li><strong>Innocent B:</strong> Genuinely couldn't know. No access. (Not blameworthy)</li>
+                <li><strong>Negligent B:</strong> Could have looked, didn't. Comfortable ignorance. (Partially responsible)</li>
+                <li><strong>Willful B:</strong> Actively chose not to see. Strategic blindness. (Fully responsible)</li>
+            </ul>
+
+            <div class="quote-box">
+                Moral maturity is taking responsibility for your occlusion choices — knowing that what you blind yourself to shapes who you become.
+            </div>
+
+            <h3>9.5 The Paradox of Necessary Blindness</h3>
+
+            <p>Complete transparency (all O) is neither possible nor desirable:</p>
+
+            <ul>
+                <li>You cannot hold everything opaque at once (Constraint 1: bandwidth)</li>
+                <li>Some B is necessary for action — paralysis comes from too much O</li>
+                <li>Healthy boundaries require appropriate B</li>
+                <li>The question is not "blind or not" but "what to blind, when, and why"</li>
+            </ul>
+
+            <div class="prediction-box">
+                <strong>Ethical mastery:</strong> The capacity to choose your occlusions consciously — knowing what you're not seeing, why, and at what cost.
+            </div>
+        </div>
+
+        <!-- Section 10: Predictions -->
+        <div class="od-section" id="predictions">
+            <h2>10. Predictions</h2>
+
+            <p>A theory is only as good as its falsifiable predictions. Occlusion Dynamics generates the following testable claims:</p>
+
+            <h3>10.1 Neural Predictions</h3>
+
+            <table>
+                <tr>
+                    <th>Prediction</th>
+                    <th>Measure</th>
+                </tr>
+                <tr>
+                    <td>High |O| states show elevated prediction error signals</td>
+                    <td>P3b amplitude, anterior cingulate activity</td>
+                </tr>
+                <tr>
+                    <td>High |B| states show reduced default mode activity</td>
+                    <td>fMRI DMN suppression</td>
+                </tr>
+                <tr>
+                    <td>O-states have higher metabolic cost than T-states</td>
+                    <td>Glucose metabolism, oxygen consumption</td>
+                </tr>
+                <tr>
+                    <td>s=B (self-blind) correlates with reduced self-referential processing</td>
+                    <td>mPFC deactivation</td>
+                </tr>
+                <tr>
+                    <td>∅=T (ground transparent) correlates with altered sense of time/space</td>
+                    <td>Posterior cingulate, precuneus activity</td>
+                </tr>
+            </table>
+
+            <h3>10.2 Behavioral Predictions</h3>
+
+            <table>
+                <tr>
+                    <th>Prediction</th>
+                    <th>Test</th>
+                </tr>
+                <tr>
+                    <td>High |O| is unstable without effort</td>
+                    <td>Time-to-collapse from O-state without instruction</td>
+                </tr>
+                <tr>
+                    <td>T→B direct (suppression) shows rebound; T→O→B doesn't</td>
+                    <td>Compare suppression vs. "noting then releasing" for intrusive thoughts</td>
+                </tr>
+                <tr>
+                    <td>Rate of B→O is limited</td>
+                    <td>Titration speed in trauma therapy predicts outcomes</td>
+                </tr>
+                <tr>
+                    <td>Practices with similar OD signatures feel similar</td>
+                    <td>Cluster practices by OD state; validate with phenomenological reports</td>
+                </tr>
+            </table>
+
+            <h3>10.3 Training Predictions</h3>
+
+            <table>
+                <tr>
+                    <th>Prediction</th>
+                    <th>Test</th>
+                </tr>
+                <tr>
+                    <td>|O| capacity increases with training</td>
+                    <td>Duration of sustained metacognition by practice hours</td>
+                </tr>
+                <tr>
+                    <td>Expert meditators can reach forbidden-adjacent states</td>
+                    <td>Access to configurations impossible for beginners</td>
+                </tr>
+                <tr>
+                    <td>Jhana depth (|B|) predicts difficulty of exit</td>
+                    <td>Transition time from deep jhana to ordinary</td>
+                </tr>
+                <tr>
+                    <td>Sequence matters: shamatha→vipassana outperforms reverse</td>
+                    <td>Compare training order for insight outcomes</td>
+                </tr>
+            </table>
+
+            <h3>10.4 Clinical Predictions</h3>
+
+            <table>
+                <tr>
+                    <th>Prediction</th>
+                    <th>Test</th>
+                </tr>
+                <tr>
+                    <td>Depression = pathological T on negative content</td>
+                    <td>Depressed patients show reduced ability to O-ify rumination</td>
+                </tr>
+                <tr>
+                    <td>Anxiety = pathological T on threat</td>
+                    <td>Anxious patients show threat content stuck in T</td>
+                </tr>
+                <tr>
+                    <td>PTSD = forced O/T cycling on trauma, with B unavailable</td>
+                    <td>Trauma content resists stable B; intrusion = forced T</td>
+                </tr>
+                <tr>
+                    <td>Dissociation = pathological B</td>
+                    <td>Dissociated content has high B→O retrieval cost</td>
+                </tr>
+                <tr>
+                    <td>Spiritual emergency = rate limit exceeded</td>
+                    <td>Rapid practice intensification predicts destabilization</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Section 8: Lineage -->
+        <div class="od-section" id="lineage">
+            <h2>11. Historical Lineage</h2>
+
+            <p>Occlusion Dynamics synthesizes insights from multiple traditions:</p>
+
+            <div class="quote-box">
+                "φύσις κρύπτεσθαι φιλεῖ" — Nature loves to hide.
+                <div class="attribution">— Heraclitus (Fragment 123)</div>
+            </div>
+
+            <div class="quote-box">
+                "ἁρμονίη ἀφανὴς φανερῆς κρείττων" — The hidden harmony is better than the obvious.
+                <div class="attribution">— Heraclitus (Fragment 54)</div>
+            </div>
+
+            <h3>Greek Sources</h3>
+            <ul>
+                <li><strong>Heraclitus:</strong> Reality actively occludes itself. The logos is present but unseen.</li>
+                <li><strong>Plato:</strong> Cave allegory — shadows (T), turning around (T→O), sun (∅→T).</li>
+                <li><strong>Aristotle:</strong> Steresis (στέρησις) — privation as cause. Absence shapes presence.</li>
+            </ul>
+
+            <h3>Jewish Sources</h3>
+            <ul>
+                <li><strong>Tzimtzum:</strong> Divine contraction creates space for creation. Strategic B enables structure.</li>
+                <li><strong>Hester Panim:</strong> God's hiding is active, relational — concealment as intimacy.</li>
+                <li><strong>Klipot/Birur:</strong> Pathological vs. holy occlusion. Some B traps, some liberates.</li>
+                <li><strong>Bittul:</strong> Self-nullification (s→B) as practice.</li>
+            </ul>
+
+            <h3>Islamic Sources</h3>
+            <ul>
+                <li><strong>Fana:</strong> Annihilation of self (s→B) — the ego dissolves in divine presence.</li>
+                <li><strong>Batin/Zahir:</strong> The hidden (B) and manifest (T) — reality has inner and outer faces.</li>
+                <li><strong>Hijab:</strong> Veils between human and divine — 70,000 veils of light and darkness to traverse.</li>
+                <li><strong>Muraqaba:</strong> Watchfulness practice — making attention opaque (a→O) through self-observation.</li>
+            </ul>
+
+            <h3>Christian Mysticism</h3>
+            <ul>
+                <li><strong>Apophatic theology:</strong> God known through negation — what God is NOT. Divine as ultimate B.</li>
+                <li><strong>Cloud of Unknowing:</strong> "Put a cloud of forgetting beneath you" — systematic B of all content to reach God.</li>
+                <li><strong>Dark Night of the Soul:</strong> When familiar T collapses and O becomes overwhelming. The rate limit exceeded (Constraint 7). St. John of the Cross mapped this as necessary passage.</li>
+                <li><strong>Centering Prayer:</strong> Release thoughts as they arise (t→B), rest in presence (∅→T).</li>
+            </ul>
+
+            <h3>Buddhist Sources</h3>
+            <ul>
+                <li><strong>Avijja:</strong> Ignorance as root — not seeing (B) what's there.</li>
+                <li><strong>Vipassana:</strong> Systematic T→O on all phenomena.</li>
+                <li><strong>Jhana:</strong> Systematic increase of |B| for stability.</li>
+                <li><strong>Sunyata:</strong> Emptiness — ∅→T as goal.</li>
+                <li><strong>Dukkha ñanas:</strong> The "knowledges of suffering" — when insight (O) becomes overwhelming. Buddhist dark night.</li>
+            </ul>
+
+            <h3>Western Psychology</h3>
+            <ul>
+                <li><strong>Freud:</strong> Repression (pathological B), making unconscious conscious (B→O).</li>
+                <li><strong>Kegan:</strong> Subject-object development (T→O for successive structures).</li>
+                <li><strong>Gendlin:</strong> Felt sense — body's implicit knowing held in B, brought to O.</li>
+                <li><strong>Metzinger:</strong> Phenomenal transparency — T as default, O as achievement.</li>
+            </ul>
+
+            <h3>Cognitive Science</h3>
+            <ul>
+                <li><strong>Predictive Processing:</strong> T = prediction confirmed, O = prediction error, B = not predicted.</li>
+                <li><strong>Attention Schema Theory:</strong> Brain models its own attention — but doesn't explain T/O/B.</li>
+                <li><strong>Global Workspace:</strong> What's "in" the workspace (T/O) vs. not (B).</li>
+            </ul>
+
+            <div class="definition-box">
+                <strong>What OD Adds:</strong> A unified formal framework with energetic constraints that generates predictions.
+            </div>
+        </div>
+
+        <p style="margin-top: 2rem;"><a href="index.html" class="back-link">&larr; Back to main site</a> | <a href="attention-frameworks.html">Related: Attention Frameworks</a></p>
+    </div>
+
+    <script>
+    // Practice data with OD mappings
+    const practiceODMappings = {
+        'shamatha': { w:'B', b:'O', e:'B', t:'B', s:'T', a:'O', m:'B', g:'B', move: 'w→B, t→B, b→O' },
+        'vipassana': { w:'O', b:'O', e:'O', t:'O', s:'O', a:'O', m:'O', g:'B', move: '*→O (noting)' },
+        'jhana': { w:'B', b:'O', e:'O', t:'B', s:'T', a:'B', m:'B', g:'B', move: 'w→B, t→B, e→O (pleasure)' },
+        'open-awareness': { w:'T', b:'T', e:'T', t:'T', s:'O', a:'T', m:'O', g:'T', move: 'a→T, ∅→T' },
+        'metta': { w:'T', b:'T', e:'O', t:'T', s:'O', a:'B', m:'B', g:'B', move: 'e→O (cultivate), s→O' },
+        'focusing': { w:'B', b:'O', e:'O', t:'O', s:'T', a:'O', m:'O', g:'B', move: 'b→O, e→O, m→O' },
+        'stoicism': { w:'T', b:'T', e:'B', t:'O', s:'T', a:'B', m:'B', g:'B', move: 't→O, e→B' },
+        'zen': { w:'T', b:'T', e:'T', t:'T', s:'O', a:'T', m:'B', g:'T', move: 's→O, ∅→T' },
+        'tm': { w:'B', b:'B', e:'B', t:'B', s:'T', a:'B', m:'B', g:'T', move: '*→B except ∅→T' },
+        'mbsr': { w:'T', b:'O', e:'T', t:'O', s:'T', a:'O', m:'B', g:'B', move: 'b→O, t→O, a→O' },
+        'mbct': { w:'T', b:'O', e:'T', t:'O', s:'T', a:'O', m:'B', g:'B', move: 't→O (decentering)' },
+        'tonglen': { w:'T', b:'T', e:'O', t:'O', s:'O', a:'O', m:'B', g:'B', move: 'e→O, s→O (self-other)' },
+        'ifs': { w:'T', b:'T', e:'O', t:'O', s:'O', a:'T', m:'B', g:'B', move: 's→O (parts visible)' },
+        'act': { w:'T', b:'T', e:'T', t:'O', s:'O', a:'T', m:'B', g:'B', move: 't→O (defusion), s→O' },
+        'dbt': { w:'T', b:'O', e:'O', t:'O', s:'T', a:'O', m:'B', g:'B', move: 'e→O, t→O' },
+        'somatic-experiencing': { w:'B', b:'O', e:'O', t:'B', s:'T', a:'O', m:'B', g:'B', move: 'b→O, e→O, w→B' },
+        'emdr': { w:'B', b:'O', e:'O', t:'O', s:'T', a:'O', m:'B', g:'B', move: 'b→O, e→O, t→O' },
+        'tre': { w:'B', b:'O', e:'T', t:'B', s:'T', a:'O', m:'B', g:'B', move: 'b→O (tremoring)' },
+        'hatha-yoga': { w:'B', b:'O', e:'B', t:'B', s:'T', a:'O', m:'B', g:'B', move: 'b→O, w/t→B' },
+        'qigong': { w:'B', b:'O', e:'B', t:'B', s:'T', a:'T', m:'B', g:'B', move: 'b→O, a→T (flow)' },
+        'tai-chi': { w:'B', b:'O', e:'B', t:'B', s:'T', a:'T', m:'B', g:'B', move: 'b→O, a→T' },
+        'holotropic-breathwork': { w:'O', b:'O', e:'O', t:'O', s:'O', a:'B', m:'O', g:'T', move: 'm→O, ∅→T' },
+        'wim-hof': { w:'B', b:'O', e:'B', t:'B', s:'T', a:'O', m:'B', g:'B', move: 'b→O (intense), e→B' },
+        'nvc': { w:'T', b:'T', e:'O', t:'O', s:'T', a:'B', m:'B', g:'B', move: 'e→O, t→O' },
+        'circling': { w:'O', b:'T', e:'O', t:'O', s:'O', a:'O', m:'B', g:'B', move: 's→O (intersubjective)' },
+        'authentic-relating': { w:'O', b:'T', e:'O', t:'O', s:'O', a:'O', m:'B', g:'B', move: 's→O, e→O' },
+        'idp': { w:'T', b:'T', e:'T', t:'O', s:'O', a:'O', m:'B', g:'B', move: 't→O, s→O (perspective)' },
+        'mussar': { w:'T', b:'T', e:'O', t:'O', s:'O', a:'O', m:'B', g:'B', move: 'e→O, s→O (middot)' },
+        'psilocybin-therapy': { w:'O', b:'O', e:'O', t:'O', s:'O', a:'O', m:'O', g:'T', move: 'm→O (forced), ∅→T' },
+        'mdma-therapy': { w:'T', b:'O', e:'O', t:'O', s:'O', a:'B', m:'B', g:'B', move: 'e→O, s→O (safety)' },
+        'ayahuasca': { w:'O', b:'O', e:'O', t:'O', s:'O', a:'B', m:'O', g:'T', move: 'm→O, ∅→T' },
+        'ketamine-therapy': { w:'O', b:'O', e:'O', t:'O', s:'O', a:'B', m:'O', g:'T', move: 's→O, m→O' },
+        'sufism': { w:'T', b:'T', e:'O', t:'O', s:'O', a:'T', m:'B', g:'T', move: 'e→O (love), ∅→T' },
+        'vedanta': { w:'O', b:'O', e:'O', t:'O', s:'O', a:'O', m:'O', g:'T', move: 's→O→B, ∅→T' },
+        'christian-contemplation': { w:'B', b:'T', e:'O', t:'B', s:'O', a:'B', m:'B', g:'T', move: 's→O, ∅→T (presence)' },
+        'secular-character-dev': { w:'T', b:'T', e:'O', t:'O', s:'O', a:'O', m:'B', g:'B', move: 'e→O, t→O, s→O' }
+    };
+
+    // State display helper
+    function stateClass(s) {
+        return s === 'T' ? 'T' : s === 'O' ? 'O' : 'B';
+    }
+
+    function computeMetrics(od) {
+        const states = [od.w, od.b, od.e, od.t, od.s, od.a, od.m, od.g];
+        const T = states.filter(s => s === 'T').length;
+        const O = states.filter(s => s === 'O').length;
+        const B = states.filter(s => s === 'B').length;
+        const insight = O / Math.max(1, T + O);
+        const compression = B / 8;
+        const groundedness = od.g === 'T' || od.g === 'O' ? 1 : 0;
+        const energy = O * 2 + T * 1 + B * 0.5; // Rough estimate
+        return { T, O, B, insight, compression, groundedness, energy };
+    }
+
+    // Load traditions and populate table
+    let traditionsData = null;
+
+    async function loadData() {
+        try {
+            const response = await fetch('data/traditions.json');
+            const data = await response.json();
+            traditionsData = data.traditions ? data : { traditions: data };
+            populateTable();
+            updateLandscape();
+        } catch (e) {
+            console.error('Failed to load data:', e);
+        }
+    }
+
+    let currentSort = { column: 'name', direction: 'asc' };
+
+    window.sortTable = function(column) {
+        if (currentSort.column === column) {
+            currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+        } else {
+            currentSort.column = column;
+            currentSort.direction = 'asc';
+        }
+        // Update header indicators
+        document.querySelectorAll('th.sortable').forEach(th => {
+            th.classList.remove('asc', 'desc');
+            if (th.dataset.sort === column) {
+                th.classList.add(currentSort.direction);
+            }
+        });
+        populateTable();
+    }
+
+    function populateTable() {
+        const tbody = document.getElementById('practice-tbody');
+        tbody.innerHTML = '';
+
+        // Filter to only practices with OD mappings and sort
+        let practices = traditionsData.traditions.filter(t => practiceODMappings[t.id]);
+
+        practices.sort((a, b) => {
+            const odA = practiceODMappings[a.id];
+            const odB = practiceODMappings[b.id];
+            const metricsA = computeMetrics(odA);
+            const metricsB = computeMetrics(odB);
+
+            let valA, valB;
+            switch(currentSort.column) {
+                case 'name': valA = a.name; valB = b.name; break;
+                case 'T': valA = metricsA.T; valB = metricsB.T; break;
+                case 'O': valA = metricsA.O; valB = metricsB.O; break;
+                case 'B': valA = metricsA.B; valB = metricsB.B; break;
+                case 'insight': valA = metricsA.insight; valB = metricsB.insight; break;
+                default: valA = a.name; valB = b.name;
+            }
+
+            if (typeof valA === 'string') {
+                return currentSort.direction === 'asc'
+                    ? valA.localeCompare(valB)
+                    : valB.localeCompare(valA);
+            }
+            return currentSort.direction === 'asc' ? valA - valB : valB - valA;
+        });
+
+        practices.forEach(t => {
+            const od = practiceODMappings[t.id];
+            if (!od) return;
+
+            const metrics = computeMetrics(od);
+            const row = document.createElement('tr');
+            row.className = 'practice-row';
+            row.innerHTML = `
+                <td><strong>${t.name}</strong></td>
+                <td class="${stateClass(od.w)}">${od.w}</td>
+                <td class="${stateClass(od.b)}">${od.b}</td>
+                <td class="${stateClass(od.e)}">${od.e}</td>
+                <td class="${stateClass(od.t)}">${od.t}</td>
+                <td class="${stateClass(od.s)}">${od.s}</td>
+                <td class="${stateClass(od.a)}">${od.a}</td>
+                <td class="${stateClass(od.m)}">${od.m}</td>
+                <td class="${stateClass(od.g)}">${od.g}</td>
+                <td>${metrics.T}</td>
+                <td>${metrics.O}</td>
+                <td>${metrics.B}</td>
+                <td>${metrics.insight.toFixed(2)}</td>
+                <td><small>${od.move}</small></td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    function updateLandscape() {
+        if (!traditionsData) return;
+
+        const svg = document.getElementById('landscape-svg');
+        const container = document.getElementById('landscape-container');
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+
+        svg.innerHTML = '';
+        svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+
+        const xAxis = document.getElementById('x-axis').value;
+        const yAxis = document.getElementById('y-axis').value;
+        const colorAxis = document.getElementById('color-axis').value;
+
+        const padding = 60;
+        const plotWidth = width - 2 * padding;
+        const plotHeight = height - 2 * padding;
+
+        // Axes
+        const xLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        xLine.setAttribute('x1', padding);
+        xLine.setAttribute('y1', height - padding);
+        xLine.setAttribute('x2', width - padding);
+        xLine.setAttribute('y2', height - padding);
+        xLine.setAttribute('stroke', '#2c3e50');
+        svg.appendChild(xLine);
+
+        const yLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        yLine.setAttribute('x1', padding);
+        yLine.setAttribute('y1', height - padding);
+        yLine.setAttribute('x2', padding);
+        yLine.setAttribute('y2', padding);
+        yLine.setAttribute('stroke', '#2c3e50');
+        svg.appendChild(yLine);
+
+        // Axis labels
+        const axisLabels = {
+            compression: 'Compression (|B|/8)',
+            insight: 'Insight Index',
+            T: 'Transparency |T|',
+            O: 'Opacity |O|',
+            energy: 'Energy'
+        };
+
+        const xLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        xLabel.setAttribute('x', width / 2);
+        xLabel.setAttribute('y', height - 15);
+        xLabel.setAttribute('text-anchor', 'middle');
+        xLabel.setAttribute('font-size', '12');
+        xLabel.textContent = axisLabels[xAxis] + ' →';
+        svg.appendChild(xLabel);
+
+        const yLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        yLabel.setAttribute('x', 15);
+        yLabel.setAttribute('y', height / 2);
+        yLabel.setAttribute('text-anchor', 'middle');
+        yLabel.setAttribute('font-size', '12');
+        yLabel.setAttribute('transform', `rotate(-90, 15, ${height/2})`);
+        yLabel.textContent = axisLabels[yAxis] + ' →';
+        svg.appendChild(yLabel);
+
+        // Compute ranges
+        let xMin = 0, xMax = 1, yMin = 0, yMax = 1;
+        if (xAxis === 'T' || xAxis === 'O') xMax = 8;
+        if (yAxis === 'T' || yAxis === 'O') yMax = 8;
+
+        // Plot practices
+        traditionsData.traditions.forEach((t, i) => {
+            const od = practiceODMappings[t.id];
+            if (!od) return;
+
+            const metrics = computeMetrics(od);
+
+            let xVal, yVal, colorVal;
+
+            switch(xAxis) {
+                case 'compression': xVal = metrics.compression; break;
+                case 'insight': xVal = metrics.insight; break;
+                case 'T': xVal = metrics.T; break;
+                case 'O': xVal = metrics.O; break;
+            }
+
+            switch(yAxis) {
+                case 'compression': yVal = metrics.compression; break;
+                case 'insight': yVal = metrics.insight; break;
+                case 'T': yVal = metrics.T; break;
+                case 'O': yVal = metrics.O; break;
+            }
+
+            switch(colorAxis) {
+                case 'energy': colorVal = metrics.energy / 16; break;
+                case 'groundedness': colorVal = metrics.groundedness; break;
+                case 'none': colorVal = 0.5; break;
+            }
+
+            const x = padding + (xVal / xMax) * plotWidth;
+            const y = height - padding - (yVal / yMax) * plotHeight;
+
+            let color;
+            if (colorAxis === 'groundedness') {
+                color = colorVal ? '#27ae60' : '#e74c3c';
+            } else if (colorAxis === 'energy') {
+                const hue = (1 - colorVal) * 240; // Blue (low) to red (high)
+                color = `hsl(${hue}, 70%, 50%)`;
+            } else {
+                color = `hsl(${i * 11}, 70%, 50%)`;
+            }
+
+            const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circle.setAttribute('cx', x);
+            circle.setAttribute('cy', y);
+            circle.setAttribute('r', 8);
+            circle.setAttribute('fill', color);
+            circle.setAttribute('stroke', '#fff');
+            circle.setAttribute('stroke-width', 2);
+            circle.style.cursor = 'pointer';
+
+            circle.addEventListener('click', () => showLandscapeInfo(t, od, metrics));
+            circle.addEventListener('mouseenter', () => circle.setAttribute('r', 12));
+            circle.addEventListener('mouseleave', () => circle.setAttribute('r', 8));
+
+            const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+            title.textContent = t.name;
+            circle.appendChild(title);
+
+            svg.appendChild(circle);
+        });
+
+        // Add region labels
+        addRegionLabel(svg, 'Ordinary\nBasin', padding + plotWidth * 0.1, height - padding - plotHeight * 0.1);
+        addRegionLabel(svg, 'Concentration\nRidge', padding + plotWidth * 0.8, height - padding - plotHeight * 0.2);
+        addRegionLabel(svg, 'Insight\nPeak', padding + plotWidth * 0.3, height - padding - plotHeight * 0.8);
+    }
+
+    function addRegionLabel(svg, text, x, y) {
+        const lines = text.split('\n');
+        lines.forEach((line, i) => {
+            const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            label.setAttribute('x', x);
+            label.setAttribute('y', y + i * 14);
+            label.setAttribute('text-anchor', 'middle');
+            label.setAttribute('font-size', '10');
+            label.setAttribute('fill', '#999');
+            label.textContent = line;
+            svg.appendChild(label);
+        });
+    }
+
+    function showLandscapeInfo(tradition, od, metrics) {
+        const info = document.getElementById('landscape-info');
+        document.getElementById('landscape-info-title').textContent = tradition.name;
+
+        const stateStr = `(${od.w}${od.b}${od.e}${od.t}${od.s}${od.a}${od.m}${od.g})`.split('').map((c,i) => {
+            if (i === 0) return '(';
+            if (i === 9) return ')';
+            const cls = c === 'T' ? 'T' : c === 'O' ? 'O' : 'B';
+            return `<span class="${cls}">${c}</span>`;
+        }).join('');
+
+        document.getElementById('landscape-info-content').innerHTML = `
+            <p>${tradition.description}</p>
+            <p><strong>OD State:</strong> <span class="state-display">${stateStr}</span></p>
+            <p><strong>Primary Move:</strong> ${od.move}</p>
+            <p><strong>Metrics:</strong> |T|=${metrics.T}, |O|=${metrics.O}, |B|=${metrics.B}, Insight=${metrics.insight.toFixed(2)}</p>
+        `;
+
+        info.style.display = 'block';
+    }
+
+    window.addEventListener('load', loadData);
+    window.addEventListener('resize', updateLandscape);
+
+    // ========== LENS VISUALIZATION ==========
+    const regions = [
+        { id: 'w', name: 'World', desc: 'External sensory experience' },
+        { id: 'b', name: 'Body', desc: 'Somatic sensations' },
+        { id: 'e', name: 'Emotion', desc: 'Feelings and affect' },
+        { id: 't', name: 'Thought', desc: 'Mental content' },
+        { id: 's', name: 'Self', desc: 'The sense of "I"' },
+        { id: 'a', name: 'Attention', desc: 'The attending process' },
+        { id: 'm', name: 'Model', desc: 'Predictive construction' },
+        { id: 'g', name: 'Ground', desc: 'Emptiness / background' }
+    ];
+
+    const presets = {
+        ordinary: {
+            state: ['T','T','T','T','T','B','B','B'],
+            name: 'Ordinary Consciousness',
+            desc: 'Everything feels real. You don\'t notice attention or the construction process.'
+        },
+        shamatha: {
+            state: ['B','O','B','B','T','O','B','B'],
+            name: 'Shamatha (Calm Abiding)',
+            desc: 'World and thought fade out. Body (breath) becomes object of focus. Attention noticed.'
+        },
+        vipassana: {
+            state: ['O','O','O','O','O','O','O','B'],
+            name: 'Vipassana (Insight)',
+            desc: 'Everything seen as constructed, arising, passing. High metacognitive load.'
+        },
+        jhana: {
+            state: ['B','O','O','B','T','B','B','B'],
+            name: 'Jhāna (Absorption)',
+            desc: 'World and thought excluded. Absorbed in pleasant body/emotion. Self feels solid.'
+        },
+        nondual: {
+            state: ['T','T','T','T','B','T','O','T'],
+            name: 'Nondual Awareness',
+            desc: 'Experience flows naturally. No separate self. Ground/emptiness transparent.'
+        },
+        focusing: {
+            state: ['B','O','O','O','T','O','O','B'],
+            name: 'Focusing',
+            desc: 'Attention on body\'s felt sense. Meaning emerges from somatic knowing.'
+        }
+    };
+
+    const explorations = {
+        w: {
+            T: 'Notice how you\'re not "seeing" — there\'s just world. The processing is invisible.',
+            O: 'Can you notice the visual field AS visual? See edges, colors as constructed?',
+            B: 'Close your eyes. Let external input fade. What remains?'
+        },
+        b: {
+            T: 'Your body is transparent — you feel FROM it, not AT it.',
+            O: 'Feel your hands. Notice sensation AS sensation. The tingling, pressure, warmth.',
+            B: 'Deep focus elsewhere. The body disappears until something demands attention.'
+        },
+        e: {
+            T: 'When anxious, you ARE anxious — the feeling is reality.',
+            O: 'Notice "there is anxiety here" — feeling becomes object.',
+            B: 'In deep concentration, emotions can fade entirely.'
+        },
+        t: {
+            T: 'Lost in thought — the story is real, you\'re inside it.',
+            O: '"Thinking, thinking" — notice the thought AS thought.',
+            B: 'Gaps between thoughts. The quiet that was always there.'
+        },
+        s: {
+            T: 'The sense of being someone looking out. Unquestioned.',
+            O: 'Who is aware? Look for the looker. The self becomes object.',
+            B: 'No one here. Just experience happening. The self was always model.'
+        },
+        a: {
+            T: 'You don\'t notice noticing. Attention is invisible.',
+            O: 'Notice that you\'re attending. Meta-awareness.',
+            B: 'Paradox: you can\'t be aware of unawareness. Or can you?'
+        },
+        m: {
+            T: 'Impossible — you can\'t see through the lens you\'re looking through.',
+            O: 'Rare glimpse: seeing that experience is constructed in real-time.',
+            B: 'The model hides itself. That\'s its job.'
+        },
+        g: {
+            T: 'Emptiness as presence. Space in which all appears.',
+            O: 'Noticing the background. The silence between sounds.',
+            B: 'No sense of space or absence. Just content.'
+        }
+    };
+
+    let lensState = ['T','T','T','T','T','B','B','B']; // Start ordinary
+    let guidedMode = false;
+    let currentGuideStep = 0;
+
+    function initLensVisualization() {
+        const stack = document.getElementById('lens-stack');
+        stack.innerHTML = '';
+
+        regions.forEach((region, i) => {
+            const lens = document.createElement('div');
+            lens.className = `lens ${lensState[i]}`;
+            lens.dataset.index = i;
+            lens.innerHTML = `
+                <span class="lens-state">${lensState[i]}</span>
+                <span class="lens-label">${region.name}</span>
+            `;
+            lens.title = `${region.name}: ${region.desc}\nClick to cycle T→O→B`;
+            lens.addEventListener('click', () => cycleLens(i));
+            stack.appendChild(lens);
+        });
+
+        updateLensDisplay();
+        setupPresetButtons();
+    }
+
+    function cycleLens(index) {
+        const cycle = { T: 'O', O: 'B', B: 'T' };
+        lensState[index] = cycle[lensState[index]];
+
+        // Clear preset selection when manually changed
+        document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+
+        updateLensDisplay();
+        showExploration(index);
+    }
+
+    function showExploration(index) {
+        const region = regions[index];
+        const state = lensState[index];
+        const exploration = explorations[region.id][state];
+
+        const desc = document.getElementById('state-description');
+        desc.innerHTML = `<strong>${region.name} → ${state}:</strong> ${exploration}`;
+        desc.style.color = state === 'T' ? '#27ae60' : state === 'O' ? '#e67e22' : '#7f8c8d';
+    }
+
+    function updateLensDisplay() {
+        // Update lens elements
+        document.querySelectorAll('#lens-stack .lens').forEach((lens, i) => {
+            lens.className = `lens ${lensState[i]}`;
+            lens.querySelector('.lens-state').textContent = lensState[i];
+        });
+
+        // Update state notation
+        const notation = document.getElementById('state-notation');
+        notation.innerHTML = '(' + lensState.map((s, i) =>
+            `<span class="${s}">${s}</span>`
+        ).join('') + ')';
+
+        // Calculate and display energy
+        const T = lensState.filter(s => s === 'T').length;
+        const O = lensState.filter(s => s === 'O').length;
+        const B = lensState.filter(s => s === 'B').length;
+        const energy = (O * 2 + T * 1 + B * 0.3) / 16 * 100;
+
+        document.getElementById('energy-fill').style.width = energy + '%';
+        document.getElementById('energy-value').textContent =
+            `|T|=${T} |O|=${O} |B|=${B}`;
+
+        // Update light beam (stops at first B lens)
+        updateLightBeam();
+
+        // Update eye based on what reaches it
+        updateEye();
+    }
+
+    function updateLightBeam() {
+        const beam = document.getElementById('light-beam');
+        const lenses = document.querySelectorAll('#lens-stack .lens');
+
+        // Find first B lens
+        let stopIndex = lensState.length;
+        for (let i = 0; i < lensState.length; i++) {
+            if (lensState[i] === 'B') {
+                stopIndex = i;
+                break;
+            }
+        }
+
+        // Calculate beam width based on stop point
+        const lensWidth = 58; // lens width + gap
+        const baseOffset = 100; // from light source to first lens
+        const beamWidth = baseOffset + (stopIndex * lensWidth);
+
+        beam.style.width = beamWidth + 'px';
+        beam.style.opacity = stopIndex === 0 ? '0.3' : '1';
+    }
+
+    function updateEye() {
+        const pupil = document.getElementById('pupil');
+        const iris = document.getElementById('iris');
+
+        const O = lensState.filter(s => s === 'O').length;
+        const B = lensState.filter(s => s === 'B').length;
+
+        // More O = more "awake" (larger pupil)
+        // More B = more "narrowed" (smaller pupil)
+        const pupilSize = 5 + (O * 1) + (8 - B) * 0.5;
+        pupil.setAttribute('r', Math.min(12, pupilSize));
+
+        // Color shifts with state
+        if (B >= 5) {
+            iris.setAttribute('fill', '#1a5276'); // deep blue - concentrated
+        } else if (O >= 5) {
+            iris.setAttribute('fill', '#e67e22'); // orange - metacognitive
+        } else {
+            iris.setAttribute('fill', '#3498db'); // normal blue
+        }
+    }
+
+    function setupPresetButtons() {
+        document.querySelectorAll('.preset-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const presetKey = btn.dataset.preset;
+                const preset = presets[presetKey];
+
+                // Animate transition
+                animateToState(preset.state, () => {
+                    document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    document.getElementById('state-description').innerHTML =
+                        `<strong>${preset.name}:</strong> ${preset.desc}`;
+                });
+            });
+        });
+    }
+
+    function animateToState(targetState, callback) {
+        let step = 0;
+        const interval = setInterval(() => {
+            if (step < 8) {
+                lensState[step] = targetState[step];
+                updateLensDisplay();
+                step++;
+            } else {
+                clearInterval(interval);
+                if (callback) callback();
+            }
+        }, 80);
+    }
+
+    // ========== GUIDED MEDITATION ==========
+    const guidedSteps = [
+        {
+            region: null,
+            title: 'Welcome',
+            instruction: 'This guided tour will help you directly experience each phenomenal region and how it can be Transparent, Opaque, or Blind.',
+            prompt: 'Take a breath. Settle into your seat. When ready, continue.'
+        },
+        {
+            region: 0, // World
+            title: 'World (External Senses)',
+            instruction: 'Right now, you\'re seeing this screen. But notice: you don\'t experience "visual processing" — you just see. The mechanism is <strong>transparent</strong>.',
+            prompt: 'Can you shift to seeing the visual field AS visual? Notice colors, edges, the flatness of the screen as constructed appearance...'
+        },
+        {
+            region: 0,
+            title: 'World → Opaque',
+            instruction: 'When you notice the visual field as a visual field, it becomes <strong>opaque</strong> — you see it AS appearance rather than through it.',
+            prompt: 'Now close your eyes briefly. External world becomes <strong>blind</strong>. What remains?'
+        },
+        {
+            region: 1, // Body
+            title: 'Body (Somatic Sensation)',
+            instruction: 'Feel your hands right now. Notice the sensations — warmth, pressure, tingling. Most of the time, you feel FROM the body. It\'s <strong>transparent</strong>.',
+            prompt: 'Can you feel sensation AS sensation? Not "my hand" but raw tingling, pressure, warmth as phenomena...'
+        },
+        {
+            region: 1,
+            title: 'Body → Exploring States',
+            instruction: 'When deeply focused on something external, the body can become <strong>blind</strong> — you forget you have one until something demands attention.',
+            prompt: 'Notice: where does the body end? The boundary is less clear than you thought...'
+        },
+        {
+            region: 2, // Emotion
+            title: 'Emotion (Affect)',
+            instruction: 'What\'s your emotional tone right now? Curious? Calm? Slightly skeptical? Usually emotions are <strong>transparent</strong> — you ARE them.',
+            prompt: 'Can you notice the feeling AS a feeling? "There is curiosity here" rather than "I am curious"...'
+        },
+        {
+            region: 2,
+            title: 'Emotion → Opaque',
+            instruction: 'When you see emotion as emotion, it becomes <strong>opaque</strong>. You have the feeling rather than being it. This is the core move of emotional intelligence.',
+            prompt: 'Notice: the emotion may shift when observed. That\'s normal. Observation changes the observed.'
+        },
+        {
+            region: 3, // Thought
+            title: 'Thought (Mental Content)',
+            instruction: 'There\'s probably some inner commentary happening right now. Usually thoughts are <strong>transparent</strong> — you\'re inside the story.',
+            prompt: 'Can you catch a thought AS a thought? Notice: "thinking is happening" without getting pulled into the content...'
+        },
+        {
+            region: 3,
+            title: 'Thought → The Gap',
+            instruction: 'Between thoughts, there are gaps. In those gaps, thought is <strong>blind</strong> — not suppressed, just absent.',
+            prompt: 'Wait for the next thought... notice the silence before it arrives...'
+        },
+        {
+            region: 4, // Self
+            title: 'Self (The "I")',
+            instruction: 'There\'s a sense of being someone having this experience. A subject. An "I". This is usually completely <strong>transparent</strong> — unquestioned.',
+            prompt: 'Who is reading these words? Look for the reader. Where is the "I"?'
+        },
+        {
+            region: 4,
+            title: 'Self → Looking for the Looker',
+            instruction: 'When you look for the self, it becomes <strong>opaque</strong> — you\'re seeing the self-model as a model. It might feel strange or slippery.',
+            prompt: 'Can you find a solid, unchanging "I"? Or just more experience arising?'
+        },
+        {
+            region: 5, // Attention
+            title: 'Attention (The Process of Attending)',
+            instruction: 'Right now, attention is somewhere — on these words, or on a sensation you noticed. But attention itself is usually <strong>blind</strong>.',
+            prompt: 'Can you notice that you\'re attending? Not just WHAT you\'re aware of, but THAT you\'re aware?'
+        },
+        {
+            region: 5,
+            title: 'Attention → Meta-Awareness',
+            instruction: 'Noticing attention makes it <strong>opaque</strong>. This is meta-awareness — awareness of awareness. It\'s subtle but learnable.',
+            prompt: 'Notice attention move... from words, to body, to sound, back... the movement itself is visible.'
+        },
+        {
+            region: 6, // Model
+            title: 'Model (Predictive Construction)',
+            instruction: 'Your brain is predicting this experience right now — constructing it from incomplete data. This process is almost always <strong>blind</strong>.',
+            prompt: 'This is the hardest lens to make opaque. You can\'t easily see the seeing process...'
+        },
+        {
+            region: 6,
+            title: 'Model → Rare Glimpses',
+            instruction: 'Sometimes, in meditation or with psychedelics, the model becomes briefly <strong>opaque</strong> — you see experience being constructed. It\'s profound and destabilizing.',
+            prompt: 'For now, just know: everything you experience is a construction. Even this.'
+        },
+        {
+            region: 7, // Ground
+            title: 'Ground (Emptiness / Background)',
+            instruction: 'Behind all content, there\'s a background — the space in which experience appears. Usually <strong>blind</strong> (just content, no space).',
+            prompt: 'Notice the space around the words. The silence between sounds. The stillness that\'s always here...'
+        },
+        {
+            region: 7,
+            title: 'Ground → Transparent',
+            instruction: 'In some practices, the ground becomes <strong>transparent</strong> — emptiness as presence, not absence. Experience arises IN space rather than filling space.',
+            prompt: 'Rest as the space in which all appears. You ARE the ground, not just the contents.'
+        },
+        {
+            region: null,
+            title: 'Integration',
+            instruction: 'You\'ve now touched all eight regions. The skill is learning to <strong>choose</strong> your occlusion pattern rather than having it chosen for you.',
+            prompt: 'Click any lens to explore. Try the presets. Notice which states feel familiar, which feel strange.'
+        }
+    ];
+
+    let guidedStep = 0;
+    let guidedActive = false;
+
+    function initGuidedMeditation() {
+        document.getElementById('guided-btn').addEventListener('click', startGuided);
+        document.getElementById('guided-prev').addEventListener('click', prevGuidedStep);
+        document.getElementById('guided-next').addEventListener('click', nextGuidedStep);
+        document.getElementById('guided-exit').addEventListener('click', exitGuided);
+    }
+
+    function startGuided() {
+        guidedActive = true;
+        guidedStep = 0;
+        document.getElementById('guided-meditation').style.display = 'block';
+        document.getElementById('lens-info').style.display = 'none';
+        document.getElementById('guided-btn').textContent = '◼ In Progress';
+
+        // Build progress dots
+        const progressContainer = document.getElementById('guided-progress');
+        progressContainer.innerHTML = guidedSteps.map((_, i) =>
+            `<div class="progress-dot ${i === 0 ? 'active' : ''}" data-step="${i}"></div>`
+        ).join('');
+
+        updateGuidedStep();
+    }
+
+    function updateGuidedStep() {
+        const step = guidedSteps[guidedStep];
+
+        // Update instruction
+        document.getElementById('guided-instruction').innerHTML =
+            `<strong>${step.title}</strong><br>${step.instruction}<span class="prompt">${step.prompt}</span>`;
+
+        // Update progress dots
+        document.querySelectorAll('.progress-dot').forEach((dot, i) => {
+            dot.classList.remove('active', 'complete');
+            if (i < guidedStep) dot.classList.add('complete');
+            if (i === guidedStep) dot.classList.add('active');
+        });
+
+        // Highlight relevant lens
+        document.querySelectorAll('#lens-stack .lens').forEach((lens, i) => {
+            lens.classList.remove('highlighted');
+            if (step.region === i) {
+                lens.classList.add('highlighted');
+            }
+        });
+
+        // Update button states
+        document.getElementById('guided-prev').disabled = guidedStep === 0;
+        document.getElementById('guided-next').textContent =
+            guidedStep === guidedSteps.length - 1 ? 'Finish' : 'Next →';
+    }
+
+    function nextGuidedStep() {
+        if (guidedStep < guidedSteps.length - 1) {
+            guidedStep++;
+            updateGuidedStep();
+        } else {
+            exitGuided();
+        }
+    }
+
+    function prevGuidedStep() {
+        if (guidedStep > 0) {
+            guidedStep--;
+            updateGuidedStep();
+        }
+    }
+
+    function exitGuided() {
+        guidedActive = false;
+        document.getElementById('guided-meditation').style.display = 'none';
+        document.getElementById('lens-info').style.display = 'block';
+        document.getElementById('guided-btn').textContent = '▶ Guided Tour';
+        document.querySelectorAll('#lens-stack .lens').forEach(lens => {
+            lens.classList.remove('highlighted');
+        });
+    }
+
+    // Initialize on load
+    document.addEventListener('DOMContentLoaded', () => {
+        initLensVisualization();
+        initGuidedMeditation();
+    });
+    </script>
+
+    <footer>
+        <p>Harmonic Alignment Project | <a href="https://github.com/justinshenk/harmonic-alignment">GitHub</a></p>
+    </footer>
+</body>
+</html>

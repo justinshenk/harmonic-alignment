@@ -554,6 +554,539 @@
         <p style="margin-top: 2rem;"><a href="index.html" class="back-link">&larr; Back to main site</a></p>
     </div>
 
+    <!-- Category Theory Visualization -->
+    <div class="research-content" style="margin-top: 2rem;">
+        <h2>Interactive: Practices as Morphisms</h2>
+        <p>This visualization models contemplative practices as morphisms (arrows) between attentional states. Click on states or practices to explore.</p>
+
+        <div id="category-diagram" style="width: 100%; height: 600px; border: 1px solid var(--border); border-radius: 8px; background: #fafafa; position: relative; overflow: hidden;">
+            <svg id="morphism-svg" width="100%" height="100%"></svg>
+        </div>
+
+        <div style="display: flex; gap: 2rem; margin-top: 1rem; flex-wrap: wrap;">
+            <div>
+                <strong>Legend:</strong>
+                <div style="display: flex; gap: 1rem; margin-top: 0.5rem; flex-wrap: wrap;">
+                    <span style="display: flex; align-items: center; gap: 0.25rem;">
+                        <span style="width: 12px; height: 12px; background: #3498db; border-radius: 50%;"></span> Objects (States)
+                    </span>
+                    <span style="display: flex; align-items: center; gap: 0.25rem;">
+                        <span style="width: 20px; height: 2px; background: #e74c3c;"></span> Morphisms (Practices)
+                    </span>
+                </div>
+            </div>
+            <div>
+                <label for="view-mode"><strong>View:</strong></label>
+                <select id="view-mode" onchange="updateDiagram()">
+                    <option value="attention-states">Attentional States</option>
+                    <option value="complexity">Complexity Space</option>
+                    <option value="simplex">Attention Simplex</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="practice-info" style="margin-top: 1rem; padding: 1rem; background: #fff; border: 1px solid var(--border); border-radius: 8px; display: none;">
+            <h4 id="info-title">Practice Name</h4>
+            <p id="info-description"></p>
+            <div id="info-morphism"></div>
+        </div>
+    </div>
+
+    <script>
+    // Category-theoretic model of contemplative practices
+    const AttentionCategory = {
+        // Objects (attentional states)
+        objects: {
+            'ordinary': {
+                name: 'Ordinary Mind',
+                description: 'Default mode - scattered, reactive, identified with thoughts',
+                x: 100, y: 300,
+                qualities: { stability: 1, clarity: 1, flexibility: 2, equanimity: 1 }
+            },
+            'concentrated': {
+                name: 'Concentrated',
+                description: 'Focused attention - stable, narrow, effortful',
+                x: 300, y: 150,
+                qualities: { stability: 5, clarity: 3, flexibility: 1, equanimity: 3 }
+            },
+            'open': {
+                name: 'Open Awareness',
+                description: 'Receptive attention - spacious, inclusive, effortless',
+                x: 300, y: 450,
+                qualities: { stability: 3, clarity: 4, flexibility: 5, equanimity: 4 }
+            },
+            'absorbed': {
+                name: 'Absorbed (Jhana)',
+                description: 'Deep concentration - unified, blissful, withdrawn',
+                x: 500, y: 100,
+                qualities: { stability: 5, clarity: 4, flexibility: 1, equanimity: 5 }
+            },
+            'insight': {
+                name: 'Insight',
+                description: 'Penetrating attention - seeing impermanence, selflessness',
+                x: 500, y: 300,
+                qualities: { stability: 4, clarity: 5, flexibility: 4, equanimity: 4 }
+            },
+            'nondual': {
+                name: 'Nondual',
+                description: 'Prior to attention - awareness aware of itself, no subject-object',
+                x: 700, y: 300,
+                qualities: { stability: 5, clarity: 5, flexibility: 5, equanimity: 5 }
+            },
+            'embodied': {
+                name: 'Embodied',
+                description: 'Somatic attention - grounded in body, sensing',
+                x: 300, y: 300,
+                qualities: { stability: 3, clarity: 4, flexibility: 3, equanimity: 3 }
+            },
+            'relational': {
+                name: 'Relational',
+                description: 'Intersubjective attention - attuned to others, empathic',
+                x: 500, y: 450,
+                qualities: { stability: 3, clarity: 4, flexibility: 4, equanimity: 4 }
+            }
+        },
+
+        // Morphisms (practices as transformations between states)
+        morphisms: []
+    };
+
+    // Map practices to morphisms based on their characteristics
+    function mapPracticeToMorphism(practice) {
+        const cp = practice.complexityProfile;
+        const eff = practice.effectiveness;
+
+        // Determine source and target states based on practice profile
+        let source = 'ordinary';
+        let target = 'ordinary';
+        let secondary = null;
+
+        // High intrapsychic + low relational → concentration path
+        if (cp.intrapsychic >= 4 && cp.relational <= 2 && cp.somatic <= 3) {
+            if (cp.transpersonal >= 4) {
+                target = 'absorbed';
+                if (eff.insight >= 4) secondary = 'nondual';
+            } else {
+                target = 'concentrated';
+                if (eff.metacognition >= 4) secondary = 'insight';
+            }
+        }
+        // High somatic → embodied
+        else if (cp.somatic >= 4) {
+            target = 'embodied';
+            if (cp.intrapsychic >= 4) secondary = 'insight';
+        }
+        // High relational → relational awareness
+        else if (cp.relational >= 4) {
+            target = 'relational';
+            if (cp.collective >= 4) secondary = 'open';
+        }
+        // High transpersonal + open monitoring style
+        else if (cp.transpersonal >= 4 && cp.intrapsychic >= 4) {
+            target = 'open';
+            secondary = 'nondual';
+        }
+        // Insight practices
+        else if (eff.insight >= 5 && eff.metacognition >= 5) {
+            target = 'insight';
+            secondary = 'nondual';
+        }
+        // Default cognitive practices
+        else if (cp.intrapsychic >= 3) {
+            target = 'concentrated';
+        }
+
+        return {
+            id: practice.id,
+            name: practice.name,
+            source: source,
+            target: target,
+            secondary: secondary,
+            practice: practice,
+            // Compute "strength" of the morphism
+            strength: (eff.focus + eff.metacognition + eff.insight) / 15
+        };
+    }
+
+    // Traditions data will be loaded here
+    let traditionsData = null;
+
+    async function loadTraditions() {
+        try {
+            const response = await fetch('data/traditions.json');
+            traditionsData = await response.json();
+
+            // Map all practices to morphisms
+            AttentionCategory.morphisms = traditionsData.traditions.map(mapPracticeToMorphism);
+
+            updateDiagram();
+        } catch (e) {
+            console.error('Failed to load traditions:', e);
+        }
+    }
+
+    function updateDiagram() {
+        const mode = document.getElementById('view-mode').value;
+        const svg = document.getElementById('morphism-svg');
+        const container = document.getElementById('category-diagram');
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+
+        svg.innerHTML = '';
+        svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+
+        if (mode === 'attention-states') {
+            drawCategoryDiagram(svg, width, height);
+        } else if (mode === 'complexity') {
+            drawComplexitySpace(svg, width, height);
+        } else if (mode === 'simplex') {
+            drawAttentionSimplex(svg, width, height);
+        }
+    }
+
+    function drawCategoryDiagram(svg, width, height) {
+        const objects = AttentionCategory.objects;
+        const morphisms = AttentionCategory.morphisms;
+
+        // Scale positions to container
+        const scaleX = width / 800;
+        const scaleY = height / 600;
+
+        // Draw morphisms (arrows) first so they're behind nodes
+        const drawnPairs = new Set();
+
+        morphisms.forEach((m, i) => {
+            const pairKey = `${m.source}-${m.target}`;
+            const count = morphisms.filter(x => `${x.source}-${x.target}` === pairKey).length;
+            const pairIndex = morphisms.filter((x, j) => j < i && `${x.source}-${x.target}` === pairKey).length;
+
+            const src = objects[m.source];
+            const tgt = objects[m.target];
+            if (!src || !tgt) return;
+
+            const x1 = src.x * scaleX;
+            const y1 = src.y * scaleY;
+            const x2 = tgt.x * scaleX;
+            const y2 = tgt.y * scaleY;
+
+            // Curve the line based on how many morphisms share this pair
+            const midX = (x1 + x2) / 2;
+            const midY = (y1 + y2) / 2;
+            const offset = (pairIndex - (count - 1) / 2) * 20;
+            const perpX = -(y2 - y1) / Math.sqrt((x2-x1)**2 + (y2-y1)**2) * offset;
+            const perpY = (x2 - x1) / Math.sqrt((x2-x1)**2 + (y2-y1)**2) * offset;
+
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            const d = `M ${x1} ${y1} Q ${midX + perpX} ${midY + perpY} ${x2} ${y2}`;
+            path.setAttribute('d', d);
+            path.setAttribute('fill', 'none');
+            path.setAttribute('stroke', `hsla(${(i * 37) % 360}, 60%, 50%, 0.6)`);
+            path.setAttribute('stroke-width', 1 + m.strength * 2);
+            path.setAttribute('class', 'morphism-path');
+            path.setAttribute('data-practice', m.id);
+            path.style.cursor = 'pointer';
+
+            path.addEventListener('click', () => showPracticeInfo(m));
+            path.addEventListener('mouseenter', () => {
+                path.setAttribute('stroke-width', 3 + m.strength * 2);
+                path.setAttribute('stroke-opacity', '1');
+            });
+            path.addEventListener('mouseleave', () => {
+                path.setAttribute('stroke-width', 1 + m.strength * 2);
+            });
+
+            svg.appendChild(path);
+
+            // Draw secondary morphism if exists
+            if (m.secondary && objects[m.secondary]) {
+                const tgt2 = objects[m.secondary];
+                const x3 = tgt2.x * scaleX;
+                const y3 = tgt2.y * scaleY;
+
+                const path2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path2.setAttribute('d', `M ${x2} ${y2} L ${x3} ${y3}`);
+                path2.setAttribute('fill', 'none');
+                path2.setAttribute('stroke', `hsla(${(i * 37) % 360}, 60%, 50%, 0.3)`);
+                path2.setAttribute('stroke-width', 1);
+                path2.setAttribute('stroke-dasharray', '4,4');
+                svg.appendChild(path2);
+            }
+        });
+
+        // Draw objects (nodes)
+        Object.entries(objects).forEach(([id, obj]) => {
+            const x = obj.x * scaleX;
+            const y = obj.y * scaleY;
+
+            // Node circle
+            const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circle.setAttribute('cx', x);
+            circle.setAttribute('cy', y);
+            circle.setAttribute('r', 30);
+            circle.setAttribute('fill', '#3498db');
+            circle.setAttribute('stroke', '#2c3e50');
+            circle.setAttribute('stroke-width', 2);
+            circle.style.cursor = 'pointer';
+
+            circle.addEventListener('click', () => showStateInfo(id, obj));
+            circle.addEventListener('mouseenter', () => circle.setAttribute('r', 35));
+            circle.addEventListener('mouseleave', () => circle.setAttribute('r', 30));
+
+            svg.appendChild(circle);
+
+            // Label
+            const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            text.setAttribute('x', x);
+            text.setAttribute('y', y + 50);
+            text.setAttribute('text-anchor', 'middle');
+            text.setAttribute('font-size', '12');
+            text.setAttribute('fill', '#2c3e50');
+            text.textContent = obj.name;
+            svg.appendChild(text);
+        });
+    }
+
+    function drawComplexitySpace(svg, width, height) {
+        if (!traditionsData) return;
+
+        const padding = 60;
+        const plotWidth = width - 2 * padding;
+        const plotHeight = height - 2 * padding;
+
+        // Use somatic vs intrapsychic as axes (PCA-like projection)
+        const traditions = traditionsData.traditions;
+
+        // Axes
+        const xAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        xAxis.setAttribute('x1', padding);
+        xAxis.setAttribute('y1', height - padding);
+        xAxis.setAttribute('x2', width - padding);
+        xAxis.setAttribute('y2', height - padding);
+        xAxis.setAttribute('stroke', '#2c3e50');
+        svg.appendChild(xAxis);
+
+        const yAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        yAxis.setAttribute('x1', padding);
+        yAxis.setAttribute('y1', height - padding);
+        yAxis.setAttribute('x2', padding);
+        yAxis.setAttribute('y2', padding);
+        yAxis.setAttribute('stroke', '#2c3e50');
+        svg.appendChild(yAxis);
+
+        // Axis labels
+        const xLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        xLabel.setAttribute('x', width / 2);
+        xLabel.setAttribute('y', height - 20);
+        xLabel.setAttribute('text-anchor', 'middle');
+        xLabel.textContent = 'Somatic Complexity →';
+        svg.appendChild(xLabel);
+
+        const yLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        yLabel.setAttribute('x', 20);
+        yLabel.setAttribute('y', height / 2);
+        yLabel.setAttribute('text-anchor', 'middle');
+        yLabel.setAttribute('transform', `rotate(-90, 20, ${height/2})`);
+        yLabel.textContent = 'Intrapsychic Complexity →';
+        svg.appendChild(yLabel);
+
+        // Plot practices
+        traditions.forEach((t, i) => {
+            const cp = t.complexityProfile;
+            const x = padding + (cp.somatic / 5) * plotWidth;
+            const y = height - padding - (cp.intrapsychic / 5) * plotHeight;
+            const r = 5 + (cp.transpersonal / 5) * 10; // Size by transpersonal
+
+            const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circle.setAttribute('cx', x);
+            circle.setAttribute('cy', y);
+            circle.setAttribute('r', r);
+            circle.setAttribute('fill', `hsla(${cp.relational * 60}, 70%, 50%, 0.7)`);
+            circle.setAttribute('stroke', '#2c3e50');
+            circle.setAttribute('stroke-width', 1);
+            circle.style.cursor = 'pointer';
+
+            circle.addEventListener('click', () => {
+                const morphism = AttentionCategory.morphisms.find(m => m.id === t.id);
+                if (morphism) showPracticeInfo(morphism);
+            });
+
+            svg.appendChild(circle);
+
+            // Label (show on hover via title)
+            const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+            title.textContent = t.name;
+            circle.appendChild(title);
+        });
+    }
+
+    function drawAttentionSimplex(svg, width, height) {
+        // Draw a 2D projection of the 4-simplex (tetrahedron)
+        // Vertices: Stability, Clarity, Flexibility, Equanimity
+
+        const cx = width / 2;
+        const cy = height / 2;
+        const r = Math.min(width, height) * 0.35;
+
+        // Tetrahedron vertices projected to 2D
+        const vertices = {
+            stability: { x: cx, y: cy - r, label: 'Stability' },
+            clarity: { x: cx + r * 0.866, y: cy + r * 0.5, label: 'Clarity' },
+            flexibility: { x: cx - r * 0.866, y: cy + r * 0.5, label: 'Flexibility' },
+            equanimity: { x: cx, y: cy, label: 'Equanimity (center)' }
+        };
+
+        // Draw simplex edges
+        const edges = [
+            ['stability', 'clarity'],
+            ['clarity', 'flexibility'],
+            ['flexibility', 'stability'],
+            ['stability', 'equanimity'],
+            ['clarity', 'equanimity'],
+            ['flexibility', 'equanimity']
+        ];
+
+        edges.forEach(([a, b]) => {
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', vertices[a].x);
+            line.setAttribute('y1', vertices[a].y);
+            line.setAttribute('x2', vertices[b].x);
+            line.setAttribute('y2', vertices[b].y);
+            line.setAttribute('stroke', '#bdc3c7');
+            line.setAttribute('stroke-width', 1);
+            svg.appendChild(line);
+        });
+
+        // Draw vertex labels
+        Object.entries(vertices).forEach(([key, v]) => {
+            const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circle.setAttribute('cx', v.x);
+            circle.setAttribute('cy', v.y);
+            circle.setAttribute('r', 8);
+            circle.setAttribute('fill', '#3498db');
+            svg.appendChild(circle);
+
+            const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            text.setAttribute('x', v.x);
+            text.setAttribute('y', v.y - 15);
+            text.setAttribute('text-anchor', 'middle');
+            text.setAttribute('font-size', '12');
+            text.setAttribute('font-weight', 'bold');
+            text.textContent = v.label;
+            svg.appendChild(text);
+        });
+
+        // Plot practices as points in barycentric coordinates
+        if (!traditionsData) return;
+
+        traditionsData.traditions.forEach((t, i) => {
+            const eff = t.effectiveness;
+
+            // Approximate attentional qualities from effectiveness scores
+            const qualities = {
+                stability: (eff.focus + eff.adhd) / 10,
+                clarity: (eff.metacognition + eff.insight) / 10,
+                flexibility: (eff.empathy + eff.communication) / 10,
+                equanimity: (eff.emotionalRegulation + eff.anxiety) / 10
+            };
+
+            // Normalize to sum to 1
+            const sum = qualities.stability + qualities.clarity + qualities.flexibility + qualities.equanimity;
+            Object.keys(qualities).forEach(k => qualities[k] /= sum);
+
+            // Compute position as weighted average of vertices
+            const x = vertices.stability.x * qualities.stability +
+                      vertices.clarity.x * qualities.clarity +
+                      vertices.flexibility.x * qualities.flexibility +
+                      vertices.equanimity.x * qualities.equanimity;
+            const y = vertices.stability.y * qualities.stability +
+                      vertices.clarity.y * qualities.clarity +
+                      vertices.flexibility.y * qualities.flexibility +
+                      vertices.equanimity.y * qualities.equanimity;
+
+            const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circle.setAttribute('cx', x);
+            circle.setAttribute('cy', y);
+            circle.setAttribute('r', 6);
+            circle.setAttribute('fill', `hsla(${i * 11}, 70%, 50%, 0.8)`);
+            circle.setAttribute('stroke', '#fff');
+            circle.setAttribute('stroke-width', 1);
+            circle.style.cursor = 'pointer';
+
+            const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+            title.textContent = `${t.name}\nStability: ${(qualities.stability * 100).toFixed(0)}%\nClarity: ${(qualities.clarity * 100).toFixed(0)}%\nFlexibility: ${(qualities.flexibility * 100).toFixed(0)}%\nEquanimity: ${(qualities.equanimity * 100).toFixed(0)}%`;
+            circle.appendChild(title);
+
+            circle.addEventListener('click', () => {
+                const morphism = AttentionCategory.morphisms.find(m => m.id === t.id);
+                if (morphism) showPracticeInfo(morphism);
+            });
+
+            svg.appendChild(circle);
+        });
+    }
+
+    function showPracticeInfo(morphism) {
+        const infoDiv = document.getElementById('practice-info');
+        const p = morphism.practice;
+
+        document.getElementById('info-title').textContent = p.name;
+        document.getElementById('info-description').textContent = p.description;
+
+        const src = AttentionCategory.objects[morphism.source];
+        const tgt = AttentionCategory.objects[morphism.target];
+
+        let morphismHtml = `
+            <div style="margin-top: 1rem; padding: 0.5rem; background: #f5f5f5; border-radius: 4px;">
+                <strong>As Morphism:</strong><br>
+                <code style="font-size: 1.1em;">${src?.name || morphism.source} → ${tgt?.name || morphism.target}</code>
+                ${morphism.secondary ? `<br><span style="color: #666;">with path to: ${AttentionCategory.objects[morphism.secondary]?.name}</span>` : ''}
+            </div>
+            <div style="margin-top: 0.5rem;">
+                <strong>Complexity Profile:</strong>
+                Somatic: ${p.complexityProfile.somatic}/5,
+                Intrapsychic: ${p.complexityProfile.intrapsychic}/5,
+                Relational: ${p.complexityProfile.relational}/5,
+                Transpersonal: ${p.complexityProfile.transpersonal}/5
+            </div>
+        `;
+
+        document.getElementById('info-morphism').innerHTML = morphismHtml;
+        infoDiv.style.display = 'block';
+    }
+
+    function showStateInfo(id, state) {
+        const infoDiv = document.getElementById('practice-info');
+
+        document.getElementById('info-title').textContent = state.name + ' (Object)';
+        document.getElementById('info-description').textContent = state.description;
+
+        // Find all morphisms into and out of this state
+        const incoming = AttentionCategory.morphisms.filter(m => m.target === id);
+        const outgoing = AttentionCategory.morphisms.filter(m => m.source === id);
+
+        let morphismHtml = `
+            <div style="margin-top: 1rem;">
+                <strong>Attentional Qualities:</strong>
+                Stability: ${state.qualities.stability}/5,
+                Clarity: ${state.qualities.clarity}/5,
+                Flexibility: ${state.qualities.flexibility}/5,
+                Equanimity: ${state.qualities.equanimity}/5
+            </div>
+            <div style="margin-top: 0.5rem;">
+                <strong>Practices leading here (${incoming.length}):</strong>
+                ${incoming.slice(0, 5).map(m => m.name).join(', ')}${incoming.length > 5 ? '...' : ''}
+            </div>
+        `;
+
+        document.getElementById('info-morphism').innerHTML = morphismHtml;
+        infoDiv.style.display = 'block';
+    }
+
+    // Initialize
+    window.addEventListener('load', loadTraditions);
+    window.addEventListener('resize', updateDiagram);
+    </script>
+
     <footer>
         <p>Harmonic Alignment Project | <a href="https://github.com/justinshenk/harmonic-alignment">GitHub</a></p>
     </footer>
