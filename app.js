@@ -549,6 +549,22 @@ function initializeNavigation() {
         aboutView: 'about-section'
     };
 
+    // Map clean URLs to view IDs
+    const pathToView = {
+        '/': 'quizView',
+        '/quiz': 'quizView',
+        '/compare': 'compareView',
+        '/research': 'researchView',
+        '/about': 'aboutView'
+    };
+
+    const viewToPath = {
+        'quizView': '/quiz',
+        'compareView': '/compare',
+        'researchView': '/research',
+        'aboutView': '/about'
+    };
+
     // Function to switch to a section
     function switchToSection(buttonId, pushState = true) {
         if (!buttons[buttonId]) return;
@@ -564,9 +580,10 @@ function initializeNavigation() {
         // Save to localStorage
         localStorage.setItem('activeSection', buttonId);
 
-        // Push to browser history (unless we're responding to popstate)
+        // Push to browser history with clean URL (unless we're responding to popstate)
         if (pushState) {
-            history.pushState({ section: buttonId }, '', `#${buttonId}`);
+            const path = viewToPath[buttonId] || `#${buttonId}`;
+            history.pushState({ section: buttonId }, '', path);
         }
 
         // Initialize complexity visualizations when switching to that view
@@ -585,24 +602,37 @@ function initializeNavigation() {
         if (event.state && event.state.section) {
             switchToSection(event.state.section, false);
         } else {
-            // Default to quiz view if no state
-            switchToSection('quizView', false);
+            // Check pathname for clean URLs
+            const viewFromPath = pathToView[window.location.pathname];
+            if (viewFromPath) {
+                switchToSection(viewFromPath, false);
+            } else {
+                switchToSection('quizView', false);
+            }
         }
     });
 
-    // Check URL hash on load
+    // Check URL on load (clean path or hash)
+    const pathname = window.location.pathname;
     const hash = window.location.hash.slice(1);
-    if (hash && buttons[hash]) {
+
+    // First check clean URL path
+    if (pathToView[pathname]) {
+        const viewId = pathToView[pathname];
+        switchToSection(viewId, false);
+        history.replaceState({ section: viewId }, '', pathname);
+    } else if (hash && buttons[hash]) {
+        // Fall back to hash-based routing for backwards compatibility
         switchToSection(hash, false);
-        history.replaceState({ section: hash }, '', `#${hash}`);
+        history.replaceState({ section: hash }, '', viewToPath[hash] || `#${hash}`);
     } else {
         // Restore saved section from localStorage
         const savedSection = localStorage.getItem('activeSection');
         if (savedSection && buttons[savedSection]) {
             switchToSection(savedSection, false);
-            history.replaceState({ section: savedSection }, '', `#${savedSection}`);
+            history.replaceState({ section: savedSection }, '', viewToPath[savedSection] || `#${savedSection}`);
         } else {
-            history.replaceState({ section: 'quizView' }, '', '#quizView');
+            history.replaceState({ section: 'quizView' }, '', '/quiz');
         }
     }
 

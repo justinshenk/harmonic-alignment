@@ -1,7 +1,8 @@
 {
-  "buildCommand": null,
-  "outputDirectory": ".",
-  "devCommand": null,
-  "installCommand": null,
-  "framework": null
+  "rewrites": [
+    { "source": "/quiz", "destination": "/index.html" },
+    { "source": "/compare", "destination": "/index.html" },
+    { "source": "/research", "destination": "/index.html" },
+    { "source": "/about", "destination": "/index.html" }
+  ]
 }
