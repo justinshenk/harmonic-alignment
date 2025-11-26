@@ -7,6 +7,7 @@ create table public.profiles (
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
   updated_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
+-- Note: Profiles are unlisted by default - only accessible via shared link
 
 -- User practices (tracks which practices user knows and their ratings)
 create table public.user_practices (
