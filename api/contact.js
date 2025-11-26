@@ -16,7 +16,7 @@ export default async function handler(req, res) {
 
     const baseId = process.env.AIRTABLE_BASE_ID;
     const apiKey = process.env.AIRTABLE_API_KEY;
-    const tableName = process.env.AIRTABLE_TABLE_NAME || 'Contact';
+    const tableName = 'Contact'; // Separate table for contact form submissions
 
     // Check env vars
     if (!baseId || !apiKey) {
