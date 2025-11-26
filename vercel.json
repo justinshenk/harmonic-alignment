@@ -5,6 +5,7 @@
     { "source": "/explore", "destination": "/index.html" },
     { "source": "/ratings", "destination": "/index.html" },
     { "source": "/profile", "destination": "/index.html" },
-    { "source": "/about", "destination": "/index.html" }
+    { "source": "/about", "destination": "/index.html" },
+    { "source": "/privacy", "destination": "/privacy.html" }
   ]
 }
