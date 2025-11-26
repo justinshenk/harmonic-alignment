@@ -19,6 +19,15 @@ let quizState = {
     answers: {},
     questions: [
         {
+            id: 'substances',
+            question: 'Include substance-assisted practices in recommendations?',
+            type: 'single',
+            options: [
+                { value: 'exclude', label: 'No, exclude substance-assisted practices' },
+                { value: 'include', label: 'Yes, include all practices' }
+            ]
+        },
+        {
             id: 'goals',
             question: 'What are your primary goals?',
             type: 'multiple',
@@ -893,14 +902,13 @@ const substancePractices = ['psilocybin-therapy', 'mdma-therapy', 'ayahuasca', '
 function calculateRecommendations() {
     if (!traditionsData) return [];
 
-    // Check if we should exclude substance practices
-    const excludeSubstances = document.getElementById('excludeSubstances')?.checked ?? true;
-
     // Build weights from answers
     const weights = {};
     const filters = [];
 
-    // Add substance filter if checkbox is checked
+    // Check if we should exclude substance practices (default to exclude)
+    const substanceAnswer = quizState.answers['substances'];
+    const excludeSubstances = substanceAnswer !== 'include';
     if (excludeSubstances) {
         filters.push(t => !substancePractices.includes(t.id));
     }
