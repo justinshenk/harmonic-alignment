@@ -36,17 +36,22 @@ export default async function handler(req, res) {
         }
 
         // Prepare Airtable record
+        const isSubscribed = subscribe === true || subscribe === 'true';
         const record = {
             fields: {
                 'Email': email,
                 'Name': name || '',
                 'Message': message || '',
-                'Subscribe': subscribe === true || subscribe === 'true',
                 'Source': source || '',
                 'Timestamp': new Date().toISOString(),
                 'Type': 'Contact'
             }
         };
+
+        // Only add Subscribe if true (Airtable checkbox)
+        if (isSubscribed) {
+            record.fields['Subscribe'] = true;
+        }
 
         // Send to Airtable with timeout
         const controller = new AbortController();
