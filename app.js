@@ -305,7 +305,12 @@ async function loadData() {
     try {
         const response = await fetch('data/traditions.json');
         const data = await response.json();
-        traditionsData = data.traditions || data;
+        // Ensure traditionsData has .traditions property
+        if (data.traditions) {
+            traditionsData = data;
+        } else {
+            traditionsData = { traditions: data };
+        }
         console.log('✓ Loaded traditions data');
     } catch (error) {
         console.error('Error loading data:', error);
