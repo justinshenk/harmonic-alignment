@@ -1125,15 +1125,16 @@ details.dimension-legend[open] summary span {
         border-radius: 8px;
     }
 
-    /* Reduce main padding */
+    /* Full width on mobile */
     main {
-        margin: 1rem auto;
-        padding: 0 0.75rem;
+        margin: 0;
+        padding: 0;
     }
 
     .section {
         padding: 1rem;
-        border-radius: 8px;
+        border-radius: 0;
+        box-shadow: none;
     }
 
     /* Finder section tighter */
