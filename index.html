@@ -61,13 +61,13 @@
                     </div>
 
                     <div class="finder-tabs">
-                        <button id="tabChat" class="tab-button" onclick="switchFinderTab('chat')">
-                            <span class="tab-icon">💬</span>
-                            Quick Suggestion
-                        </button>
                         <button id="tabQuiz" class="tab-button active" onclick="switchFinderTab('quiz')">
                             <span class="tab-icon">📋</span>
                             Guided Quiz
+                        </button>
+                        <button id="tabChat" class="tab-button" onclick="switchFinderTab('chat')">
+                            <span class="tab-icon">💬</span>
+                            Quick Suggestion
                         </button>
                     </div>
 
@@ -84,12 +84,12 @@
 
                         <div id="finderQuiz" class="finder-content active">
                             <p class="finder-description">Answer a few questions to find practices tailored to your goals and circumstances.</p>
-                            <label class="filter-checkbox">
+                            <button id="startQuiz" class="primary-button finder-cta">Start Quiz</button>
+                            <p class="finder-hint">Takes about 2 minutes</p>
+                            <label class="filter-checkbox" style="margin-top: 1rem;">
                                 <input type="checkbox" id="excludeSubstances" checked>
                                 <span>Exclude substance-assisted practices</span>
                             </label>
-                            <button id="startQuiz" class="primary-button finder-cta">Start Quiz</button>
-                            <p class="finder-hint">Takes about 2 minutes</p>
                         </div>
                     </div>
 

@@ -111,7 +111,8 @@ function updateAuthUI(isLoggedIn) {
     }
 
     // Profile page logged in/out states (skip if viewing shared profile)
-    if (!isViewingSharedProfile) {
+    const hasUserParam = new URLSearchParams(window.location.search).has('user');
+    if (!isViewingSharedProfile && !hasUserParam) {
         if (profileLoggedOut) {
             profileLoggedOut.style.display = isLoggedIn ? 'none' : 'block';
         }
