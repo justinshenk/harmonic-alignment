@@ -1960,9 +1960,9 @@ function createVerticalViolinPlot(tradition) {
     const isMobile = window.innerWidth <= 768;
     const margin = {
         top: 20,
-        right: isMobile ? 20 : 40,
+        right: isMobile ? 15 : 40,
         bottom: 40,
-        left: isMobile ? 80 : 120
+        left: isMobile ? 95 : 120
     };
     const containerWidth = container.clientWidth || 450;
     const width = containerWidth - margin.left - margin.right;
