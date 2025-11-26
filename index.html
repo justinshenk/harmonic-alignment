@@ -451,8 +451,11 @@
                     <div class="profile-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
                         <div>
                             <span id="userDisplayName" style="font-weight: 600;"></span>
+                            <span id="userBio" style="display: block; font-size: 0.9rem; color: #666; margin-top: 0.25rem;"></span>
+                            <a id="userPersonalUrl" href="" target="_blank" rel="noopener" style="display: none; font-size: 0.85rem;">Personal link →</a>
                         </div>
-                        <div style="display: flex; gap: 0.5rem;">
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <button class="secondary-button" onclick="showProfileSettings()" title="Edit profile">Settings</button>
                             <button class="secondary-button" onclick="shareProfile()" title="Share your profile">Share</button>
                             <button class="secondary-button" onclick="showAddPracticeSelect()">+ Add Practice</button>
                         </div>
@@ -468,6 +471,36 @@
             </div>
         </div>
     </main>
+
+    <!-- Profile Settings Modal -->
+    <div id="profileSettingsModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeProfileSettings()">&times;</button>
+            <h2 style="margin-bottom: 1.5rem;">Profile Settings</h2>
+
+            <form id="profileSettingsForm" onsubmit="handleProfileSettingsSubmit(event)">
+                <div class="form-group">
+                    <label for="settingsDisplayName">Display Name</label>
+                    <input type="text" id="settingsDisplayName" name="display_name" placeholder="Your name">
+                </div>
+
+                <div class="form-group">
+                    <label for="settingsBio">Bio</label>
+                    <textarea id="settingsBio" name="bio" rows="2" placeholder="A short description about yourself"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="settingsPersonalUrl">Personal Link</label>
+                    <input type="url" id="settingsPersonalUrl" name="personal_url" placeholder="https://your-website.com">
+                </div>
+
+                <div style="display: flex; gap: 1rem;">
+                    <button type="submit" class="primary-button" style="flex: 1;">Save</button>
+                    <button type="button" class="secondary-button" onclick="closeProfileSettings()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <!-- Auth Modal -->
     <div id="authModal" class="modal" style="display: none;">

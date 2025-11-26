@@ -4,6 +4,8 @@
 create table public.profiles (
   id uuid references auth.users on delete cascade primary key,
   display_name text,
+  personal_url text,  -- personal website or social link
+  bio text,  -- short bio/description
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
   updated_at timestamp with time zone default timezone('utc'::text, now()) not null
 );

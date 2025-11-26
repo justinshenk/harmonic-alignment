@@ -390,6 +390,90 @@ async function handlePracticeSubmit(e) {
     loadUserPractices();
 }
 
+// ============ Profile Settings ============
+
+// Show profile settings modal
+async function showProfileSettings() {
+    const modal = document.getElementById('profileSettingsModal');
+    if (!modal || !currentUser) return;
+
+    // Load current profile data
+    const { data } = await supabase
+        .from('profiles')
+        .select('display_name, bio, personal_url')
+        .eq('id', currentUser.id)
+        .single();
+
+    document.getElementById('settingsDisplayName').value = data?.display_name || currentUser.user_metadata?.display_name || '';
+    document.getElementById('settingsBio').value = data?.bio || '';
+    document.getElementById('settingsPersonalUrl').value = data?.personal_url || '';
+
+    modal.style.display = 'flex';
+}
+
+// Close profile settings modal
+function closeProfileSettings() {
+    document.getElementById('profileSettingsModal').style.display = 'none';
+}
+
+// Handle profile settings form submit
+async function handleProfileSettingsSubmit(e) {
+    e.preventDefault();
+    const form = e.target;
+
+    const { error } = await supabase
+        .from('profiles')
+        .upsert({
+            id: currentUser.id,
+            display_name: form.display_name.value || null,
+            bio: form.bio.value || null,
+            personal_url: form.personal_url.value || null,
+            updated_at: new Date().toISOString()
+        });
+
+    if (error) {
+        showNotification('Error saving profile: ' + error.message, 'error');
+        return;
+    }
+
+    showNotification('Profile saved!', 'success');
+    closeProfileSettings();
+    updateProfileDisplay();
+}
+
+// Update profile display after changes
+async function updateProfileDisplay() {
+    if (!currentUser) return;
+
+    const { data } = await supabase
+        .from('profiles')
+        .select('display_name, bio, personal_url')
+        .eq('id', currentUser.id)
+        .single();
+
+    const displayNameEl = document.getElementById('userDisplayName');
+    const bioEl = document.getElementById('userBio');
+    const personalUrlEl = document.getElementById('userPersonalUrl');
+
+    if (displayNameEl) {
+        displayNameEl.textContent = data?.display_name || currentUser.user_metadata?.display_name || currentUser.email;
+    }
+
+    if (bioEl) {
+        bioEl.textContent = data?.bio || '';
+        bioEl.style.display = data?.bio ? 'block' : 'none';
+    }
+
+    if (personalUrlEl) {
+        if (data?.personal_url) {
+            personalUrlEl.href = data.personal_url;
+            personalUrlEl.style.display = 'inline';
+        } else {
+            personalUrlEl.style.display = 'none';
+        }
+    }
+}
+
 // ============ Share Profile ============
 
 // Share profile - copy link to clipboard
@@ -424,15 +508,25 @@ async function loadSharedProfile(userId) {
         return;
     }
 
-    // Get display name from profile
+    // Get profile info
     const { data: profile } = await supabase
         .from('profiles')
-        .select('display_name')
+        .select('display_name, bio, personal_url')
         .eq('id', userId)
         .single();
 
-    document.getElementById('sharedProfileName').textContent =
-        profile?.display_name || 'Anonymous User';
+    const nameEl = document.getElementById('sharedProfileName');
+    nameEl.textContent = profile?.display_name || 'Anonymous User';
+
+    // Add bio and personal URL after the name
+    let extraInfo = '';
+    if (profile?.bio) {
+        extraInfo += `<p style="color: #666; margin: 0.25rem 0 0 0; font-size: 0.95rem;">${profile.bio}</p>`;
+    }
+    if (profile?.personal_url) {
+        extraInfo += `<a href="${profile.personal_url}" target="_blank" rel="noopener" style="font-size: 0.85rem; color: var(--secondary);">Personal link →</a>`;
+    }
+    nameEl.insertAdjacentHTML('afterend', extraInfo);
 
     renderSharedPractices(practices);
 }
@@ -720,9 +814,12 @@ function updateAuthUI(isLoggedIn) {
         userDisplayName.textContent = currentUser.user_metadata?.display_name || currentUser.email;
     }
 
-    // Refresh My Practices if on that view
-    if (isLoggedIn && document.getElementById('profile-section')?.classList.contains('active')) {
-        loadUserPractices();
+    // Update profile and practices if logged in
+    if (isLoggedIn) {
+        updateProfileDisplay();
+        if (document.getElementById('profile-section')?.classList.contains('active')) {
+            loadUserPractices();
+        }
     }
 }
 
