@@ -588,7 +588,7 @@ async function loadSharedProfile(userId) {
         .from('profiles')
         .select('display_name, bio, personal_url')
         .eq('id', userId)
-        .single();
+        .maybeSingle();
 
     const nameEl = document.getElementById('sharedProfileName');
     nameEl.textContent = profile?.display_name || 'Anonymous User';

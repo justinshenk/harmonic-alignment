@@ -1,4 +1,4 @@
-// Vercel serverless function for contact form
+// Vercel serverless function for contact form - v2
 export default async function handler(req, res) {
     // Enable CORS
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -28,23 +28,30 @@ export default async function handler(req, res) {
     }
 
     try {
-        const { email, name, message } = req.body;
+        const { email, name, message, subscribe, source } = req.body;
 
         // Validate required fields
-        if (!email || !message) {
-            return res.status(400).json({ error: 'Email and message are required' });
+        if (!email) {
+            return res.status(400).json({ error: 'Email is required' });
         }
 
         // Prepare Airtable record
+        const isSubscribed = subscribe === true || subscribe === 'true';
         const record = {
             fields: {
                 'Email': email,
                 'Name': name || '',
-                'Message': message,
+                'Message': message || '',
+                'Source': source || '',
                 'Timestamp': new Date().toISOString(),
                 'Type': 'Contact'
             }
         };
+
+        // Only add Subscribe if true (Airtable checkbox)
+        if (isSubscribed) {
+            record.fields['Subscribe'] = true;
+        }
 
         // Send to Airtable with timeout
         const controller = new AbortController();
