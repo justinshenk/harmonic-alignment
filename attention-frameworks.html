@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attention as the Primitive - Harmonic Alignment</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .research-content {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .framework {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .framework:last-child {
+            border-bottom: none;
+        }
+        .framework h2 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        .framework-author {
+            color: #666;
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+        .framework h3 {
+            color: var(--secondary);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+        .concept-box {
+            background: #e8f4f8;
+            padding: 1rem;
+            border-left: 4px solid var(--secondary);
+            margin: 1rem 0;
+        }
+        .insight-box {
+            background: #f0f8f0;
+            padding: 1rem;
+            border-left: 4px solid var(--success);
+            margin: 1rem 0;
+        }
+        .proposal-box {
+            background: #fff8e6;
+            padding: 1.5rem;
+            border-left: 4px solid #f39c12;
+            margin: 1.5rem 0;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: var(--secondary);
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .source-link {
+            font-size: 0.9rem;
+            color: var(--secondary);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        th, td {
+            border: 1px solid var(--border);
+            padding: 0.75rem;
+            text-align: left;
+        }
+        th {
+            background: var(--bg);
+        }
+        .toc {
+            background: var(--bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        .toc h3 {
+            margin-top: 0;
+            color: var(--primary);
+        }
+        .toc ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+        .toc li {
+            margin: 0.5rem 0;
+        }
+        .toc a {
+            color: var(--secondary);
+            text-decoration: none;
+        }
+        .toc a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Attention as the Primitive</h1>
+        <p>Unified frameworks for understanding contemplative practices</p>
+    </header>
+
+    <div class="research-content">
+        <a href="index.html" class="back-link">&larr; Back to main site</a>
+
+        <div class="toc">
+            <h3>Contents</h3>
+            <ul>
+                <li><a href="#introduction">Introduction: The Case for Attention</a></li>
+                <li><a href="#historical">Historical Foundations</a></li>
+                <li><a href="#frameworks">Contemporary Frameworks</a></li>
+                <li><a href="#neuroscience">Neuroscience of Attention</a></li>
+                <li><a href="#proposal">Toward a Unified Model</a></li>
+                <li><a href="#sources">Sources</a></li>
+            </ul>
+        </div>
+
+        <section id="introduction">
+            <h2>Introduction: The Case for Attention</h2>
+
+            <p>Across thousands of years and diverse cultural contexts, contemplative traditions have independently converged on attention as the fundamental capacity underlying human transformation. Whether we look at Buddhist shamatha, Hindu dharana, Christian contemplation, or modern mindfulness, we find that training attention is the common thread.</p>
+
+            <div class="insight-box">
+                <strong>Central Thesis:</strong> All contemplative practices can be understood as systematic methods for training attention along specific dimensions. The apparent diversity of practices reflects different emphases on attentional qualities (stability, clarity, flexibility, scope) and different objects of attention (body, breath, emotions, thoughts, relationships, awareness itself).
+            </div>
+
+            <p>This page surveys the major frameworks that have attempted to unify contemplative practices through the lens of attention, and proposes a synthetic model that may help practitioners and researchers understand how different traditions relate to each other.</p>
+        </section>
+
+        <section id="historical">
+            <h2>Historical Foundations</h2>
+
+            <div class="framework">
+                <h3>William James (1890)</h3>
+                <p class="framework-author">The Principles of Psychology</p>
+
+                <div class="concept-box">
+                    "The faculty of voluntarily bringing back a wandering attention, over and over again, is the very root of judgment, character, and will. No one is <em>compos sui</em> if he have it not. An education which should improve this faculty would be the education par excellence."
+                </div>
+
+                <p>James defined attention as "taking possession by the mind, in clear and vivid form, of one of what seem several simultaneously possible objects or trains of thought. Focalization, concentration, of consciousness are of its essence."</p>
+
+                <p>He distinguished between:</p>
+                <ul>
+                    <li><strong>Passive/spontaneous attention:</strong> Drawn automatically by interesting objects</li>
+                    <li><strong>Voluntary attention:</strong> Deliberately sustained through effort</li>
+                    <li><strong>Sensorial attention:</strong> Directed toward present sensory stimuli</li>
+                    <li><strong>Intellectual attention:</strong> Directed toward mental representations</li>
+                </ul>
+
+                <p>James also made the radical claim that "Volition is nothing but attention"&mdash;connecting attention fundamentally to will, agency, and character development.</p>
+
+                <p class="source-link"><a href="https://psychclassics.yorku.ca/James/Principles/prin11.htm" target="_blank">Read Chapter 11: Attention</a></p>
+            </div>
+
+            <div class="framework">
+                <h3>Patanjali's Yoga Sutras (~400 CE)</h3>
+                <p class="framework-author">Classical Yoga</p>
+
+                <p>The final three limbs of Patanjali's eight-limbed path describe a progressive deepening of attention:</p>
+
+                <table>
+                    <tr>
+                        <th>Limb</th>
+                        <th>Sanskrit</th>
+                        <th>Definition</th>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>Dharana</td>
+                        <td><strong>Concentration:</strong> Binding consciousness to a single place. Effortful, one-pointed attention.</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>Dhyana</td>
+                        <td><strong>Meditation:</strong> Continuous flow of attention toward the object without interruption. Effortless absorption.</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>Samadhi</td>
+                        <td><strong>Absorption:</strong> Subject-object distinction dissolves. Pure awareness without separation.</td>
+                    </tr>
+                </table>
+
+                <p>This progression describes a qualitative transformation: from effortful concentration to effortless flow to complete absorption. The object of attention can be physical (candle, image), energetic (chakra, breath), or mental (mantra, concept).</p>
+
+                <p class="source-link"><a href="https://en.wikipedia.org/wiki/Ashtanga_(eight_limbs_of_yoga)" target="_blank">Eight Limbs of Yoga</a></p>
+            </div>
+        </section>
+
+        <section id="frameworks">
+            <h2>Contemporary Frameworks</h2>
+
+            <div class="framework">
+                <h3>Lutz, Dunne, & Davidson (2008)</h3>
+                <p class="framework-author">Attention Regulation and Monitoring in Meditation</p>
+
+                <p>This influential paper proposed a two-style taxonomy that has become standard in contemplative neuroscience:</p>
+
+                <div class="concept-box">
+                    <strong>Focused Attention (FA):</strong> Voluntary focusing of attention on a chosen object (breath, mantra, image). When attention wanders, recognize the distraction and return to the object.<br><br>
+                    <strong>Open Monitoring (OM):</strong> Nonreactive monitoring of experience from moment to moment. No explicit focus object; instead, attention remains open to whatever arises.
+                </div>
+
+                <p>The framework identifies key attentional processes:</p>
+                <ul>
+                    <li><strong>Sustained attention:</strong> Maintaining focus over time</li>
+                    <li><strong>Selective attention:</strong> Prioritizing the chosen object over distractions</li>
+                    <li><strong>Executive attention:</strong> Monitoring and managing attention itself</li>
+                    <li><strong>Meta-awareness:</strong> Knowing the current state of one's own attention</li>
+                </ul>
+
+                <p>Importantly, FA and OM are not mutually exclusive but represent different emphases. Many practices involve both elements, and practitioners often progress from FA (building stability) to OM (building clarity and flexibility).</p>
+
+                <p class="source-link"><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2693206/" target="_blank">Read the paper (PMC)</a></p>
+            </div>
+
+            <div class="framework">
+                <h3>Shinzen Young</h3>
+                <p class="framework-author">Unified Mindfulness System</p>
+
+                <p>Shinzen Young's system reduces mindfulness to three core attentional skills, often abbreviated CCE:</p>
+
+                <div class="concept-box">
+                    <strong>Concentration:</strong> The ability to focus on what you consider relevant at any given time. Keeping attention on the chosen object moment by moment.<br><br>
+                    <strong>Sensory Clarity:</strong> The ability to track and distinguish components of experience. Discerning thought from feeling, sound from sight, subtle from obvious.<br><br>
+                    <strong>Equanimity:</strong> The ability to let sensory experience come and go without push or pull. Allowing without grasping or resisting.
+                </div>
+
+                <p>Key insights:</p>
+                <ul>
+                    <li>These three skills work together multiplicatively, not additively</li>
+                    <li>Different practices emphasize different combinations</li>
+                    <li>The framework is tradition-agnostic and maps onto Buddhist, Hindu, Christian, and secular practices</li>
+                    <li>Designed to facilitate neuroscience research by providing clear operational definitions</li>
+                </ul>
+
+                <p>Unified Mindfulness offers 16+ techniques that emphasize different sensory modalities (see, hear, feel) and directions (in, out, rest). This creates a comprehensive map of attentional training possibilities.</p>
+
+                <p class="source-link"><a href="https://unifiedmindfulness.com/what-is-mindfulness-by-shinzen/" target="_blank">What is Mindfulness?</a> | <a href="https://www.shinzen.org/wp-content/uploads/2016/08/WhatIsMindfulness_SY_Public_ver1.5.pdf" target="_blank">PDF</a></p>
+            </div>
+
+            <div class="framework">
+                <h3>Culadasa (John Yates)</h3>
+                <p class="framework-author">The Mind Illuminated (2015)</p>
+
+                <p>Culadasa's system distinguishes two fundamental modes of knowing, both of which are attentional:</p>
+
+                <div class="concept-box">
+                    <strong>Attention:</strong> The focused "spotlight" that isolates and analyzes specific objects. Narrow, sequential, detail-oriented.<br><br>
+                    <strong>Peripheral Awareness:</strong> The open "floodlight" that perceives the whole context. Broad, holistic, relationship-oriented.
+                </div>
+
+                <p>His 10-stage model maps the progressive development of attentional skills:</p>
+
+                <table>
+                    <tr>
+                        <th>Stages</th>
+                        <th>Challenge</th>
+                        <th>Skill Developed</th>
+                    </tr>
+                    <tr>
+                        <td>1-3</td>
+                        <td>Mind-wandering, forgetting</td>
+                        <td>Basic attentional stability</td>
+                    </tr>
+                    <tr>
+                        <td>4-6</td>
+                        <td>Gross & subtle distraction, dullness</td>
+                        <td>Continuous attention, metacognitive awareness</td>
+                    </tr>
+                    <tr>
+                        <td>7-10</td>
+                        <td>Subtle dullness, effort</td>
+                        <td>Effortless stability, tranquility, equanimity</td>
+                    </tr>
+                </table>
+
+                <p>Key innovation: The model emphasizes that attention and awareness must develop together. Too much attention without awareness leads to tunnel vision; too much awareness without attention leads to instability.</p>
+
+                <p class="source-link"><a href="https://www.goodreads.com/book/show/25942786-the-mind-illuminated" target="_blank">The Mind Illuminated</a></p>
+            </div>
+
+            <div class="framework">
+                <h3>B. Alan Wallace</h3>
+                <p class="framework-author">The Attention Revolution (2006)</p>
+
+                <p>Wallace presents shamatha (calm abiding) as the foundational training for all contemplative development:</p>
+
+                <div class="concept-box">
+                    <strong>Shamatha:</strong> The cultivation of attentional stability and vividness. Creates the mental platform for all further practice.<br><br>
+                    <strong>Vipashyana:</strong> Insight practices that investigate the nature of mind and phenomena. Requires shamatha as foundation.
+                </div>
+
+                <p>Wallace emphasizes that full shamatha mastery requires 5,000-10,000 hours of dedicated practice. He maps nine traditional stages of attentional development from directed attention through to complete shamatha.</p>
+
+                <p>Key insight: The transformative power of Buddhist meditation emerges from unifying shamatha (stability) with vipashyana (insight). Neither alone produces lasting liberation.</p>
+
+                <p class="source-link"><a href="https://wisdomexperience.org/product/attention-revolution/" target="_blank">The Attention Revolution</a></p>
+            </div>
+
+            <div class="framework">
+                <h3>Daniel Ingram</h3>
+                <p class="framework-author">Mastering the Core Teachings of the Buddha (2008, 2018)</p>
+
+                <p>Ingram distinguishes two fundamental modes of attentional training:</p>
+
+                <div class="concept-box">
+                    <strong>Concentration (Samatha):</strong> Builds stability, calm, and positive states. Attention becomes fixed and absorbed. Access concentration precedes jhana states.<br><br>
+                    <strong>Insight (Vipassana):</strong> Investigates the three characteristics (impermanence, unsatisfactoriness, not-self). Attention becomes precise and penetrating.
+                </div>
+
+                <p>Ingram provides detailed maps of what happens to attention as insight develops through predictable stages (the Progress of Insight). Each stage is characterized by distinct attentional qualities and challenges.</p>
+
+                <p>Key insight: The "attention-first" versus "insight-first" debate. Concentration-heavy approaches build stability before investigation; insight-heavy approaches plunge directly into investigation at the cost of some stability.</p>
+
+                <p class="source-link"><a href="https://www.mctb.org/" target="_blank">MCTB Online</a></p>
+            </div>
+
+            <div class="framework">
+                <h3>Evan Thompson</h3>
+                <p class="framework-author">Neurophenomenology and Contemplative Science</p>
+
+                <p>Thompson bridges phenomenology (first-person investigation) and neuroscience (third-person investigation) through attention:</p>
+
+                <div class="concept-box">
+                    Contemplative training cultivates "a capacity for sustained, attentive awareness of the moment-to-moment flux of experience or what James famously called 'the stream of consciousness'."
+                </div>
+
+                <p>His framework emphasizes:</p>
+                <ul>
+                    <li><strong>Neurophenomenology:</strong> Using trained attention to provide precise first-person data for correlation with brain states</li>
+                    <li><strong>Contemplative neuroscience:</strong> The integration of contemplative training with neuroscience research</li>
+                    <li><strong>Phenomenological variations:</strong> Systematic changes in the direction and quality of attention</li>
+                </ul>
+
+                <p class="source-link"><a href="https://evanthompson.me/articles/" target="_blank">Thompson's Articles</a></p>
+            </div>
+        </section>
+
+        <section id="neuroscience">
+            <h2>Neuroscience of Attention</h2>
+
+            <p>Modern neuroscience has identified several brain networks relevant to understanding contemplative attention training:</p>
+
+            <div class="concept-box">
+                <strong>Default Mode Network (DMN):</strong> Active during mind-wandering, self-referential thought, and rumination. Meditation is associated with reduced DMN activity and increased control over DMN activation.<br><br>
+                <strong>Task-Positive Network / Central Executive Network:</strong> Active during focused, goal-directed attention. Engaged during FA meditation.<br><br>
+                <strong>Salience Network:</strong> Detects relevant stimuli and switches between DMN and task-positive modes. Enhanced in experienced meditators.
+            </div>
+
+            <h3>Key Findings</h3>
+            <ul>
+                <li>Meditators show <strong>stronger anticorrelations</strong> between DMN and attention networks, indicating better attentional control</li>
+                <li>Long-term practice is associated with <strong>structural changes</strong> in attention-related brain regions (anterior cingulate cortex, prefrontal cortex)</li>
+                <li>Different practices show <strong>distinct neural signatures</strong> (FA vs. OM vs. compassion meditation)</li>
+                <li>Meditation may produce <strong>trait changes</strong> in baseline attention that persist outside formal practice</li>
+            </ul>
+
+            <p class="source-link"><a href="https://www.pnas.org/doi/10.1073/pnas.1112029108" target="_blank">Meditation and DMN connectivity (PNAS)</a> | <a href="https://www.nature.com/articles/s41598-022-17325-6" target="_blank">Mindfulness and network connectivity</a></p>
+        </section>
+
+        <section id="proposal">
+            <h2>Toward a Unified Model</h2>
+
+            <div class="proposal-box">
+                <strong>Proposal:</strong> A Multidimensional Attentional Training Framework (MATF)
+            </div>
+
+            <p>Based on the surveyed frameworks, we can identify several orthogonal dimensions along which attentional training varies:</p>
+
+            <h3>1. Attentional Qualities (What is being trained)</h3>
+            <table>
+                <tr>
+                    <th>Quality</th>
+                    <th>Definition</th>
+                    <th>Framework Sources</th>
+                </tr>
+                <tr>
+                    <td><strong>Stability</strong></td>
+                    <td>Ability to maintain chosen focus over time without wandering</td>
+                    <td>Concentration (Shinzen), Sustained attention (Lutz), Shamatha (Wallace)</td>
+                </tr>
+                <tr>
+                    <td><strong>Clarity</strong></td>
+                    <td>Ability to perceive experience with precision and discernment</td>
+                    <td>Sensory clarity (Shinzen), Meta-awareness (Culadasa), Vividness (Wallace)</td>
+                </tr>
+                <tr>
+                    <td><strong>Flexibility</strong></td>
+                    <td>Ability to redirect, widen, or narrow attention as needed</td>
+                    <td>Executive attention (Lutz), Attention vs. Awareness balance (Culadasa)</td>
+                </tr>
+                <tr>
+                    <td><strong>Equanimity</strong></td>
+                    <td>Ability to attend without grasping or aversion</td>
+                    <td>Equanimity (Shinzen), Nonreactivity (Lutz OM)</td>
+                </tr>
+            </table>
+
+            <h3>2. Attentional Scope (Narrow to Wide)</h3>
+            <ul>
+                <li><strong>Focused:</strong> Single object (breath, mantra, kasina)</li>
+                <li><strong>Expanded:</strong> Multiple objects or domains (body scan, choiceless awareness)</li>
+                <li><strong>Open:</strong> No fixed object; receptive to whatever arises</li>
+                <li><strong>Reflexive:</strong> Attention to attention itself; awareness aware of itself</li>
+            </ul>
+
+            <h3>3. Attentional Object (What attention is directed toward)</h3>
+            <table>
+                <tr>
+                    <th>Domain</th>
+                    <th>Objects</th>
+                    <th>Example Practices</th>
+                </tr>
+                <tr>
+                    <td>Somatic</td>
+                    <td>Breath, body sensations, movement</td>
+                    <td>Anapanasati, body scan, yoga</td>
+                </tr>
+                <tr>
+                    <td>Affective</td>
+                    <td>Emotions, feelings, moods</td>
+                    <td>Tonglen, metta, Focusing</td>
+                </tr>
+                <tr>
+                    <td>Cognitive</td>
+                    <td>Thoughts, mental images, concepts</td>
+                    <td>Noting, inquiry, contemplation</td>
+                </tr>
+                <tr>
+                    <td>Relational</td>
+                    <td>Other beings, relationships</td>
+                    <td>Compassion meditation, Circling</td>
+                </tr>
+                <tr>
+                    <td>Meta</td>
+                    <td>Awareness itself, consciousness</td>
+                    <td>Dzogchen, self-inquiry, nondual practices</td>
+                </tr>
+            </table>
+
+            <h3>4. Attentional Effort (Effortful to Effortless)</h3>
+            <ul>
+                <li><strong>Active/Effortful:</strong> Deliberate direction and redirection (early stages, FA)</li>
+                <li><strong>Receptive/Effortless:</strong> Allowing attention to rest naturally (later stages, OM)</li>
+                <li><strong>Spontaneous:</strong> Attention operates optimally without any sense of "doing" (mastery, sahaja)</li>
+            </ul>
+
+            <h3>Mapping Practices</h3>
+            <p>Using these dimensions, any contemplative practice can be characterized as a specific configuration:</p>
+
+            <div class="concept-box">
+                <strong>Example: Breath Counting</strong><br>
+                Qualities: Stability (primary), Clarity (secondary)<br>
+                Scope: Focused<br>
+                Object: Somatic (breath)<br>
+                Effort: Active<br><br>
+
+                <strong>Example: Dzogchen</strong><br>
+                Qualities: Clarity (primary), Equanimity (primary)<br>
+                Scope: Open/Reflexive<br>
+                Object: Meta (awareness itself)<br>
+                Effort: Effortless/Spontaneous<br><br>
+
+                <strong>Example: Metta (Loving-Kindness)</strong><br>
+                Qualities: Stability, Equanimity<br>
+                Scope: Expanded (self &rarr; others &rarr; all beings)<br>
+                Object: Affective/Relational<br>
+                Effort: Active &rarr; Receptive
+            </div>
+
+            <h3>Implications</h3>
+
+            <div class="insight-box">
+                <strong>For Practitioners:</strong>
+                <ul>
+                    <li>Understand which attentional capacities your current practice develops</li>
+                    <li>Identify gaps in your training and practices that might address them</li>
+                    <li>Recognize that apparent contradictions between traditions often reflect different emphases on the same underlying capacities</li>
+                </ul>
+            </div>
+
+            <div class="insight-box">
+                <strong>For Researchers:</strong>
+                <ul>
+                    <li>Operationalize "meditation" more precisely by specifying which dimensions are being trained</li>
+                    <li>Design studies that isolate specific attentional components</li>
+                    <li>Build cumulative knowledge by locating new findings within a shared framework</li>
+                </ul>
+            </div>
+
+            <div class="insight-box">
+                <strong>For Harmonic Alignment:</strong>
+                <ul>
+                    <li>The complexity dimensions (somatic, intrapsychic, relational, collective, systemic, transpersonal) map onto attentional object domains</li>
+                    <li>Practice outcomes may be predictable from their attentional configuration</li>
+                    <li>Personalized recommendations can account for which attentional capacities a practitioner needs to develop</li>
+                </ul>
+            </div>
+
+            <h3>Open Questions</h3>
+            <ul>
+                <li>Are the proposed dimensions truly orthogonal, or do some co-vary?</li>
+                <li>What is the optimal sequence for developing different attentional qualities?</li>
+                <li>Do individuals differ in baseline attentional capacities in ways that predict which practices will benefit them?</li>
+                <li>Can a "complete" practice be defined as one that trains all dimensions adequately?</li>
+                <li>How do psychedelic experiences relate to attention training (rapid but temporary shifts vs. gradual but stable development)?</li>
+            </ul>
+        </section>
+
+        <section id="sources">
+            <h2>Sources</h2>
+
+            <h3>Primary Frameworks</h3>
+            <ul>
+                <li>James, W. (1890). <a href="https://psychclassics.yorku.ca/James/Principles/prin11.htm" target="_blank">The Principles of Psychology, Chapter 11: Attention</a></li>
+                <li>Lutz, A., Slagter, H. A., Dunne, J. D., & Davidson, R. J. (2008). <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2693206/" target="_blank">Attention regulation and monitoring in meditation</a>. Trends in Cognitive Sciences.</li>
+                <li>Young, S. <a href="https://unifiedmindfulness.com/what-is-mindfulness-by-shinzen/" target="_blank">Unified Mindfulness</a> | <a href="https://www.shinzen.org/wp-content/uploads/2016/08/WhatIsMindfulness_SY_Public_ver1.5.pdf" target="_blank">What is Mindfulness? (PDF)</a></li>
+                <li>Yates, J. (Culadasa). (2015). <a href="https://www.goodreads.com/book/show/25942786-the-mind-illuminated" target="_blank">The Mind Illuminated</a>. Touchstone.</li>
+                <li>Wallace, B. A. (2006). <a href="https://wisdomexperience.org/product/attention-revolution/" target="_blank">The Attention Revolution</a>. Wisdom Publications.</li>
+                <li>Ingram, D. (2018). <a href="https://www.mctb.org/" target="_blank">Mastering the Core Teachings of the Buddha</a>.</li>
+                <li>Thompson, E. (2015). <a href="https://www.amazon.com/Waking-Dreaming-Being-Consciousness-Neuroscience/dp/0231136951" target="_blank">Waking, Dreaming, Being</a>. Columbia University Press.</li>
+            </ul>
+
+            <h3>Neuroscience</h3>
+            <ul>
+                <li>Brewer, J. A., et al. (2011). <a href="https://www.pnas.org/doi/10.1073/pnas.1112029108" target="_blank">Meditation experience is associated with differences in default mode network activity and connectivity</a>. PNAS.</li>
+                <li>Bauer, C. C. C., et al. (2022). <a href="https://www.nature.com/articles/s41598-022-17325-6" target="_blank">Mindfulness meditation increases default mode, salience, and central executive network connectivity</a>. Scientific Reports.</li>
+            </ul>
+
+            <h3>Additional Resources</h3>
+            <ul>
+                <li><a href="https://link.springer.com/article/10.1007/s12671-017-0730-1" target="_blank">Contemplative Cognition: A More Integrative Framework</a> (Mindfulness journal)</li>
+                <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5112249/" target="_blank">Defining Contemplative Science</a> (Frontiers in Psychology)</li>
+                <li><a href="https://en.wikipedia.org/wiki/Ashtanga_(eight_limbs_of_yoga)" target="_blank">Eight Limbs of Yoga</a> (Wikipedia)</li>
+            </ul>
+        </section>
+
+        <p style="margin-top: 2rem;"><a href="index.html" class="back-link">&larr; Back to main site</a></p>
+    </div>
+
+    <footer>
+        <p>Harmonic Alignment Project | <a href="https://github.com/justinshenk/harmonic-alignment">GitHub</a></p>
+    </footer>
+</body>
+</html>
