@@ -302,21 +302,11 @@ function initializePracticeChat() {
 }
 
 async function loadData() {
-    // Try CSV first
-    try {
-        console.log('Loading data from CSV...');
-        traditionsData = await loadFromCSV();
-        console.log('✓ Loaded from CSV');
-        return;
-    } catch (error) {
-        console.warn('Failed to load from CSV, falling back...', error);
-    }
-
-    // Fallback to local JSON
     try {
         const response = await fetch('data/traditions.json');
-        traditionsData = await response.json();
-        console.log('✓ Loaded from local JSON');
+        const data = await response.json();
+        traditionsData = data.traditions || data;
+        console.log('✓ Loaded traditions data');
     } catch (error) {
         console.error('Error loading data:', error);
     }
