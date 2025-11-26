@@ -24,6 +24,8 @@ async function initAuth() {
         if (event === 'SIGNED_IN') {
             closeAuthModal();
             showNotification('Signed in successfully!');
+            // Navigate to My Practices
+            document.getElementById('profileView')?.click();
         } else if (event === 'SIGNED_OUT') {
             showNotification('Signed out');
         }
