@@ -53,6 +53,9 @@ create policy "Users can update own profile" on public.profiles
 create policy "Users can insert own profile" on public.profiles
   for insert with check (auth.uid() = id);
 
+create policy "Users can delete own profile" on public.profiles
+  for delete using (auth.uid() = id);
+
 create policy "Users can view own practices" on public.user_practices
   for select using (auth.uid() = user_id);
 
