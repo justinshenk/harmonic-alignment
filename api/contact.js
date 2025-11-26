@@ -1,4 +1,4 @@
-// Vercel serverless function for contact form
+// Vercel serverless function for contact form - v2
 export default async function handler(req, res) {
     // Enable CORS
     res.setHeader('Access-Control-Allow-Origin', '*');
