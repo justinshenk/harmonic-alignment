@@ -21,11 +21,22 @@ async function initAuth() {
         currentUser = session?.user || null;
         updateAuthUI(!!session);
 
+        // Handle OAuth callback (Google sign in redirects back with hash)
+        if (window.location.hash.includes('access_token')) {
+            showNotification('Signed in successfully!');
+            document.getElementById('profileView')?.click();
+            history.replaceState(null, '', '/profile');
+            return;
+        }
+
         if (event === 'SIGNED_IN') {
             closeAuthModal();
             showNotification('Signed in successfully!');
-            // Navigate to My Practices
-            document.getElementById('profileView')?.click();
+            // Navigate to My Practices (unless viewing a shared profile)
+            const isViewingSharedProfile = new URLSearchParams(window.location.search).has('user');
+            if (!isViewingSharedProfile) {
+                document.getElementById('profileView')?.click();
+            }
         } else if (event === 'SIGNED_OUT') {
             showNotification('Signed out');
         }
@@ -648,7 +659,10 @@ function checkForSharedProfile() {
     const params = new URLSearchParams(window.location.search);
     const sharedUserId = params.get('user');
 
-    if (sharedUserId && window.location.pathname === '/profile') {
+    if (sharedUserId) {
+        // Navigate to profile section first
+        document.getElementById('profileView')?.click();
+
         // Hide other sections, show shared view
         document.getElementById('profileLoggedOut').style.display = 'none';
         document.getElementById('profileLoggedIn').style.display = 'none';
