@@ -550,16 +550,25 @@
         </div>
     </div>
 
-    <!-- Add Practice Select Modal -->
+    <!-- Add Practice Modal -->
     <div id="addPracticeModal" class="modal" style="display: none;">
-        <div class="modal-content">
+        <div class="modal-content" style="max-width: 600px;">
             <button class="modal-close" onclick="closeAddPracticeModal()">&times;</button>
-            <h2 style="margin-bottom: 1rem;">Add a Practice</h2>
-            <p style="margin-bottom: 1rem; color: #666;">Select a practice to add to your profile:</p>
-            <select id="addPracticeSelect" style="width: 100%; padding: 0.75rem; margin-bottom: 1rem;">
-                <option value="">Choose a practice...</option>
-            </select>
-            <button class="primary-button" style="width: 100%;" onclick="addSelectedPractice()">Add Practice</button>
+            <h2 style="margin-bottom: 0.5rem;">Add a Practice</h2>
+            <p style="margin-bottom: 1rem; color: #666;">Select a practice to track:</p>
+            <input type="text" id="practiceSearchInput" placeholder="Search practices..." style="width: 100%; padding: 0.75rem; margin-bottom: 1rem; border: 1px solid var(--border); border-radius: 6px;" oninput="filterPracticeList()">
+            <div id="practiceListContainer" style="max-height: 400px; overflow-y: auto;">
+                <table id="practiceListTable" style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: var(--bg); position: sticky; top: 0;">
+                            <th style="padding: 0.75rem; text-align: left;">Practice</th>
+                            <th style="padding: 0.75rem; text-align: left;">Origin</th>
+                            <th style="padding: 0.75rem; width: 80px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="practiceListBody"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 

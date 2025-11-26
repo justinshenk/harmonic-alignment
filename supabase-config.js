@@ -377,39 +377,67 @@ function addToMyPractices(practiceId) {
 
 // ============ Add Practice Helpers ============
 
-// Show add practice select modal
+// Show add practice modal with table
 function showAddPracticeSelect() {
     const modal = document.getElementById('addPracticeModal');
-    const select = document.getElementById('addPracticeSelect');
+    const tbody = document.getElementById('practiceListBody');
+    const searchInput = document.getElementById('practiceSearchInput');
 
-    if (!modal || !select || !traditionsData?.traditions) return;
+    if (!modal || !tbody || !traditionsData?.traditions) return;
 
-    // Populate select with traditions
-    select.innerHTML = '<option value="">Choose a practice...</option>';
-    traditionsData.traditions.forEach(t => {
-        select.innerHTML += `<option value="${t.id}">${t.name} (${t.origin})</option>`;
-    });
+    // Clear search
+    if (searchInput) searchInput.value = '';
+
+    // Populate table
+    renderPracticeList(traditionsData.traditions);
 
     modal.style.display = 'flex';
+}
+
+// Render practice list table
+function renderPracticeList(practices) {
+    const tbody = document.getElementById('practiceListBody');
+    if (!tbody) return;
+
+    tbody.innerHTML = practices.map(t => `
+        <tr style="border-bottom: 1px solid var(--border);">
+            <td style="padding: 0.75rem;">
+                <strong>${t.name}</strong>
+                ${t.description ? `<br><span style="font-size: 0.85rem; color: #666;">${t.description.slice(0, 60)}${t.description.length > 60 ? '...' : ''}</span>` : ''}
+            </td>
+            <td style="padding: 0.75rem; color: #666;">${t.origin || ''}</td>
+            <td style="padding: 0.75rem;">
+                <button class="secondary-button" style="padding: 0.4rem 0.75rem; font-size: 0.85rem;" onclick="selectPracticeFromList('${t.id}')">Add</button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+// Filter practice list by search
+function filterPracticeList() {
+    const searchInput = document.getElementById('practiceSearchInput');
+    const query = searchInput?.value?.toLowerCase() || '';
+
+    if (!traditionsData?.traditions) return;
+
+    const filtered = traditionsData.traditions.filter(t =>
+        t.name.toLowerCase().includes(query) ||
+        (t.origin && t.origin.toLowerCase().includes(query)) ||
+        (t.description && t.description.toLowerCase().includes(query))
+    );
+
+    renderPracticeList(filtered);
+}
+
+// Select practice from list
+function selectPracticeFromList(practiceId) {
+    closeAddPracticeModal();
+    editUserPractice(practiceId);
 }
 
 // Close add practice modal
 function closeAddPracticeModal() {
     document.getElementById('addPracticeModal').style.display = 'none';
-}
-
-// Add selected practice
-function addSelectedPractice() {
-    const select = document.getElementById('addPracticeSelect');
-    const practiceId = select.value;
-
-    if (!practiceId) {
-        showNotification('Please select a practice', 'error');
-        return;
-    }
-
-    closeAddPracticeModal();
-    editUserPractice(practiceId);
 }
 
 // ============ Auth UI Helpers ============
