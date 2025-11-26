@@ -6,6 +6,7 @@
     { "source": "/ratings", "destination": "/index.html" },
     { "source": "/profile", "destination": "/index.html" },
     { "source": "/about", "destination": "/index.html" },
-    { "source": "/privacy", "destination": "/privacy.html" }
+    { "source": "/privacy", "destination": "/privacy.html" },
+    { "source": "/terms", "destination": "/terms.html" }
   ]
 }
