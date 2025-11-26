@@ -1042,6 +1042,36 @@ details.dimension-legend[open] summary span {
         font-size: 1.8rem;
     }
 
+    header p {
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+
+    /* Mobile nav - horizontal scroll */
+    nav {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        gap: 0.5rem;
+        padding: 0.5rem 0;
+        margin: 0 -1rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        scrollbar-width: none;
+    }
+
+    nav::-webkit-scrollbar {
+        display: none;
+    }
+
+    nav button {
+        flex-shrink: 0;
+        padding: 0.4rem 0.8rem;
+        font-size: 0.85rem;
+        white-space: nowrap;
+    }
+
     /* Quiz landing page mobile */
     #quiz-intro h2 {
         font-size: 1.8rem !important;
