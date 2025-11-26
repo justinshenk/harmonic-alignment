@@ -33,9 +33,21 @@
             <button id="compareView">Compare</button>
             <button id="exploreView">Explore</button>
             <button id="ratingsView">Ratings</button>
-            <button id="profileView" style="display: none;">My Practices</button>
             <button id="aboutView">About</button>
             <button id="authButton" class="auth-button">Sign In</button>
+            <div id="profileDropdown" class="profile-dropdown" style="display: none;">
+                <button id="profileDropdownBtn" class="profile-dropdown-btn" onclick="toggleProfileDropdown()">
+                    <span id="profileDropdownName">My Profile</span>
+                    <span class="dropdown-arrow">▼</span>
+                </button>
+                <div id="profileDropdownMenu" class="profile-dropdown-menu">
+                    <a href="/profile" onclick="document.getElementById('profileView').click(); closeProfileDropdown(); return false;">My Practices</a>
+                    <a href="#" onclick="showProfileSettings(); closeProfileDropdown(); return false;">Settings</a>
+                    <hr>
+                    <a href="#" onclick="handleSignOut(); closeProfileDropdown(); return false;">Sign Out</a>
+                </div>
+            </div>
+            <button id="profileView" style="display: none;">My Practices</button>
         </nav>
     </header>
 

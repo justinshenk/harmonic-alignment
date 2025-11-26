@@ -79,22 +79,67 @@ async function signInWithOAuth(provider) {
 // Update UI based on auth state
 function updateAuthUI(isLoggedIn) {
     const authButton = document.getElementById('authButton');
-    const profileNav = document.getElementById('profileView');
+    const profileDropdown = document.getElementById('profileDropdown');
+    const profileDropdownName = document.getElementById('profileDropdownName');
+    const profileLoggedOut = document.getElementById('profileLoggedOut');
+    const profileLoggedIn = document.getElementById('profileLoggedIn');
+    const userDisplayName = document.getElementById('userDisplayName');
 
+    // Show/hide auth button vs profile dropdown
     if (authButton) {
-        authButton.textContent = isLoggedIn ? 'Sign Out' : 'Sign In';
-        authButton.onclick = isLoggedIn ? handleSignOut : showAuthModal;
+        authButton.style.display = isLoggedIn ? 'none' : 'inline-block';
+        authButton.onclick = () => showAuthModal('signin');
     }
 
-    if (profileNav) {
-        profileNav.style.display = isLoggedIn ? 'inline-block' : 'none';
+    if (profileDropdown) {
+        profileDropdown.style.display = isLoggedIn ? 'inline-block' : 'none';
+        if (isLoggedIn && currentUser) {
+            const name = currentUser.user_metadata?.display_name || currentUser.email?.split('@')[0] || 'Profile';
+            profileDropdownName.textContent = name;
+        }
     }
 
-    // Refresh My Practices if on that view
-    if (isLoggedIn && document.getElementById('profile-section')?.classList.contains('active')) {
-        loadUserPractices();
+    // Profile page logged in/out states
+    if (profileLoggedOut) {
+        profileLoggedOut.style.display = isLoggedIn ? 'none' : 'block';
+    }
+
+    if (profileLoggedIn) {
+        profileLoggedIn.style.display = isLoggedIn ? 'block' : 'none';
+    }
+
+    if (userDisplayName && currentUser) {
+        userDisplayName.textContent = currentUser.user_metadata?.display_name || currentUser.email;
+    }
+
+    // Update profile and practices if logged in
+    if (isLoggedIn) {
+        updateProfileDisplay();
+        if (document.getElementById('profile-section')?.classList.contains('active')) {
+            loadUserPractices();
+        }
     }
 }
+
+// Toggle profile dropdown
+function toggleProfileDropdown() {
+    const dropdown = document.getElementById('profileDropdown');
+    dropdown?.classList.toggle('open');
+}
+
+// Close profile dropdown
+function closeProfileDropdown() {
+    const dropdown = document.getElementById('profileDropdown');
+    dropdown?.classList.remove('open');
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', (e) => {
+    const dropdown = document.getElementById('profileDropdown');
+    if (dropdown && !dropdown.contains(e.target)) {
+        dropdown.classList.remove('open');
+    }
+});
 
 // Show auth modal
 function showAuthModal(mode = 'signin') {
@@ -828,46 +873,6 @@ function filterPracticeList() {
 function closeAddPracticeModal() {
     document.getElementById('addPracticeModal').style.display = 'none';
     bulkPracticeEdits = {};
-}
-
-// ============ Auth UI Helpers ============
-
-// Update UI for logged in state
-function updateAuthUI(isLoggedIn) {
-    const authButton = document.getElementById('authButton');
-    const profileNav = document.getElementById('profileView');
-    const profileLoggedOut = document.getElementById('profileLoggedOut');
-    const profileLoggedIn = document.getElementById('profileLoggedIn');
-    const userDisplayName = document.getElementById('userDisplayName');
-
-    if (authButton) {
-        authButton.textContent = isLoggedIn ? 'Sign Out' : 'Sign In';
-        authButton.onclick = isLoggedIn ? handleSignOut : () => showAuthModal('signin');
-    }
-
-    if (profileNav) {
-        profileNav.style.display = isLoggedIn ? 'inline-block' : 'none';
-    }
-
-    if (profileLoggedOut) {
-        profileLoggedOut.style.display = isLoggedIn ? 'none' : 'block';
-    }
-
-    if (profileLoggedIn) {
-        profileLoggedIn.style.display = isLoggedIn ? 'block' : 'none';
-    }
-
-    if (userDisplayName && currentUser) {
-        userDisplayName.textContent = currentUser.user_metadata?.display_name || currentUser.email;
-    }
-
-    // Update profile and practices if logged in
-    if (isLoggedIn) {
-        updateProfileDisplay();
-        if (document.getElementById('profile-section')?.classList.contains('active')) {
-            loadUserPractices();
-        }
-    }
 }
 
 // Initialize auth when DOM is ready
