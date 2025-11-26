@@ -662,10 +662,16 @@ function checkForSharedProfile() {
         // Set global flag before any navigation
         isViewingSharedProfile = true;
 
-        // Hide other sections, show shared view
-        document.getElementById('profileLoggedOut').style.display = 'none';
-        document.getElementById('profileLoggedIn').style.display = 'none';
-        document.getElementById('sharedProfileView').style.display = 'block';
+        // Hide other sections and header, show shared view
+        const profileHeader = document.getElementById('profileHeader');
+        const profileLoggedOut = document.getElementById('profileLoggedOut');
+        const profileLoggedIn = document.getElementById('profileLoggedIn');
+        const sharedProfileView = document.getElementById('sharedProfileView');
+
+        if (profileHeader) profileHeader.style.display = 'none';
+        if (profileLoggedOut) profileLoggedOut.style.display = 'none';
+        if (profileLoggedIn) profileLoggedIn.style.display = 'none';
+        if (sharedProfileView) sharedProfileView.style.display = 'block';
 
         // Show profile section
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
