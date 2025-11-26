@@ -705,7 +705,9 @@ function initializeQuiz() {
 
 function startQuiz() {
     quizState.currentQuestion = 0;
-    quizState.answers = {};
+    quizState.answers = {
+        substances: 'exclude'  // Pre-select exclude by default
+    };
 
     document.getElementById('quiz-intro').classList.remove('active');
     document.getElementById('quiz-questions').classList.add('active');
