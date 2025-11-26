@@ -1784,46 +1784,6 @@ details.dimension-legend[open] summary span {
     color: var(--secondary);
 }
 
-/* Star rating */
-.star-rating {
-    display: flex;
-    gap: 0.25rem;
-}
-
-.star-rating .star {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    color: #ddd;
-    cursor: pointer;
-    padding: 0;
-    transition: color 0.15s;
-}
-
-.star-rating .star:hover,
-.star-rating .star.active {
-    color: #f1c40f;
-}
-
-.star-rating:hover .star {
-    color: #ddd;
-}
-
-.star-rating:hover .star:hover,
-.star-rating:hover .star:hover ~ .star {
-    color: #ddd;
-}
-
-.star-rating .star:hover,
-.star-rating .star:hover ~ .star {
-    color: #ddd;
-}
-
-.star-rating:hover .star:hover,
-.star-rating:hover .star.hovered {
-    color: #f1c40f;
-}
-
 /* Practice resource link */
 .practice-resource {
     display: inline-block;
@@ -1835,13 +1795,6 @@ details.dimension-legend[open] summary span {
 
 .practice-resource:hover {
     text-decoration: underline;
-}
-
-/* Rating display on cards */
-.practice-rating {
-    color: #f1c40f;
-    font-size: 0.9rem;
-    margin-top: 0.5rem;
 }
 
 /* Form styles */
