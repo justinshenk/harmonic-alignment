@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <header>
@@ -32,7 +33,9 @@
             <button id="compareView">Compare</button>
             <button id="exploreView">Explore</button>
             <button id="ratingsView">Ratings</button>
+            <button id="profileView" style="display: none;">My Practices</button>
             <button id="aboutView">About</button>
+            <button id="authButton" class="auth-button">Sign In</button>
         </nav>
     </header>
 
@@ -422,12 +425,149 @@
                 </form>
             </div>
         </div>
+
+        <div id="profile-section" class="section">
+            <div class="content">
+                <h2>My Practices</h2>
+                <p style="margin-bottom: 2rem;">Track your experience with different practices and get personalized recommendations.</p>
+
+                <div id="profileLoggedOut" style="text-align: center; padding: 3rem;">
+                    <p style="margin-bottom: 1rem;">Sign in to track your practices and get personalized recommendations.</p>
+                    <button class="primary-button" onclick="showAuthModal()">Sign In</button>
+                </div>
+
+                <div id="profileLoggedIn" style="display: none;">
+                    <div class="profile-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <div>
+                            <span id="userDisplayName" style="font-weight: 600;"></span>
+                        </div>
+                        <button class="secondary-button" onclick="showAddPracticeSelect()">+ Add Practice</button>
+                    </div>
+
+                    <div id="userPracticesList"></div>
+
+                    <div id="practiceRecommendation" style="margin-top: 2rem; padding: 1.5rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; color: white; display: none;">
+                        <h3 style="margin: 0 0 0.5rem 0;">Which practice now?</h3>
+                        <p id="recommendationText" style="margin: 0;"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
+
+    <!-- Auth Modal -->
+    <div id="authModal" class="modal" style="display: none;">
+        <div class="modal-content auth-modal">
+            <button class="modal-close" onclick="closeAuthModal()">&times;</button>
+            <h2 style="text-align: center; margin-bottom: 1.5rem;">Welcome</h2>
+
+            <div class="auth-tabs">
+                <button id="authModeSignin" class="auth-tab active" onclick="switchAuthMode('signin')">Sign In</button>
+                <button id="authModeSignup" class="auth-tab" onclick="switchAuthMode('signup')">Sign Up</button>
+            </div>
+
+            <form id="signinForm" onsubmit="handleSignIn(event)">
+                <div class="form-group">
+                    <label for="signin-email">Email</label>
+                    <input type="email" id="signin-email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="signin-password">Password</label>
+                    <input type="password" id="signin-password" name="password" required minlength="6">
+                </div>
+                <button type="submit" class="primary-button" style="width: 100%;">Sign In</button>
+            </form>
+
+            <form id="signupForm" onsubmit="handleSignUp(event)" style="display: none;">
+                <div class="form-group">
+                    <label for="signup-name">Display Name (optional)</label>
+                    <input type="text" id="signup-name" name="displayName">
+                </div>
+                <div class="form-group">
+                    <label for="signup-email">Email</label>
+                    <input type="email" id="signup-email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-password">Password</label>
+                    <input type="password" id="signup-password" name="password" required minlength="6">
+                </div>
+                <button type="submit" class="primary-button" style="width: 100%;">Sign Up</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Practice Edit Modal -->
+    <div id="practiceModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closePracticeModal()">&times;</button>
+            <h2 id="practiceModalTitle" style="margin-bottom: 1.5rem;"></h2>
+
+            <form id="practiceForm" onsubmit="handlePracticeSubmit(event)">
+                <input type="hidden" id="practiceModalId" name="practiceId">
+
+                <div class="form-group">
+                    <label for="practiceStatus">Status</label>
+                    <select id="practiceStatus" name="status">
+                        <option value="interested">Interested</option>
+                        <option value="learning">Learning</option>
+                        <option value="practicing">Currently Practicing</option>
+                        <option value="experienced">Experienced</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Effectiveness Ratings (1-5, leave blank if unsure)</label>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.5rem;">
+                        <div>
+                            <label for="practiceEffectivenessOverall" style="font-size: 0.9rem;">Overall</label>
+                            <input type="number" id="practiceEffectivenessOverall" name="effectivenessOverall" min="1" max="5">
+                        </div>
+                        <div>
+                            <label for="practiceEffectivenessAnxiety" style="font-size: 0.9rem;">For Anxiety</label>
+                            <input type="number" id="practiceEffectivenessAnxiety" name="effectivenessAnxiety" min="1" max="5">
+                        </div>
+                        <div>
+                            <label for="practiceEffectivenessFocus" style="font-size: 0.9rem;">For Focus</label>
+                            <input type="number" id="practiceEffectivenessFocus" name="effectivenessFocus" min="1" max="5">
+                        </div>
+                        <div>
+                            <label for="practiceEffectivenessMood" style="font-size: 0.9rem;">For Mood</label>
+                            <input type="number" id="practiceEffectivenessMood" name="effectivenessMood" min="1" max="5">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="practiceNotes">Notes</label>
+                    <textarea id="practiceNotes" name="notes" rows="3" placeholder="When does this practice work best for you?"></textarea>
+                </div>
+
+                <div style="display: flex; gap: 1rem;">
+                    <button type="submit" class="primary-button" style="flex: 1;">Save</button>
+                    <button type="button" class="secondary-button" onclick="closePracticeModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Practice Select Modal -->
+    <div id="addPracticeModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeAddPracticeModal()">&times;</button>
+            <h2 style="margin-bottom: 1rem;">Add a Practice</h2>
+            <p style="margin-bottom: 1rem; color: #666;">Select a practice to add to your profile:</p>
+            <select id="addPracticeSelect" style="width: 100%; padding: 0.75rem; margin-bottom: 1rem;">
+                <option value="">Choose a practice...</option>
+            </select>
+            <button class="primary-button" style="width: 100%;" onclick="addSelectedPractice()">Add Practice</button>
+        </div>
+    </div>
 
     <footer>
         <p>Harmonic Alignment Project | MIT License | <a href="https://github.com/justinshenk/harmonic-alignment">GitHub</a></p>
     </footer>
 
     <script src="app.js"></script>
+    <script src="supabase-config.js"></script>
 </body>
 </html>

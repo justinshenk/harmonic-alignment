@@ -563,6 +563,7 @@ function initializeNavigation() {
         compareView: 'compare-section',
         exploreView: 'explore-section',
         ratingsView: 'ratings-section',
+        profileView: 'profile-section',
         aboutView: 'about-section'
     };
 
@@ -573,6 +574,7 @@ function initializeNavigation() {
         '/compare': 'compareView',
         '/explore': 'exploreView',
         '/ratings': 'ratingsView',
+        '/profile': 'profileView',
         '/about': 'aboutView'
     };
 
@@ -581,6 +583,7 @@ function initializeNavigation() {
         'compareView': '/compare',
         'exploreView': '/explore',
         'ratingsView': '/ratings',
+        'profileView': '/profile',
         'aboutView': '/about'
     };
 
@@ -611,6 +614,13 @@ function initializeNavigation() {
             renderAttentionClassification();
             if (typeof renderEvolutionTree === 'function') {
                 renderEvolutionTree();
+            }
+        }
+
+        // Load user practices when switching to profile view
+        if (buttonId === 'profileView') {
+            if (typeof loadUserPractices === 'function') {
+                loadUserPractices();
             }
         }
     }
