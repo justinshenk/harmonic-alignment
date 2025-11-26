@@ -118,7 +118,7 @@ let quizState = {
 // API endpoint for practice chat (use local dev or production)
 const PRACTICE_CHAT_API = window.location.hostname === 'localhost'
     ? 'http://localhost:3001/api/practice-chat'
-    : 'https://justinshenk.com/api/practice-chat';
+    : 'https://www.justinshenk.com/api/practice-chat';
 
 // Initialize
 document.addEventListener('DOMContentLoaded', async () => {
