@@ -474,6 +474,51 @@ async function updateProfileDisplay() {
     }
 }
 
+// ============ Delete Account ============
+
+// Confirm delete account
+function confirmDeleteAccount() {
+    if (confirm('Are you sure you want to delete your account? This will permanently delete all your practice data and cannot be undone.')) {
+        deleteAccount();
+    }
+}
+
+// Delete account and all data
+async function deleteAccount() {
+    if (!currentUser) return;
+
+    try {
+        // Delete user practices
+        await supabase
+            .from('user_practices')
+            .delete()
+            .eq('user_id', currentUser.id);
+
+        // Delete practice logs
+        await supabase
+            .from('practice_logs')
+            .delete()
+            .eq('user_id', currentUser.id);
+
+        // Delete profile
+        await supabase
+            .from('profiles')
+            .delete()
+            .eq('id', currentUser.id);
+
+        // Sign out
+        await signOut();
+
+        closeProfileSettings();
+        showNotification('Account deleted successfully', 'success');
+
+        // Navigate to home
+        document.getElementById('quizView').click();
+    } catch (error) {
+        showNotification('Error deleting account: ' + error.message, 'error');
+    }
+}
+
 // ============ Share Profile ============
 
 // Share profile - copy link to clipboard

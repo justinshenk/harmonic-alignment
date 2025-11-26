@@ -1561,6 +1561,23 @@ details.dimension-legend[open] summary span {
     padding: 0 1rem;
 }
 
+/* Danger button */
+.danger-button {
+    background: transparent;
+    color: #e74c3c;
+    border: 1px solid #e74c3c;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.danger-button:hover {
+    background: #e74c3c;
+    color: white;
+}
+
 /* Notifications */
 .notification {
     position: fixed;
