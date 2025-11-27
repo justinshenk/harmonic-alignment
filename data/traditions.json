@@ -275,52 +275,6 @@
       }
     },
     {
-      "id": "idp",
-      "name": "Intentional Development Practice (IDP)",
-      "origin": "Developmental Psychology",
-      "yearOrigin": 2010,
-      "parentTraditions": [
-        "adult-development"
-      ],
-      "description": "Structured practice for advancing developmental stages through deliberate practice",
-      "practices": [
-        "Perspective-taking",
-        "Journaling",
-        "Dialectical thinking",
-        "Horizontal skill building"
-      ],
-      "timeCommitment": "20-40 min daily",
-      "guidanceNeeded": "Medium-High",
-      "accessibility": "Medium",
-      "effectiveness": {
-        "adhd": 3,
-        "depression": 3,
-        "anxiety": 3,
-        "trauma": 2,
-        "focus": 4,
-        "metacognition": 5,
-        "insight": 5,
-        "compassion": 4,
-        "communication": 5,
-        "empathy": 5,
-        "bodyAwareness": 2,
-        "emotionalRegulation": 4
-      },
-      "researchSupport": "Medium",
-      "citations": [
-        "Kegan, R. (1982). The Evolving Self",
-        "Deliberate practice in adult development research"
-      ],
-      "complexityProfile": {
-        "somatic": 2,
-        "intrapsychic": 5,
-        "relational": 4,
-        "collective": 4,
-        "systemic": 4,
-        "transpersonal": 3
-      }
-    },
-    {
       "id": "circling",
       "name": "Circling",
       "origin": "Humanistic Psychology",

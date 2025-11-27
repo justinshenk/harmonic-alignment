@@ -1437,12 +1437,6 @@ function buildTreeData() {
                             { name: 'Somatic Experiencing', description: 'Body-based trauma work' }
                         ]
                     },
-                    {
-                        name: 'Developmental (1980s)',
-                        children: [
-                            { name: 'IDP (2010)', description: 'Stage development' }
-                        ]
-                    }
                 ]
             }
         ]
