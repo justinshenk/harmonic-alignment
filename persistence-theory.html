@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practice Persistence Theory - Harmonic Alignment</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .research-content {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .framework {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .framework:last-child {
+            border-bottom: none;
+        }
+        .framework h2 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        .framework-status {
+            color: #666;
+            font-style: italic;
+            margin-bottom: 1rem;
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: #fff3cd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        .framework h3 {
+            color: var(--secondary);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+        .concept-box {
+            background: #e8f4f8;
+            padding: 1rem;
+            border-left: 4px solid var(--secondary);
+            margin: 1rem 0;
+        }
+        .hypothesis-box {
+            background: #f5e6ff;
+            padding: 1.5rem;
+            border-left: 4px solid #9b59b6;
+            margin: 1.5rem 0;
+        }
+        .prediction-box {
+            background: #e8f8e8;
+            padding: 1rem;
+            border-left: 4px solid var(--success);
+            margin: 1rem 0;
+        }
+        .math-box {
+            background: #f8f8f8;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: var(--secondary);
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        th, td {
+            border: 1px solid var(--border);
+            padding: 0.75rem;
+            text-align: left;
+        }
+        th {
+            background: var(--bg);
+        }
+        .toc {
+            background: var(--bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        .toc h3 {
+            margin-top: 0;
+            color: var(--primary);
+        }
+        .toc ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+        .toc li {
+            margin: 0.5rem 0;
+        }
+        .toc a {
+            color: var(--secondary);
+            text-decoration: none;
+        }
+        .toc a:hover {
+            text-decoration: underline;
+        }
+        .viz-container {
+            width: 100%;
+            height: 500px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: #fafafa;
+            position: relative;
+            overflow: hidden;
+            margin: 1.5rem 0;
+        }
+        .slider-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+        .slider-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .slider-row label {
+            min-width: 180px;
+            font-size: 0.9rem;
+        }
+        .slider-row input[type="range"] {
+            flex: 1;
+        }
+        .slider-row .value {
+            min-width: 40px;
+            text-align: right;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Practice Persistence Theory</h1>
+        <p>Cognitive models for predicting sustained engagement with growth practices</p>
+    </header>
+
+    <div class="research-content">
+        <a href="index.html" class="back-link">&larr; Back to main site</a>
+
+        <div class="toc">
+            <h3>Contents</h3>
+            <ul>
+                <li><a href="#introduction">Introduction: The Persistence Problem</a></li>
+                <li><a href="#crh">Cognitive Resonance Hypothesis</a></li>
+                <li><a href="#tiw">Temporal Integration Windows</a></li>
+                <li><a href="#synthesis">Synthesis: The Resonance-Temporal Model</a></li>
+                <li><a href="#predictions">Empirical Predictions</a></li>
+                <li><a href="#visualization">Interactive Model</a></li>
+            </ul>
+        </div>
+
+        <section id="introduction">
+            <h2>Introduction: The Persistence Problem</h2>
+
+            <p>Why do some people maintain contemplative practices for decades while others abandon them within weeks? Existing models (habit formation, motivation theory, social support) explain some variance but miss a crucial factor: the <em>cognitive fit</em> between practitioner and practice.</p>
+
+            <p>Two complementary hypotheses address this gap:</p>
+
+            <ol>
+                <li><strong>Cognitive Resonance Hypothesis (CRH)</strong>: Persistence depends on the match between a practice's cognitive demands and the practitioner's default cognitive architecture.</li>
+                <li><strong>Temporal Integration Windows (TIW)</strong>: Persistence depends on alignment between a practice's feedback timescale and the practitioner's temporal discounting function.</li>
+            </ol>
+
+            <p>Both can be formalized mathematically and mapped onto geometric structures (including unit spheres), enabling quantitative predictions about practice-practitioner compatibility.</p>
+        </section>
+
+        <section id="crh" class="framework">
+            <h2>Cognitive Resonance Hypothesis</h2>
+            <span class="framework-status">Theoretical / Untested</span>
+
+            <div class="hypothesis-box">
+                <strong>Core Claim:</strong> Persistence at a contemplative practice is maximized when the practice's cognitive demands fall within an optimal distance from the practitioner's baseline cognitive state. Too close yields boredom; too far yields frustration or destabilization.
+            </div>
+
+            <h3>Theoretical Foundations</h3>
+
+            <p>The hypothesis draws from several established frameworks:</p>
+
+            <ul>
+                <li><strong>Flow Theory (Csikszentmihalyi)</strong>: Engagement requires balance between challenge and skill</li>
+                <li><strong>Predictive Processing (Friston)</strong>: The brain minimizes prediction error; optimal learning occurs at intermediate error levels</li>
+                <li><strong>Zone of Proximal Development (Vygotsky)</strong>: Growth occurs just beyond current competence</li>
+                <li><strong>Default Mode Network research</strong>: Individual differences in baseline DMN activity and connectivity</li>
+            </ul>
+
+            <h3>Formalization</h3>
+
+            <p>Let cognitive state be represented as a point in n-dimensional space. For tractability, we use key dimensions derived from contemplative neuroscience:</p>
+
+            <div class="math-box">
+                <strong>Cognitive State Vector:</strong><br><br>
+                C = (c<sub>1</sub>, c<sub>2</sub>, c<sub>3</sub>, c<sub>4</sub>) where:<br>
+                &nbsp;&nbsp;c<sub>1</sub> = Attentional stability (DMN suppression capacity)<br>
+                &nbsp;&nbsp;c<sub>2</sub> = Interoceptive sensitivity (body awareness)<br>
+                &nbsp;&nbsp;c<sub>3</sub> = Meta-cognitive clarity (awareness of mental states)<br>
+                &nbsp;&nbsp;c<sub>4</sub> = Affective flexibility (emotion regulation capacity)<br><br>
+
+                Normalize to unit sphere: C&#x0302; = C / ||C||
+            </div>
+
+            <p>Each practice P can similarly be characterized by its <em>target cognitive profile</em>&mdash;the cognitive configuration it develops or requires:</p>
+
+            <div class="math-box">
+                <strong>Practice Target Vector:</strong><br><br>
+                P = (p<sub>1</sub>, p<sub>2</sub>, p<sub>3</sub>, p<sub>4</sub>)<br><br>
+
+                P&#x0302; = P / ||P|| (normalized to unit sphere)
+            </div>
+
+            <h3>The Resonance Function</h3>
+
+            <p>Cognitive resonance R between practitioner and practice is defined as:</p>
+
+            <div class="math-box">
+                <strong>Resonance Function:</strong><br><br>
+                R(C&#x0302;, P&#x0302;) = exp(-|d - d*|<sup>2</sup> / 2&sigma;<sup>2</sup>)<br><br>
+
+                where:<br>
+                &nbsp;&nbsp;d = arccos(C&#x0302; &middot; P&#x0302;) &nbsp;&nbsp;[geodesic distance on sphere]<br>
+                &nbsp;&nbsp;d* = optimal distance (typically &pi;/6 to &pi;/3)<br>
+                &nbsp;&nbsp;&sigma; = individual tolerance parameter<br><br>
+
+                R &isin; (0, 1] with R = 1 at optimal distance
+            </div>
+
+            <p>This yields a "Goldilocks zone" on the sphere around each practitioner's baseline state. Practices falling in this band have highest persistence probability.</p>
+
+            <div class="concept-box">
+                <strong>Key Insight:</strong> The optimal distance d* is not zero. Practices too similar to baseline (d &approx; 0) provide insufficient challenge or transformation signal. The sweet spot lies at moderate distance&mdash;enough stretch to be engaging, not so much as to be destabilizing.
+            </div>
+
+            <h3>Individual Differences</h3>
+
+            <p>The model accommodates individual variation through:</p>
+
+            <table>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Individual Variation</th>
+                    <th>Implications</th>
+                </tr>
+                <tr>
+                    <td>d* (optimal distance)</td>
+                    <td>Novelty-seekers have larger d*; stability-seekers smaller</td>
+                    <td>Some thrive with radical practices; others need gentle approaches</td>
+                </tr>
+                <tr>
+                    <td>&sigma; (tolerance)</td>
+                    <td>Wider &sigma; indicates more flexibility</td>
+                    <td>High-&sigma; individuals can persist at diverse practices</td>
+                </tr>
+                <tr>
+                    <td>C&#x0302; (baseline state)</td>
+                    <td>Shaped by genetics, development, prior training</td>
+                    <td>Determines which practices fall in resonance zone</td>
+                </tr>
+            </table>
+
+            <h3>Mapping Traditions</h3>
+
+            <p>Using the Harmonic Alignment dataset, we can estimate practice vectors from effectiveness and complexity profiles:</p>
+
+            <table>
+                <tr>
+                    <th>Practice</th>
+                    <th>Estimated P&#x0302; (approx)</th>
+                    <th>Primary Quadrant</th>
+                </tr>
+                <tr>
+                    <td>Jhana Meditation</td>
+                    <td>(0.8, 0.3, 0.4, 0.3)</td>
+                    <td>High stability, moderate body</td>
+                </tr>
+                <tr>
+                    <td>Focusing</td>
+                    <td>(0.3, 0.8, 0.5, 0.3)</td>
+                    <td>High interoception</td>
+                </tr>
+                <tr>
+                    <td>Vipassana</td>
+                    <td>(0.6, 0.6, 0.7, 0.5)</td>
+                    <td>Balanced, high metacognition</td>
+                </tr>
+                <tr>
+                    <td>IFS</td>
+                    <td>(0.4, 0.4, 0.7, 0.8)</td>
+                    <td>High metacognition + affect</td>
+                </tr>
+                <tr>
+                    <td>Somatic Experiencing</td>
+                    <td>(0.3, 0.9, 0.4, 0.6)</td>
+                    <td>Very high interoception</td>
+                </tr>
+            </table>
+
+            <div class="prediction-box">
+                <strong>Testable Prediction 1:</strong> Practitioners whose baseline cognitive profile (measured via DMN connectivity, interoceptive accuracy tasks, FFMQ subscales) falls at moderate spherical distance from a practice's target profile will show higher 6-month retention than those at very small or very large distances.
+            </div>
+        </section>
+
+        <section id="tiw" class="framework">
+            <h2>Temporal Integration Windows</h2>
+            <span class="framework-status">Theoretical / Untested</span>
+
+            <div class="hypothesis-box">
+                <strong>Core Claim:</strong> Practices operate on characteristic timescales. Persistence requires alignment between practice timescale and practitioner's temporal discounting function. Mismatches cause dropout before benefits manifest.
+            </div>
+
+            <h3>The Timescale Spectrum</h3>
+
+            <p>Contemplative practices vary dramatically in when their effects become noticeable:</p>
+
+            <table>
+                <tr>
+                    <th>Timescale</th>
+                    <th>Duration</th>
+                    <th>Example Practices</th>
+                    <th>Feedback Type</th>
+                </tr>
+                <tr>
+                    <td>Immediate</td>
+                    <td>Seconds to minutes</td>
+                    <td>Wim Hof breathing, cold exposure</td>
+                    <td>Physiological shift, altered state</td>
+                </tr>
+                <tr>
+                    <td>Session</td>
+                    <td>Minutes to hours</td>
+                    <td>Jhana, Holotropic breathwork</td>
+                    <td>State change, emotional release</td>
+                </tr>
+                <tr>
+                    <td>Daily</td>
+                    <td>Days to weeks</td>
+                    <td>Gratitude journaling, Stoic exercises</td>
+                    <td>Mood improvement, stress reduction</td>
+                </tr>
+                <tr>
+                    <td>Developmental</td>
+                    <td>Weeks to months</td>
+                    <td>Vipassana, character development</td>
+                    <td>Trait changes, insight accumulation</td>
+                </tr>
+                <tr>
+                    <td>Transformational</td>
+                    <td>Months to years</td>
+                    <td>Dzogchen, deep therapy</td>
+                    <td>Identity shifts, awakening</td>
+                </tr>
+            </table>
+
+            <h3>Temporal Discounting</h3>
+
+            <p>Humans discount future rewards hyperbolically. The subjective value V of a reward R delayed by time t is approximately:</p>
+
+            <div class="math-box">
+                <strong>Hyperbolic Discounting:</strong><br><br>
+                V(R, t) = R / (1 + kt)<br><br>
+
+                where k = individual discount rate<br>
+                &nbsp;&nbsp;High k: steep discounting, preference for immediate rewards<br>
+                &nbsp;&nbsp;Low k: shallow discounting, patience for delayed rewards
+            </div>
+
+            <p>The discount rate k varies substantially across individuals and can be measured via behavioral tasks (delay discounting paradigms).</p>
+
+            <h3>The Alignment Model</h3>
+
+            <p>Let each practice have a characteristic <em>benefit emergence time</em> T<sub>p</sub>&mdash;the typical delay before practitioners notice meaningful effects.</p>
+
+            <div class="math-box">
+                <strong>Persistence Probability:</strong><br><br>
+                P(persist) &prop; V(B, T<sub>p</sub>) / C<sub>ongoing</sub><br><br>
+
+                = [B / (1 + k&middot;T<sub>p</sub>)] / C<sub>ongoing</sub><br><br>
+
+                where:<br>
+                &nbsp;&nbsp;B = eventual benefit magnitude<br>
+                &nbsp;&nbsp;T<sub>p</sub> = practice benefit emergence time<br>
+                &nbsp;&nbsp;k = practitioner's discount rate<br>
+                &nbsp;&nbsp;C<sub>ongoing</sub> = ongoing cost (time, effort, discomfort)
+            </div>
+
+            <h3>Critical Implications</h3>
+
+            <div class="concept-box">
+                <strong>The Dropout Threshold:</strong> When discounted benefit falls below ongoing cost, the practitioner will likely quit. For high-k individuals, long-timescale practices cross this threshold before benefits emerge&mdash;even if the eventual benefit would be large.
+            </div>
+
+            <p>This explains several phenomena:</p>
+
+            <ul>
+                <li><strong>Why immediate-feedback practices are popular:</strong> Wim Hof, breathwork, and cold exposure provide rapid physiological feedback, reducing dropout among high-k individuals</li>
+                <li><strong>Why deep practices require commitment structures:</strong> Retreats, sanghas, and teachers provide external scaffolding that sustains engagement past the dropout threshold</li>
+                <li><strong>Why practice eclecticism is common:</strong> High-k practitioners sample many practices but persist at few, always chasing faster feedback</li>
+            </ul>
+
+            <h3>Mapping to Spherical Geometry</h3>
+
+            <p>The temporal dimension can be incorporated into the unit sphere model:</p>
+
+            <div class="math-box">
+                <strong>Extended State Space:</strong><br><br>
+                Position on sphere: cognitive profile (as in CRH)<br>
+                Radius from center: temporal horizon<br><br>
+
+                r = 1 / (1 + k) &nbsp;&nbsp;[normalized inverse discount rate]<br><br>
+
+                High-k individuals (steep discounting) &rarr; r near 0 (close to center)<br>
+                Low-k individuals (shallow discounting) &rarr; r near 1 (surface of sphere)
+            </div>
+
+            <p>Practices can now be represented as shells at different radii:</p>
+
+            <ul>
+                <li>Immediate-feedback practices: inner shell (small r)</li>
+                <li>Long-timescale practices: outer shell (large r)</li>
+                <li>Practitioners "reach" practices within their r-neighborhood</li>
+            </ul>
+
+            <div class="prediction-box">
+                <strong>Testable Prediction 2:</strong> Practitioners with high discount rates (measured via delay discounting tasks) will show significantly higher dropout from developmental-timescale practices (Vipassana, character development) compared to practitioners with low discount rates, controlling for initial motivation and practice quality.
+            </div>
+
+            <div class="prediction-box">
+                <strong>Testable Prediction 3:</strong> Adding immediate-feedback components (biofeedback, micro-rewards, session-level tracking) to long-timescale practices will improve retention among high-k practitioners without affecting low-k practitioners.
+            </div>
+        </section>
+
+        <section id="synthesis" class="framework">
+            <h2>Synthesis: The Resonance-Temporal Model</h2>
+
+            <p>The two hypotheses can be unified into a single geometric model:</p>
+
+            <div class="math-box">
+                <strong>Combined Persistence Function:</strong><br><br>
+                P(persist | C, k, Practice) = R(C&#x0302;, P&#x0302;) &times; T(k, T<sub>p</sub>)<br><br>
+
+                where:<br>
+                &nbsp;&nbsp;R = cognitive resonance (angular distance on sphere)<br>
+                &nbsp;&nbsp;T = temporal alignment (radial accessibility)<br><br>
+
+                Full model uses 5D space:<br>
+                &nbsp;&nbsp;4 cognitive dimensions (on unit 3-sphere S<sup>3</sup>)<br>
+                &nbsp;&nbsp;1 temporal dimension (radius, 0 to 1)
+            </div>
+
+            <h3>Geometric Interpretation</h3>
+
+            <p>Visualize this as a solid 4-ball where:</p>
+
+            <ul>
+                <li>Angular position (on the 3-sphere boundary) encodes cognitive profile</li>
+                <li>Radial position encodes temporal horizon</li>
+                <li>Each practitioner occupies a point in this space</li>
+                <li>Each practice occupies a region (fuzzy zone, not a point)</li>
+                <li>Persistence probability is highest when practitioner point falls within practice region</li>
+            </ul>
+
+            <h3>Practice Recommendation Algorithm</h3>
+
+            <p>Given a practitioner's measured profile (C&#x0302;, k), recommend practices by:</p>
+
+            <ol>
+                <li>Compute angular distance to all practice target profiles</li>
+                <li>Filter to practices within temporal reach (T<sub>p</sub> compatible with k)</li>
+                <li>Rank by combined resonance-temporal score</li>
+                <li>Present top matches with explanation of fit</li>
+            </ol>
+
+            <div class="concept-box">
+                <strong>Practical Application:</strong> This model could power a "practice matching" tool that goes beyond simple preference questionnaires. By measuring actual cognitive parameters (attention tasks, interoceptive accuracy, delay discounting), recommendations would be grounded in predictive models rather than self-report.
+            </div>
+        </section>
+
+        <section id="predictions" class="framework">
+            <h2>Empirical Predictions</h2>
+
+            <p>The model generates specific, testable predictions:</p>
+
+            <h3>Cross-Sectional Predictions</h3>
+
+            <ol>
+                <li>Long-term practitioners will show smaller cognitive distance to their practice's target profile than short-term practitioners or dropouts</li>
+                <li>High-k individuals will be over-represented among practitioners of immediate-feedback traditions and under-represented among developmental-timescale traditions</li>
+                <li>Practitioners who persist at "mismatched" practices will report more use of compensatory strategies (external accountability, modified techniques)</li>
+            </ol>
+
+            <h3>Longitudinal Predictions</h3>
+
+            <ol>
+                <li>Initial cognitive profile will predict 6-month retention better than initial motivation or expectancy</li>
+                <li>Dropout timing will correlate with practice timescale: immediate-feedback practice dropouts occur in days/weeks; developmental-timescale dropouts occur at characteristic lag (when discounted value crosses cost threshold)</li>
+                <li>Interventions that shift cognitive profile toward practice target (e.g., preliminary concentration training before insight practice) will improve retention</li>
+            </ol>
+
+            <h3>Experimental Predictions</h3>
+
+            <ol>
+                <li>Randomizing practitioners to matched vs. mismatched practices will show retention differences favoring matched assignment</li>
+                <li>Adding immediate-feedback scaffolding to long-timescale practices will selectively improve retention among high-k participants</li>
+                <li>Training temporal patience (expanding k) before practice initiation will improve retention at long-timescale practices</li>
+            </ol>
+        </section>
+
+        <section id="visualization">
+            <h2>Interactive Model</h2>
+
+            <p>Explore the Resonance-Temporal model interactively. Adjust your hypothetical cognitive profile and temporal discount rate to see which practices fall in your predicted persistence zone.</p>
+
+            <div class="slider-group">
+                <div class="slider-row">
+                    <label>Attentional Stability (c<sub>1</sub>)</label>
+                    <input type="range" id="c1" min="0" max="100" value="50" oninput="updateModel()">
+                    <span class="value" id="c1-val">0.50</span>
+                </div>
+                <div class="slider-row">
+                    <label>Interoceptive Sensitivity (c<sub>2</sub>)</label>
+                    <input type="range" id="c2" min="0" max="100" value="50" oninput="updateModel()">
+                    <span class="value" id="c2-val">0.50</span>
+                </div>
+                <div class="slider-row">
+                    <label>Meta-cognitive Clarity (c<sub>3</sub>)</label>
+                    <input type="range" id="c3" min="0" max="100" value="50" oninput="updateModel()">
+                    <span class="value" id="c3-val">0.50</span>
+                </div>
+                <div class="slider-row">
+                    <label>Affective Flexibility (c<sub>4</sub>)</label>
+                    <input type="range" id="c4" min="0" max="100" value="50" oninput="updateModel()">
+                    <span class="value" id="c4-val">0.50</span>
+                </div>
+                <div class="slider-row">
+                    <label>Temporal Discount Rate (k)</label>
+                    <input type="range" id="k" min="0" max="100" value="50" oninput="updateModel()">
+                    <span class="value" id="k-val">0.50</span>
+                </div>
+            </div>
+
+            <div class="viz-container" id="model-viz">
+                <canvas id="viz-canvas"></canvas>
+            </div>
+
+            <div id="recommendations" style="margin-top: 1rem;">
+                <h4>Predicted High-Persistence Practices</h4>
+                <div id="rec-list"></div>
+            </div>
+        </section>
+
+        <p style="margin-top: 2rem;"><a href="index.html" class="back-link">&larr; Back to main site</a></p>
+    </div>
+
+    <script>
+    // Practice profiles (estimated from traditions.json data)
+    const practices = [
+        { id: 'jhana', name: 'Jhana Meditation', p: [0.8, 0.4, 0.5, 0.4], timescale: 0.6, color: '#3498db' },
+        { id: 'vipassana', name: 'Vipassana', p: [0.6, 0.6, 0.8, 0.6], timescale: 0.7, color: '#9b59b6' },
+        { id: 'focusing', name: 'Focusing', p: [0.3, 0.9, 0.5, 0.5], timescale: 0.4, color: '#e74c3c' },
+        { id: 'stoicism', name: 'Stoicism', p: [0.5, 0.2, 0.8, 0.7], timescale: 0.5, color: '#f39c12' },
+        { id: 'ifs', name: 'IFS', p: [0.4, 0.4, 0.8, 0.9], timescale: 0.7, color: '#1abc9c' },
+        { id: 'metta', name: 'Metta', p: [0.4, 0.3, 0.4, 0.7], timescale: 0.4, color: '#e91e63' },
+        { id: 'somatic-exp', name: 'Somatic Experiencing', p: [0.3, 0.95, 0.4, 0.7], timescale: 0.6, color: '#ff5722' },
+        { id: 'wim-hof', name: 'Wim Hof Method', p: [0.5, 0.8, 0.2, 0.6], timescale: 0.15, color: '#00bcd4' },
+        { id: 'zen', name: 'Zen (Zazen)', p: [0.7, 0.5, 0.7, 0.5], timescale: 0.75, color: '#607d8b' },
+        { id: 'nvc', name: 'NVC', p: [0.3, 0.3, 0.6, 0.8], timescale: 0.5, color: '#8bc34a' },
+        { id: 'circling', name: 'Circling', p: [0.3, 0.5, 0.8, 0.7], timescale: 0.35, color: '#ff9800' },
+        { id: 'mbsr', name: 'MBSR', p: [0.5, 0.6, 0.5, 0.6], timescale: 0.45, color: '#795548' },
+        { id: 'yoga', name: 'Hatha Yoga', p: [0.5, 0.8, 0.4, 0.6], timescale: 0.35, color: '#673ab7' },
+        { id: 'qigong', name: 'Qigong', p: [0.5, 0.8, 0.4, 0.6], timescale: 0.4, color: '#4caf50' },
+        { id: 'open-awareness', name: 'Open Awareness', p: [0.4, 0.4, 0.9, 0.6], timescale: 0.8, color: '#2196f3' }
+    ];
+
+    // Normalize a vector
+    function normalize(v) {
+        const mag = Math.sqrt(v.reduce((sum, x) => sum + x * x, 0));
+        return v.map(x => x / mag);
+    }
+
+    // Dot product
+    function dot(a, b) {
+        return a.reduce((sum, ai, i) => sum + ai * b[i], 0);
+    }
+
+    // Angular distance on unit sphere
+    function angularDistance(a, b) {
+        const d = dot(normalize(a), normalize(b));
+        return Math.acos(Math.max(-1, Math.min(1, d)));
+    }
+
+    // Resonance function
+    function resonance(c, p, optimalDist = Math.PI / 4, sigma = 0.5) {
+        const d = angularDistance(c, p);
+        return Math.exp(-Math.pow(d - optimalDist, 2) / (2 * sigma * sigma));
+    }
+
+    // Temporal alignment
+    function temporalAlignment(k, tp) {
+        // k: discount rate (0 = patient, 1 = impatient)
+        // tp: practice timescale (0 = immediate, 1 = long-term)
+        const reach = 1 - k; // how far into future practitioner can reach
+        if (tp <= reach + 0.2) {
+            return Math.exp(-Math.pow(tp - reach, 2) / 0.1);
+        }
+        return Math.exp(-Math.pow(tp - reach, 2) / 0.05);
+    }
+
+    // Combined persistence score
+    function persistenceScore(c, k, practice) {
+        const r = resonance(c, practice.p);
+        const t = temporalAlignment(k, practice.timescale);
+        return r * t;
+    }
+
+    let canvas, ctx;
+
+    function initCanvas() {
+        canvas = document.getElementById('viz-canvas');
+        const container = document.getElementById('model-viz');
+        canvas.width = container.clientWidth;
+        canvas.height = container.clientHeight;
+        ctx = canvas.getContext('2d');
+    }
+
+    function updateModel() {
+        // Read slider values
+        const c1 = document.getElementById('c1').value / 100;
+        const c2 = document.getElementById('c2').value / 100;
+        const c3 = document.getElementById('c3').value / 100;
+        const c4 = document.getElementById('c4').value / 100;
+        const k = document.getElementById('k').value / 100;
+
+        // Update displayed values
+        document.getElementById('c1-val').textContent = c1.toFixed(2);
+        document.getElementById('c2-val').textContent = c2.toFixed(2);
+        document.getElementById('c3-val').textContent = c3.toFixed(2);
+        document.getElementById('c4-val').textContent = c4.toFixed(2);
+        document.getElementById('k-val').textContent = k.toFixed(2);
+
+        const c = [c1, c2, c3, c4];
+
+        // Calculate scores for all practices
+        const scores = practices.map(p => ({
+            ...p,
+            score: persistenceScore(c, k, p),
+            resonance: resonance(c, p.p),
+            temporal: temporalAlignment(k, p.timescale)
+        }));
+
+        // Sort by score
+        scores.sort((a, b) => b.score - a.score);
+
+        // Draw visualization
+        drawVisualization(c, k, scores);
+
+        // Update recommendations
+        updateRecommendations(scores);
+    }
+
+    function drawVisualization(c, k, scores) {
+        if (!ctx) initCanvas();
+
+        const w = canvas.width;
+        const h = canvas.height;
+
+        ctx.clearRect(0, 0, w, h);
+
+        // Draw axes
+        const margin = 60;
+        const plotW = w - 2 * margin;
+        const plotH = h - 2 * margin;
+
+        // Background
+        ctx.fillStyle = '#fafafa';
+        ctx.fillRect(0, 0, w, h);
+
+        // X axis: Cognitive Resonance
+        ctx.strokeStyle = '#333';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(margin, h - margin);
+        ctx.lineTo(w - margin, h - margin);
+        ctx.stroke();
+
+        // Y axis: Temporal Alignment
+        ctx.beginPath();
+        ctx.moveTo(margin, h - margin);
+        ctx.lineTo(margin, margin);
+        ctx.stroke();
+
+        // Axis labels
+        ctx.fillStyle = '#333';
+        ctx.font = '12px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Cognitive Resonance (R)', w / 2, h - 15);
+
+        ctx.save();
+        ctx.translate(20, h / 2);
+        ctx.rotate(-Math.PI / 2);
+        ctx.fillText('Temporal Alignment (T)', 0, 0);
+        ctx.restore();
+
+        // Draw persistence contours
+        ctx.strokeStyle = 'rgba(100, 100, 100, 0.2)';
+        ctx.lineWidth = 1;
+        [0.2, 0.4, 0.6, 0.8].forEach(level => {
+            ctx.beginPath();
+            // Contour: R * T = level, so T = level / R
+            for (let rx = 0.01; rx <= 1; rx += 0.01) {
+                const ty = level / rx;
+                if (ty >= 0 && ty <= 1) {
+                    const px = margin + rx * plotW;
+                    const py = h - margin - ty * plotH;
+                    if (rx === 0.01) ctx.moveTo(px, py);
+                    else ctx.lineTo(px, py);
+                }
+            }
+            ctx.stroke();
+        });
+
+        // Draw practices
+        scores.forEach((p, i) => {
+            const x = margin + p.resonance * plotW;
+            const y = h - margin - p.temporal * plotH;
+            const r = 8 + p.score * 15;
+
+            // Glow for high scores
+            if (p.score > 0.5) {
+                ctx.fillStyle = `rgba(46, 204, 113, ${p.score * 0.3})`;
+                ctx.beginPath();
+                ctx.arc(x, y, r + 10, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // Circle
+            ctx.fillStyle = p.color;
+            ctx.beginPath();
+            ctx.arc(x, y, r, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Label (top 5 only)
+            if (i < 7) {
+                ctx.fillStyle = '#333';
+                ctx.font = '11px sans-serif';
+                ctx.textAlign = 'left';
+                ctx.fillText(p.name, x + r + 5, y + 4);
+            }
+        });
+
+        // Draw "you are here" indicator
+        ctx.fillStyle = '#e74c3c';
+        ctx.font = 'bold 12px sans-serif';
+        ctx.textAlign = 'right';
+        ctx.fillText('Practices in upper-right: best fit', w - margin, margin + 20);
+    }
+
+    function updateRecommendations(scores) {
+        const recList = document.getElementById('rec-list');
+        const top5 = scores.slice(0, 5);
+
+        recList.innerHTML = top5.map((p, i) => `
+            <div style="display: flex; align-items: center; gap: 1rem; margin: 0.5rem 0; padding: 0.5rem; background: ${i === 0 ? '#e8f8e8' : '#f8f8f8'}; border-radius: 4px;">
+                <span style="width: 12px; height: 12px; background: ${p.color}; border-radius: 50%;"></span>
+                <strong>${p.name}</strong>
+                <span style="color: #666;">R: ${p.resonance.toFixed(2)} | T: ${p.temporal.toFixed(2)} | Relevance: ${p.score.toFixed(2)}</span>
+            </div>
+        `).join('');
+    }
+
+    // Initialize
+    window.addEventListener('load', () => {
+        initCanvas();
+        updateModel();
+    });
+
+    window.addEventListener('resize', () => {
+        initCanvas();
+        updateModel();
+    });
+    </script>
+
+    <footer>
+        <p>Harmonic Alignment Project | <a href="https://github.com/justinshenk/harmonic-alignment">GitHub</a></p>
+    </footer>
+</body>
+</html>
