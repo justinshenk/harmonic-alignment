@@ -34,20 +34,7 @@
             <button id="exploreView">Explore</button>
             <button id="ratingsView">Ratings</button>
             <button id="aboutView">About</button>
-            <button id="authButton" class="auth-button">Sign In</button>
-            <div id="profileDropdown" class="profile-dropdown" style="display: none;">
-                <button id="profileDropdownBtn" class="profile-dropdown-btn" onclick="toggleProfileDropdown()">
-                    <span id="profileDropdownName">My Profile</span>
-                    <span class="dropdown-arrow">▼</span>
-                </button>
-                <div id="profileDropdownMenu" class="profile-dropdown-menu">
-                    <a href="/profile" onclick="document.getElementById('profileView').click(); closeProfileDropdown(); return false;">My Practices</a>
-                    <a href="#" onclick="showProfileSettings(); closeProfileDropdown(); return false;">Settings</a>
-                    <hr>
-                    <a href="#" onclick="handleSignOut(); closeProfileDropdown(); return false;">Sign Out</a>
-                </div>
             </div>
-            <button id="profileView" style="display: none;">My Practices</button>
         </nav>
     </header>
 
@@ -449,11 +436,7 @@
                     <p style="margin-bottom: 2rem;">Track your experience with different practices and get personalized recommendations.</p>
                 </div>
 
-                <div id="profileLoggedOut" style="display: none; text-align: center; padding: 3rem;">
-                    <p style="margin-bottom: 1rem;">Sign in to track your practices and get personalized recommendations.</p>
-                    <button class="primary-button" onclick="showAuthModal()">Sign In</button>
-                </div>
-
+                
                 <div id="sharedProfileView" style="display: none;">
                     <div style="margin-bottom: 1.5rem;">
                         <h3 id="sharedProfileName" style="margin: 0;"></h3>
@@ -523,62 +506,6 @@
                 <button type="button" class="danger-button" onclick="confirmDeleteAccount()">Delete Account</button>
                 <p style="font-size: 0.8rem; color: #999; margin-top: 0.5rem;">Permanently deletes your profile, practices, and notes.<br><a href="/privacy" target="_blank" style="color: #999;">Data retention policy</a></p>
             </div>
-        </div>
-    </div>
-
-    <!-- Auth Modal -->
-    <div id="authModal" class="modal" style="display: none;">
-        <div class="modal-content auth-modal">
-            <button class="modal-close" onclick="closeAuthModal()">&times;</button>
-            <h2 style="text-align: center; margin-bottom: 1.5rem;">Welcome</h2>
-
-            <div class="auth-tabs">
-                <button id="authModeSignin" class="auth-tab active" onclick="switchAuthMode('signin')">Sign In</button>
-                <button id="authModeSignup" class="auth-tab" onclick="switchAuthMode('signup')">Sign Up</button>
-            </div>
-
-            <button onclick="signInWithOAuth('google')" class="google-button" type="button">
-                <svg width="18" height="18" viewBox="0 0 18 18" style="margin-right: 8px;">
-                    <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
-                    <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/>
-                    <path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/>
-                    <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/>
-                </svg>
-                Continue with Google
-            </button>
-
-            <div class="auth-divider">
-                <span>or</span>
-            </div>
-
-            <form id="signinForm" onsubmit="handleSignIn(event)">
-                <div class="form-group">
-                    <label for="signin-email">Email</label>
-                    <input type="email" id="signin-email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="signin-password">Password</label>
-                    <input type="password" id="signin-password" name="password" required minlength="6">
-                </div>
-                <button type="submit" class="primary-button" style="width: 100%;">Sign In</button>
-            </form>
-
-            <form id="signupForm" onsubmit="handleSignUp(event)" style="display: none;">
-                <div class="form-group">
-                    <label for="signup-name">Display Name (optional)</label>
-                    <input type="text" id="signup-name" name="displayName">
-                </div>
-                <div class="form-group">
-                    <label for="signup-email">Email</label>
-                    <input type="email" id="signup-email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="signup-password">Password</label>
-                    <input type="password" id="signup-password" name="password" required minlength="6">
-                </div>
-                <button type="submit" class="primary-button" style="width: 100%;">Sign Up</button>
-                <p style="font-size: 0.8rem; color: #7f8c8d; text-align: center; margin-top: 1rem;">By signing up, you agree to our <a href="/privacy" target="_blank">Privacy Policy</a> and <a href="/terms" target="_blank">Terms of Service</a>.</p>
-            </form>
         </div>
     </div>
 
