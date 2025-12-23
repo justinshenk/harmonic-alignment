@@ -1145,6 +1145,7 @@ details.dimension-legend[open] summary span {
         display: flex;
         top: 1rem;
         right: 1rem;
+        z-index: 200;
     }
 
     /* Mobile nav - vertical dropdown */

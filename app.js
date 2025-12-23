@@ -148,7 +148,8 @@ function initializeHamburgerMenu() {
 
     if (!hamburger || !nav) return;
 
-    hamburger.addEventListener('click', () => {
+    hamburger.addEventListener('click', (e) => {
+        e.stopPropagation();
         hamburger.classList.toggle('active');
         nav.classList.toggle('open');
     });
@@ -159,6 +160,14 @@ function initializeHamburgerMenu() {
             hamburger.classList.remove('active');
             nav.classList.remove('open');
         });
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!nav.contains(e.target) && !hamburger.contains(e.target)) {
+            hamburger.classList.remove('active');
+            nav.classList.remove('open');
+        }
     });
 }
 
@@ -604,11 +613,13 @@ function initializeNavigation() {
 
         // Update active button
         document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
-        document.getElementById(buttonId).classList.add('active');
+        const activeBtn = document.getElementById(buttonId);
+        if (activeBtn) activeBtn.classList.add('active');
 
         // Update active section
         document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
-        document.getElementById(buttons[buttonId]).classList.add('active');
+        const activeSection = document.getElementById(buttons[buttonId]);
+        if (activeSection) activeSection.classList.add('active');
 
         // Save to localStorage
         localStorage.setItem('activeSection', buttonId);
@@ -676,9 +687,12 @@ function initializeNavigation() {
     }
 
     Object.keys(buttons).forEach(buttonId => {
-        document.getElementById(buttonId).addEventListener('click', () => {
-            switchToSection(buttonId, true);
-        });
+        const btn = document.getElementById(buttonId);
+        if (btn) {
+            btn.addEventListener('click', () => {
+                switchToSection(buttonId, true);
+            });
+        }
     });
 
     // Add filter listeners
@@ -686,11 +700,18 @@ function initializeNavigation() {
 }
 
 function initializeQuiz() {
-    document.getElementById('startQuiz').addEventListener('click', startQuiz);
-    document.getElementById('prevQuestion').addEventListener('click', prevQuestion);
-    document.getElementById('nextQuestion').addEventListener('click', nextQuestion);
-    document.getElementById('restartQuiz').addEventListener('click', restartQuiz);
-    document.getElementById('compareRecommendations').addEventListener('click', () => {
+    const startBtn = document.getElementById('startQuiz');
+    const prevBtn = document.getElementById('prevQuestion');
+    const nextBtn = document.getElementById('nextQuestion');
+    const restartBtn = document.getElementById('restartQuiz');
+
+    if (startBtn) startBtn.addEventListener('click', startQuiz);
+    if (prevBtn) prevBtn.addEventListener('click', prevQuestion);
+    if (nextBtn) nextBtn.addEventListener('click', nextQuestion);
+    if (restartBtn) restartBtn.addEventListener('click', restartQuiz);
+
+    const compareBtn = document.getElementById('compareRecommendations');
+    if (compareBtn) compareBtn.addEventListener('click', () => {
         // Switch to compare view
         document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
         document.getElementById('compareView').classList.add('active');
