@@ -287,6 +287,62 @@
             .architecture-svg {
                 font-size: 12px;
             }
+
+            /* Tighter line spacing for narrow viewports */
+            .model-content {
+                line-height: 1.65;
+            }
+
+            /* Reduce card padding so content isn't double-gutter'd
+               inside .section's mobile padding */
+            .endpoint-card,
+            .iit-box {
+                padding: 1rem;
+                margin: 1rem 0;
+            }
+
+            .highlight-box {
+                padding: 0.875rem;
+            }
+
+            .practice-box,
+            .code-box {
+                padding: 0.75rem;
+            }
+
+            .architecture-container {
+                padding: 1rem;
+                margin: 1rem 0;
+            }
+
+            /* Cap list indentation so deeply-nested lists still fit */
+            .model-content ul,
+            .model-content ol,
+            .highlight-box ul,
+            .iit-box ul {
+                margin-left: 1.25rem;
+            }
+
+            /* Make the wide endpoint-selection table scrollable
+               instead of squashing 5 columns into 360px */
+            .comparison-table {
+                display: block;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                white-space: nowrap;
+                font-size: 0.85rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.5rem 0.6rem;
+            }
+
+            /* Defensive: long words / URLs shouldn't blow out the layout */
+            .code-box,
+            .endpoint-meta {
+                overflow-wrap: anywhere;
+            }
         }
     </style>
 </head>
