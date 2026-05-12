@@ -124,10 +124,8 @@ let quizState = {
 };
 
 
-// API endpoint for practice chat (use local dev or production)
-const PRACTICE_CHAT_API = window.location.hostname === 'localhost'
-    ? 'http://localhost:3001/api/practice-chat'
-    : 'https://www.justinshenk.com/api/practice-chat';
+// API endpoint for practice chat — co-located Vercel Function on this site.
+const PRACTICE_CHAT_API = '/api/practice-chat';
 
 // Initialize
 document.addEventListener('DOMContentLoaded', async () => {

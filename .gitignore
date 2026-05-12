@@ -4,3 +4,4 @@
 scripts/setup-vercel-env.sh
 .DS_Store
 .env*.local
+node_modules
