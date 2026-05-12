@@ -137,15 +137,10 @@ module.exports = async function handler(req, res) {
       })
     );
 
-    // The AI Gateway integration on Vercel auto-injects AI_GATEWAY_API_KEY.
-    // If it's missing (e.g., local dev without it), degrade gracefully.
-    if (!process.env.AI_GATEWAY_API_KEY && !process.env.OPENAI_API_KEY) {
-      res.status(200).json({
-        response:
-          'The practice recommendation service is currently unavailable. Please try the quiz instead.'
-      });
-      return;
-    }
+    // AI Gateway auth: VERCEL_OIDC_TOKEN is injected automatically on every
+    // Vercel deployment, so no env-var check is needed here. If the gateway
+    // is not enabled on the project, generateObject below throws and the
+    // catch returns 500; the frontend renders that as the soft-fail message.
 
     const fallbackTraditions = [
       { id: 'mbsr', name: 'MBSR', practices: ['Body scan', 'Breathing space'] }
@@ -161,7 +156,8 @@ module.exports = async function handler(req, res) {
 
     const { object } = await generateObject({
       // Plain "provider/model" string routes through the Vercel AI Gateway.
-      model: 'openai/gpt-4o-mini',
+      // Haiku is cheap, fast, and strong at structured JSON for this size of task.
+      model: 'anthropic/claude-haiku-4.5',
       schema: recommendationSchema,
       system: buildSystemPrompt(list),
       prompt: userMessage,
