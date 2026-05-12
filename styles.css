@@ -46,15 +46,21 @@ header p {
     display: none;
     flex-direction: column;
     justify-content: space-between;
+    /* 44×44 tap target per Apple HIG; bars stay visually 28×20 via padding */
+    box-sizing: content-box;
     width: 28px;
     height: 20px;
+    padding: 12px 8px;
     background: transparent;
     border: none;
     cursor: pointer;
-    padding: 0;
     position: absolute;
-    right: 1.5rem;
-    top: 1.5rem;
+    right: calc(1.5rem - 8px);
+    top: calc(1.5rem - 12px);
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-appearance: none;
+    appearance: none;
 }
 
 .hamburger span {
@@ -64,6 +70,7 @@ header p {
     background: white;
     border-radius: 2px;
     transition: all 0.3s;
+    pointer-events: none;
 }
 
 .hamburger.active span:nth-child(1) {
@@ -1143,8 +1150,8 @@ details.dimension-legend[open] summary span {
     /* Show hamburger on mobile */
     .hamburger {
         display: flex;
-        top: 1rem;
-        right: 1rem;
+        top: calc(1rem - 12px);
+        right: calc(1rem - 8px);
         z-index: 200;
     }
 

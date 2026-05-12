@@ -131,14 +131,18 @@ const PRACTICE_CHAT_API = window.location.hostname === 'localhost'
 
 // Initialize
 document.addEventListener('DOMContentLoaded', async () => {
-    await loadData();
-    initializeNavigation();
+    // Wire UI handlers first so taps work even before data finishes loading.
     initializeHamburgerMenu();
     initializeQuiz();
+    initializeNavigation();
     initializePracticeChat();
+    initializeResearchSection();
+
+    await loadData();
+
+    // Data-dependent renders run after the fetch resolves.
     renderComparisonTable();
     renderEvolutionTree();
-    initializeResearchSection();
 });
 
 // Hamburger menu toggle
@@ -150,8 +154,9 @@ function initializeHamburgerMenu() {
 
     hamburger.addEventListener('click', (e) => {
         e.stopPropagation();
-        hamburger.classList.toggle('active');
-        nav.classList.toggle('open');
+        const isOpen = nav.classList.toggle('open');
+        hamburger.classList.toggle('active', isOpen);
+        hamburger.setAttribute('aria-expanded', String(isOpen));
     });
 
     // Close menu when a nav button is clicked
@@ -770,6 +775,8 @@ function findPrevVisibleQuestion(fromIndex) {
 }
 
 function restartQuiz() {
+    quizState.currentQuestion = 0;
+    quizState.answers = { substances: 'exclude' };
     document.getElementById('quiz-results').classList.remove('active');
     document.getElementById('quiz-intro').classList.add('active');
 }
